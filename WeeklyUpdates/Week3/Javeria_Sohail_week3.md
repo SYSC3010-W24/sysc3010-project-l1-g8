@@ -23,14 +23,13 @@ I spent 3 hours on the project this week.
 - Conducted in-depth research on the specific components required for our project.
 - Developed a preliminary proposal for the Project with my team members.
 
-4. _**How do you feel about your progress?**_ _(brief, free-form reflection)_
-
+4. _**How do you feel about your progress?**_
 - I'm satisfied with the progress made this week. The research laid a solid foundation, and the initial project idea aligns well with our course goals.
 
-5. _**What are you planning to do next week**_? _(give specific goals)_
+5. _**What are you planning to do next week**_? 
 - Starting the official proposal for the deadline that is coming soon.
 - Research the practicalities of the project a little more in depth.
 - Finding out the components from the market and seeing if there is any alternatives that could work better.
 
-6. _**Is anything blocking you that you need from others?**_ _(What do you need from whom)_
+6. _**Is anything blocking you that you need from others?**_ 
 Not currently.
