@@ -1,0 +1,138 @@
+<mxfile host="app.diagrams.net" modified="2024-02-05T21:39:23.304Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0" etag="9ZM84NPST0cMQOa2ZlZl" version="23.1.1" type="device">
+  <diagram name="Page-1" id="8SBFVfklAt3B3amvHatq">
+    <mxGraphModel dx="1050" dy="1630" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SnTm31GQBL8k4SEw-431-1" value="" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="310" width="190" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="460" y="190" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-3" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-2" target="SnTm31GQBL8k4SEw-431-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="630" y="380" as="sourcePoint" />
+            <mxPoint x="680" y="330" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-4" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-2" target="SnTm31GQBL8k4SEw-431-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="510" y="280" as="sourcePoint" />
+            <mxPoint x="510" y="200" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-5" value="Switch/Router" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="280" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-6" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="640" y="50" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-7" value="Firebase Real-time DB" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="600" y="10" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-41" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.55;exitY=0.95;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=85;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-8" target="SnTm31GQBL8k4SEw-431-36">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="310" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="476" y="170" />
+              <mxPoint x="665" y="170" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-8" value="" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="30" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-9" value="" style="html=1;strokeWidth=1;shadow=0;dashed=0;shape=mxgraph.ios7.misc.wifi;fillColor=#007AFF;strokeColor=none;buttonText=;strokeColor2=#222222;fontColor=#222222;fontSize=8;verticalLabelPosition=bottom;verticalAlign=top;align=center;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="462.5" y="60" width="17.5" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-10" value="Internet" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="470" y="10" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-11" value="Raspberry Pi Pico" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="340" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-18" value="&lt;div&gt;&amp;lt;&amp;lt;component&amp;gt;&amp;gt;&lt;/div&gt;haptic alarm" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="105" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.16;exitY=0.55;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=85;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;exitPerimeter=0;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-8" target="SnTm31GQBL8k4SEw-431-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=85;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-20" target="SnTm31GQBL8k4SEw-431-2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-20" value="" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="287.5" y="310" width="190" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-21" value="Raspberry Pi 4" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="337.5" y="340" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-22" value="&lt;div&gt;&amp;lt;&amp;lt;component&amp;gt;&amp;gt;&lt;/div&gt;&lt;div&gt;alarm system&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="332.5" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.875;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-6" target="SnTm31GQBL8k4SEw-431-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-25" value="" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="280" width="190" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-26" value="Raspberry Pi 4" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="885" y="300" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-27" value="&lt;div&gt;&amp;lt;&amp;lt;component&amp;gt;&amp;gt;&lt;/div&gt;&lt;div&gt;temperature logging web client&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="895" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=85;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-2" target="SnTm31GQBL8k4SEw-431-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-33" value="&lt;div&gt;&amp;lt;&amp;lt;component&amp;gt;&amp;gt;&lt;/div&gt;&lt;div&gt;smoke detection system&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="895" y="335" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.55;exitY=0.95;exitDx=0;exitDy=0;exitPerimeter=0;startArrow=classic;startFill=1;entryX=0;entryY=0;entryDx=85;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-8" target="SnTm31GQBL8k4SEw-431-25">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="540" y="96" as="sourcePoint" />
+            <mxPoint x="989" y="270" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="476" y="140" />
+              <mxPoint x="925" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-36" value="" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="320" width="180" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-37" value="Raspberry Pi 4" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="625" y="340" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-39" value="&lt;div&gt;&amp;lt;&amp;lt;component&amp;gt;&amp;gt;&lt;/div&gt;&lt;div&gt;notification system&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="370" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=85;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-2" target="SnTm31GQBL8k4SEw-431-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-43" value="" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="-120" width="190" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-44" value="Some client device" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="-90" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-45" value="&lt;div&gt;&amp;lt;&amp;lt;component&amp;gt;&amp;gt;&lt;/div&gt;web gui" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="155" y="-60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SnTm31GQBL8k4SEw-431-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=190;exitDy=85;exitPerimeter=0;entryX=0.4;entryY=0.1;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="SnTm31GQBL8k4SEw-431-43" target="SnTm31GQBL8k4SEw-431-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="458" y="-35" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
