@@ -2,7 +2,7 @@
 
 ### Group number: L1-G8
 
-### Student name: Matteo Golin
+### Student name: Javeria Sohail
 
 ### Week: 4 (31 Jan - 6 Feb)
 
@@ -16,7 +16,7 @@ I spent 4 hours this week.
    (meetings, information gathering, design, research, brainstorming, evaluating options, prototyping options, writing/documenting, refactoring, testing, software implementation, hardware implementation)
 
    1. Meeting with team members to discuss project proposal: 1.5 hours
-   2. Working on proposal (creating diagrams, researching sensors, etc.): 2.5 hours
+   2. Working on the draft proposal to get quality feedback before the actual feedback.
 
 3. **_What did you accomplish this week?_** _(Be specific)_
 
@@ -25,13 +25,12 @@ I spent 4 hours this week.
 
 4. **_How do you feel about your progress?_** _(brief, free-form reflection)_
 
-- I'm a little concerned that we are almost half way through the semester and haven't started developing any actual part
-  of our project, but I was thinking of starting to draw ideas of our UI next week to make starting easier.
+- Not sure how fast paced the coming weeks will be as we havent started any project component yet. 
 
 5. **_What are you planning to do next week_**? _(give specific goals)_
 
 - Preliminary design of GUI for FANS
-- Find out if we can get our auxiliary sensors from the department or if we need to buy them.
+- Work on getting the project hardware ordered and its research.
 
 6. **_Is anything blocking you that you need from others?_** _(What do you need from whom)_
 
