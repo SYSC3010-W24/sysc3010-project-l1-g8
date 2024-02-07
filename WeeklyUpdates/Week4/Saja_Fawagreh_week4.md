@@ -31,7 +31,7 @@
 5. **_What are you planning to do next week?_** _(give specific goals)_
 
 - Initiate preliminary GUI design for FANS.
-- Determine if we can acquire auxiliary sensors from the department or if we need to purchase them.
+- Research how we can acquire the hardware devices needed for our project.
 
 6. **_Is anything blocking you that you need from others?_** _(What do you need from whom)_
 
