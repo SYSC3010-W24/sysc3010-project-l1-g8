@@ -4,7 +4,7 @@
 
 ### Student name: Grant Achuzia
 
-### Week: 3, Monday January 29th 2024 - February 5th 2024
+### Week: 3, Wednesday January 24th 2024 - Tuesday January 30th 2024
 
 ___
 
