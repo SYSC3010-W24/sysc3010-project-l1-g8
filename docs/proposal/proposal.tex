@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% Display graphics nicely
+\usepackage{float}
+\usepackage{graphicx}
+
+% References
+\usepackage[style=ieee]{biblatex}
+\addbibresource{./references.bib}
+
+% Remove paragraph indentation and use newline to separate instead. %
+\usepackage[parfill]{parskip}
+\setlength{\parindent}{0cm}
+
+\author{
+    Grant Achuzia, 101222695 \\
+    Javeria Sohail, 101197163 \\
+    Matteo Golin, 101220709 \\
+    Saja Fawagreh, 101217326 \\
+    TA: Sean Kirkby
+}
+\title{
+    SYSC3010 Computer Systems Development Project \\
+    FANS Project Proposal \\
+    \medium{Group L1-G8} \\
+    {
+        \vspace{0.5in}
+        \centering
+        \includegraphics[width=4in]{../assets/header-image.jpg}
+    }
+}
+\date{
+    Created: February 11th, 2024 \\
+    Modified: \today
+}
+
+\begin{document}
+
+% TITLE %
+\maketitle
+\pagebreak
+
+% TABLE OF CONTENTS %
+\tableofcontents
+
+% MAIN MATTER %
+\include{sections/introduction}
+\include{sections/system-design}
+\include{sections/work-plan}
+\include{sections/project-requirements}
+\include{sections/additional-hw}
+
+% BIBLIOGRAPHY %
+\pagebreak
+\printbibliography
+
+% APPENDIX %
+\pagebreak
+\include{sections/appendix}
+
+\end{document}

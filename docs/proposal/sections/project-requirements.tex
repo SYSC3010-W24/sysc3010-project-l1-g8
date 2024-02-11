@@ -1,0 +1,34 @@
+\section{Project Requirements Checklist}
+
+\textbf{Computer Components}
+
+\begin{itemize}
+    \item 1 Raspberry Pi per each of the following: Smoke Detector device, Smoke Alarm, Wearable Accessory
+    \item 1 Raspberry Pi will be used to transfer info to and from all the other RPis to the Web GUI (running in headless mode). There are 4 Raspberry Pi’s used in the project overall.
+\end{itemize}
+
+\textbf{Hardware Components}
+
+\begin{itemize}
+    \item MQ2 Smoke Sensor (x1), LCD Display (x2), AudioHat Module (x1), SenseHat Module (x1)
+    \item Actuator: LCD Display, AudioHat Module
+    \item Smoke sensor waits till it senses smoke, once that requirement is met it triggers the alarm, wearable accessory, and
+          sends a notification to the Web GUI
+\end{itemize}
+
+\textbf{Software Components}
+
+\begin{itemize}
+    \item Database for employee contact information.
+    \item The computer hosting the database changes depending on user configurations (Level of smoke to detect, Web GUI themes,
+          alarm sounds).
+    \item Database includes a table for user info (employee names, phone numbers, emergency numbers) and another table for sensor
+          data (temperature data, smoke detection).
+    \item Periodic timing loop is given by the smoke sensor monitoring the environment for smoke. The smoker sensor will log this
+          data and send it to the web GUI every minute.
+    \item The data the smoke detector logs will be displayed on the user website in the form of varying graphs and widgets.
+    \item Smart watch will have a buzzer, Raspberry Pi with the alarm will have notification software. Raspberry Pi will send
+          notifications to the Smart watch and to the web GUI.
+    \item Bidirectional GUI included (user can reset the smoke detector from the web GUI, and changes made to the physical
+          detector will show in Web GUI settings)
+\end{itemize}
