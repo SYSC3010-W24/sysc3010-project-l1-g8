@@ -1,6 +1,15 @@
 \documentclass[11pt]{article}
 \usepackage[letterpaper, margin=1in]{geometry}
 
+% Proper links
+\usepackage[
+    pdftitle={SYSC3010 Computer Systems Development Project - FANS Project Proposal},
+    colorlinks=false,
+    allbordercolors={0 0 0},
+    citebordercolor={1 1 1}, % No border for citations
+    pdfborderstyle={/S/U/W 1},
+]{hyperref}
+
 % Display graphics nicely
 \usepackage{float}
 \usepackage{graphicx}
@@ -43,7 +52,10 @@
 \pagebreak
 
 % TABLE OF CONTENTS %
-\tableofcontents
+{
+    \hypersetup{hidelinks}
+    \tableofcontents
+}
 
 % MAIN MATTER %
 \include{sections/introduction}
