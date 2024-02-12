@@ -3,13 +3,27 @@
 \subsection{System Overview Diagram}
 
 Figure \ref{fig:deployment} shows the deployment diagram for FANS. There will be three devices which communicate with
-each other on a local network: the alarm system on a Raspberry Pi 4, a smoke detection and temperature logging system
-on a second Raspberry Pi 4, and a notification system on a third Raspberry Pi 4. When the smoke detection system
-detects smoke above the limiting threshold, it will signal the alarm system to sound the alarm. It will signal the
-notification system to send out notifications to the affected persons. The smoke detection and temperature logging
-system will also update the cloud database (hosted by Firebase) with the recorded smoke and temperature levels, and
-enable a flag that indicates the emergency. The fourth device, the Pi Pico, will buzz when the cloud database indicates
-that an emergency has been detected by the detection system. This will notify the user of the emergency.
+each other on a local network:
+
+\begin{enumerate}
+    \item The alarm system on a Raspberry Pi 4.
+    \item The smoke detection system on a Raspberry Pi 4.
+    \item A notification system on a Raspberry Pi 4.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../assets/FANSDeployment.png}
+    \caption{Deployment diagram of FANS.}
+    \label{fig:deployment}
+\end{figure}
+
+When the smoke detection system detects smoke above the limiting threshold, it will signal the alarm system to sound
+the alarm. It will signal the notification system to send out notifications to the affected persons. The smoke
+detection and temperature logging system will also update the cloud database (hosted by Firebase) with the recorded
+smoke and temperature levels, and enable a flag that indicates the emergency. The fourth device, the Pi Pico, will buzz
+when the cloud database indicates that an emergency has been detected by the detection system. This will notify the
+user of the emergency.
 
 The notification and alarm system are on separate devices to preserve their integrity in the case of an emergency. It
 is possible that the smoke detection system will be closer to the source of the fire, and therefore be at risk of being
@@ -19,13 +33,6 @@ connection, they will be able to perform their responsibilities with less risk o
 The cloud database is a real-time database to facilitate the real-time nature of display information on the web GUI. In
 addition, it will allow the haptic feedback device to buzz as soon as the smoke detection system signals an emergency
 to the cloud database.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{../assets/FANSDeployment.png}
-    \caption{Deployment diagram of FANS.}
-    \label{fig:deployment}
-\end{figure}
 
 The web GUI is displayed as being on the client device, because it will be accessible by any device with an internet
 connection. It will be served on the cloud.
@@ -53,12 +60,19 @@ Each node on the local network (the smoke detection system, alarm system and not
 each other using UDP packets over the local network.
 
 Nodes which communicate with the cloud hosted real-time Firebase database will use HTTP requests to interact with the
-database. The smoke detection system will post JSON payloads to the database to write data. The web GUI will request
-JSON over HTTP to update its visual components (dashboard with charts, etc.) with the data stored in the database. The
-notification system will request contact information from the database over HTTP to send notifications to affected
-users.
+database.
 
-Finally, the notification system will communicate with affected users over email and SMS text notifications.
+\begin{itemize}
+    \item The smoke detection system will post JSON payloads to the database to write data.
+    \item The web GUI will request JSON over HTTP to update its visual components (dashboard with charts, etc.) with the data
+          stored in the database.
+    \item The notification system will request contact information from the database over HTTP to send notifications to affected
+          users.
+    \item The haptic alarm system will poll a database flag over HTTP to check if there is an active emergency.
+\end{itemize}
+
+Finally, the notification system will communicate with affected users over email and SMS text notifications. This will
+use standard internet, SMS and email protocols.
 
 \subsection{Component Details}
 
@@ -110,7 +124,6 @@ The real-time database is responsible for storing smoke and temperature level da
 flag indicating emergency. User contact information will also be stored in this database. Finally, it will also contain
 user-configured settings (such as smoke level threshold for triggering an emergency). It will be cloud hosted by
 Firebase.
-
 
 % TODO: All of the components that interact with the database will have their own sequence diagrams. Do we still need
 % one for the database? Ask prof
