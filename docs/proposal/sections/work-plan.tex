@@ -56,46 +56,66 @@ is passionate about optimization, efficient design and modularity.
 \textbf{Regular Team Meetings} \\
 We will schedule regular team meetings to discuss project progress, share updates, and address any challenges or
 questions. Our team will establish MS Teams as our main communication channel to ensure efficient communication within
-the team and with the TA. Additionally, the team meetings will be documented to review what we talked about in case
-someone missed the meeting.
+the team and with the TA.
+
+Additionally, the team meetings will be documented to review what we talked about in the case that someone misses a
+meeting.
 
 \textbf{Version Control} \\
-We will use GitHub to manage codebase changes. This includes practices such as creating branches for features or bug
-fixes, committing regularly, and using pull requests for code reviews. Informative commit messages will be prioritized
-to avoid misunderstandings.
+We will use GitHub to manage our codebase changes. This will include practices such as creating branches for features or bug
+fixes, committing regularly, and requiring code reviews before merging pull requests.
+
+Informative commit messages that follow the SYSC3010 commit formatting guidelines will be required to avoid
+misunderstandings.
+
+The team will release frequent prototypes using GitHub's version release features. Versioning will follow
+\textit{semantic versioning} (semver) notation. \cite{semver}
 
 \textbf{Code Reviews} \\
-Before merging code changes, thorough code reviews will be conducted to ensure code quality and maintainability.
+Before merging code changes, thorough code reviews will be conducted to ensure code quality and maintainability, as well
+as gain feedback about feature implementations from other team members.
 
 \textbf{Testing} \\
 We will follow a testing strategy that includes unit testing, integration testing, and system testing to ensure the
 reliability and robustness of the FANS.
 
+FANS will be frequently prototyped to ensure a working system at each development step. This methodology is in
+accordance with the V-model. \cite{v-model} To ensure this, mocking will be used to simulate modules of the system that
+haven't been fully implemented.
+
+Unit testing will be written by developers who have written the feature under test, and will also be run as GitHub
+workflows on pull requests to ensure that new code does not break existing functionality.
+
 \textbf{Feedback} \\
 Team members will provide constructive feedback to each other for continuous improvement and learning (also making use
-of FBF). We also want to take constant feedback from our TA at every milestone so that our big picture comes together
+of Feedback Fruits). We will also request feedback from our TA at every milestone so that our final system comes together
 seamlessly.
 
 \subsubsection{What We Will Need to Learn}
 
 \textbf{Hardware integration} \\
 Since the FANS includes both hardware and software components, we need to learn how to integrate them seamlessly. We
-utilize online resources and forums where hardware integration techniques are discussed.
+utilize online resources and forums where hardware integration techniques are discussed. Many of our hardware modules
+(SenseHat, AudioHat, etc.) have associated online tutorials and a plethora of information associated with them.
+\cite{sensehat} We will leverage this information.
 
 \textbf{Real-time communication} \\
 Implementing real-time communication features such as SMS and email notifications requires
 knowledge of APIs and protocols for sending messages. We will look at the documentation and instructions provided by
 communication service providers (e.g. SMS) and learn how to integrate these services into our system.
 
+We will also seek out Python tutorials for automated email sending, as there are several Python libraries that provide
+this functionality (such as \texttt{smtplib} \cite{python-email}).
+
 \textbf{Developing a web interface} \\
 Creating a user-friendly web interface for the FANS requires knowledge of front-end development, including HTML, CSS
-and JavaScript. We will use online tutorials, courses and documentation of web development frameworks such as React or
-Angular to improve our web development skills.
+and JavaScript. We will use online tutorials, courses and documentation of web development frameworks such as React.
 
 \textbf{Test strategies} \\
 Developing effective testing strategies, including unit testing, integration testing, and system
-testing, requires an understanding of various testing frameworks and methodologies. We will explore tutorials,
-documentation, and best practices for testing in software development.
+testing, requires an understanding of various testing frameworks and methodologies. We will explore tutorials for
+language specific testing frameworks, and use online resources to teach ourselves how to effectively mock components of
+our system.
 
 \subsection{Project Milestones}
 

@@ -149,7 +149,8 @@ Firebase.
 
 The interaction between the haptic alarm system and the real-time database is visible in Figure
 \ref{fig:haptic-alarm-sq}. The interaction between the smoke detector system and the real-time database is visible in
-Figure \ref{fig:smoke-detector-sq}.
+Figure \ref{fig:smoke-detector-sq}. The primary interaction between the web GUI and the real-time database is
+documented in Figure \ref{fig:webui-sq}, and secondary interactions can be seen in Section \ref{s:use-cases}.
 
 \subsubsection{Web GUI}
 
@@ -157,7 +158,14 @@ The web GUI is responsible for displaying the sensor information from the real-t
 will also allow users to configure settings for FANS (emergency thresholds, etc.) and add more user contact information
 to the notification subscriber list. It will also allow users to disable the alarm when an emergency has been resolved.
 
-\subsection{Use Cases}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/WebGUiSequence.png}
+    \caption{Sequence diagram for the primary responsibilities of web GUI.}
+    \label{fig:webui-sq}
+\end{figure}
+
+\subsection{Use Cases} \label{s:use-cases}
 
 \subsubsection{Trigger Emergency}
 
