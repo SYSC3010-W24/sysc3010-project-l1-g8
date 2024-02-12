@@ -65,36 +65,47 @@ Finally, the notification system will communicate with affected users over email
 The following section will describe the interfaces and responsibilities of each major node in the FANS system.
 
 % TODO: Each of these subsubsections requires a sequence diagram
-\subsubsection{Smoke Detection System}
-The first component in the proposed system is the smoke detection and temperature sensing system. It will receive
-sensor data using the I2C protocol from a locally connected smoke sensor and temperature sensor. It will then update
-the real-time Firebase database with the collected sensor data. If any temperature or smoke measurements are above the
-critical threshold for signalling an emergency, it will send a message to the notification system over TCP to signify
-an emergency.
+\subsubsection{Smoke Detection System} % TODO: I'm doing this one
+
+The first component in the proposed system is the smoke detection and temperature sensing system. It will read sensor
+data from a locally connected smoke sensor and temperature sensor using the I2C protocol over the Raspberry Pi 4's GPIO
+pins. It will then update the real-time Firebase database with the collected sensor data over an internet connection.
+If any temperature or smoke measurements are above the critical threshold for signalling an emergency, it will send a
+message to the notification system and the alarm system over TCP to signify an emergency.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/SmokeDetectorSequence.png}
+    \caption{Sequence diagram for the primary responsibilities of the smoke detector system.}
+\end{figure}
 
 \subsubsection{Notification System}
-The notification system is responsible for notifying affected users of an emergency and triggering the alarm system.
-When it receives an emergency notification over TCP from the smoke detection system, it will forward the message on to
-the alarm system. It will also send SMS and email notifications to all users in the database to notify them of the
-detected emergency.
+
+The notification system is responsible for notifying affected users of an emergency and triggering the alarm system. It
+will also send SMS and email notifications to all users in the database to notify them of the detected emergency.
 
 \subsubsection{Alarm System}
+
 The alarm system is responsible for sounding an alarm in the building when an emergency has been detected. The alarm
 system receives notification over TCP from the notification system when an emergency has been detected, at which point
 it sounds an alarm and flashes lights. The lights will be an onboard SenseHat, and the alarm is still to be decided.
 The alarm will continue to sound until the system receives a TCP message to stop.
 
-\subsubsection{Haptic Alarm System}
+\subsubsection{Haptic Alarm System} % TODO: I'm doing this one
+
 The haptic alarm system is designed to be a wearable device that vibrates during an emergency. The device queries the
 real-time database for a flag indicating an alarm. Once the flag is raised, the device vibrates until the emergency has
 ended (the flag is “lowered”).
 
-\subsubsection{Firebase Real-time Database}
-The real-time database is responsible for storing smoke and temperature level data in real-time, a flag indicating
-emergency and user contact information. It will also contain user-configured settings (such as smoke level threshold
-for triggering an emergency). It will be cloud hosted by Firebase.
+\subsubsection{Firebase Real-time Database} % TODO: I'm doing this one
+
+The real-time database is responsible for storing smoke and temperature level data in real-time, as well as a database
+flag indicating emergency. User contact information will also be stored in this database. Finally, it will also contain
+user-configured settings (such as smoke level threshold for triggering an emergency). It will be cloud hosted by
+Firebase.
 
 \subsubsection{Web GUI}
+
 The web GUI is responsible for displaying the sensor information from the real-time database. It will also allow users
 to configure settings for FANS (emergency thresholds, etc.) and add more user contact information in the case of an
 emergency. It will also allow users to disable the alarm when an emergency has been resolved.
