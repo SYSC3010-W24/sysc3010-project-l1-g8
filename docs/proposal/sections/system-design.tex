@@ -167,6 +167,41 @@ to the notification subscriber list. It will also allow users to disable the ala
 
 \subsection{Use Cases} \label{s:use-cases}
 
+\subsubsection{Adding New Contact Information}
+
+\textbf{Actor:} User
+
+\textbf{Preconditions:}
+\begin{itemize}
+    \item User must be logged into the Web GUI.
+    \item user must be authenticated and authorized to make database changes.
+\end{itemize}
+
+\textbf{Flow of events:}
+\begin{enumerate}
+    \item User accesses the web GUI.
+    \item User navigates to the section for managing contacts or settings.
+    \item User selects the option to add new contact information.
+    \item User fills in the required fields such as name, phone number, and email address.
+    \item User submits the form to save the new contact information.
+    \item The web GUI sends a request to the Firebase Real-Time Database to add the new contact information.
+    \item Firebase Real-Time Database confirms the successful addition of the new contact information.
+    \item The web GUI displays a confirmation message to the user indicating that the new contact information has been
+          successfully added.
+\end{enumerate}
+
+\textbf{Postconditions:}
+\begin{itemize}
+    \item The new contact information is stored in the Firebase Real-Time Database.
+    \item The web GUI reflects the updated contact list.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../assets/AddContactInfo.png}
+    \caption{Sequence diagram for the major interactions in the "Add Contact Information" use case.}
+\end{figure}
+
 \subsubsection{Trigger Emergency}
 
 \textbf{Flow of events}
