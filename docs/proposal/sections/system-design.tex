@@ -64,8 +64,7 @@ Finally, the notification system will communicate with affected users over email
 
 The following section will describe the interfaces and responsibilities of each major node in the FANS system.
 
-% TODO: Each of these subsubsections requires a sequence diagram
-\subsubsection{Smoke Detection System} % TODO: I'm doing this one
+\subsubsection{Smoke Detection System}
 
 The first component in the proposed system is the smoke detection and temperature sensing system. It will read sensor
 data from a locally connected smoke sensor and temperature sensor using the I2C protocol over the Raspberry Pi 4's GPIO
@@ -91,11 +90,17 @@ system receives notification over TCP from the notification system when an emerg
 it sounds an alarm and flashes lights. The lights will be an onboard SenseHat, and the alarm is still to be decided.
 The alarm will continue to sound until the system receives a TCP message to stop.
 
-\subsubsection{Haptic Alarm System} % TODO: I'm doing this one
+\subsubsection{Haptic Alarm System}
 
 The haptic alarm system is designed to be a wearable device that vibrates during an emergency. The device queries the
 real-time database for a flag indicating an alarm. Once the flag is raised, the device vibrates until the emergency has
-ended (the flag is “lowered”).
+ended (the flag is "lowered").
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/HapticAlarmSequence.png}
+    \caption{Sequence diagram for the primary responsibilities of the haptic alarm system.}
+\end{figure}
 
 \subsubsection{Firebase Real-time Database} % TODO: I'm doing this one
 
