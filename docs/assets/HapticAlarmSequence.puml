@@ -1,0 +1,31 @@
+@startuml
+participant HapticAlarm
+participant FirebaseDB
+
+loop forever
+
+loop while !is_emergency
+
+HapticAlarm -> FirebaseDB: get_flag() <<http>>
+activate HapticAlarm
+activate FirebaseDB
+FirebaseDB --> HapticAlarm: is_emergency <<http>>
+deactivate FirebaseDB
+
+end
+
+loop while is_emergency
+
+HapticAlarm -> HapticAlarm: buzz()
+
+HapticAlarm -> FirebaseDB: get_flag() <<http>>
+activate FirebaseDB
+FirebaseDB --> HapticAlarm: is_emergency <<http>>
+deactivate FirebaseDB
+
+end
+
+end
+deactivate HapticAlarm
+
+@enduml
