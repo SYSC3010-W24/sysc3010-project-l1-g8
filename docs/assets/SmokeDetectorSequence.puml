@@ -1,0 +1,35 @@
+@startuml
+participant SmokeDetector
+participant Notifier
+participant Alarm
+participant FirebaseDB
+
+loop forever
+activate SmokeDetector
+SmokeDetector -> SmokeDetector: fetch_temperature()
+SmokeDetector -> SmokeDetector: fetch_smoke_levels()
+SmokeDetector -> FirebaseDB: post_sensor_data() <<http>>
+
+activate FirebaseDB
+deactivate FirebaseDB
+
+alt smoke_level > threshold || temperature > threshold
+
+SmokeDetector -> Alarm: emergency <<udp>>
+activate Alarm
+Alarm -> Alarm: sound_alarm()
+deactivate Alarm
+
+SmokeDetector -> Notifier: emergency <<udp>>
+activate Notifier
+Notifier -> Notifier: notify_users()
+deactivate Notifier
+
+SmokeDetector -> FirebaseDB: raise_flag() <<http>>
+activate FirebaseDB
+deactivate FirebaseDB
+
+end
+deactivate SmokeDetector
+
+end
