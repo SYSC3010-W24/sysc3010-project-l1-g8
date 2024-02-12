@@ -202,6 +202,44 @@ to the notification subscriber list. It will also allow users to disable the ala
     \caption{Sequence diagram for the major interactions in the "Add Contact Information" use case.}
 \end{figure}
 
+\subsubsection{Change Emergency Threshold}
+
+\textbf{Actor:} User
+
+\textbf{Preconditions:}
+\begin{itemize}
+    \item User must have access to the web GUI.
+    \item User must be authenticated and authorized to make changes to the database.
+    \item The smoke detection system must be operational and connected to the Firebase Real-Time Database.
+\end{itemize}
+
+\textbf{Flow of events:}
+\begin{enumerate}
+    \item User accesses the web GUI.
+    \item User navigates to the section for managing settings.
+    \item User selects the option to change the smoke detection threshold.
+    \item User enters the new threshold value.
+    \item User submits the form to save the new threshold value.
+    \item The web GUI sends a request to the Firebase Real-Time Database to update the smoke detection threshold.
+    \item Firebase Real-Time Database confirms the successful update of the threshold value.
+    \item The web GUI displays a confirmation message to the user indicating that the threshold value has been successfully
+          updated.
+\end{enumerate}
+
+\textbf{Postconditions:}
+\begin{itemize}
+    \item The new smoke detection threshold value is stored in the Firebase Real-Time Database.
+    \item The smoke detection system adjusts its threshold for triggering an emergency based on the new value.
+    \item The web GUI reflects the updated threshold value.
+\end{itemize}
+
+% TODO: The sequence diagrams are missing activations
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../assets/ChangeThresholdUseCaseSequence.png}
+    \caption{Sequence diagram for the major interactions in the "Change Emergency Threshold" use case.}
+\end{figure}
+
 \subsubsection{Trigger Emergency}
 
 \textbf{Flow of events}
