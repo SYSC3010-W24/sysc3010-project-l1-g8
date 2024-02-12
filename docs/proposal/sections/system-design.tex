@@ -76,6 +76,7 @@ message to the notification system and the alarm system over TCP to signify an e
     \centering
     \includegraphics[width=5in]{../assets/SmokeDetectorSequence.png}
     \caption{Sequence diagram for the primary responsibilities of the smoke detector system.}
+    \label{fig:smoke-detector-sq}
 \end{figure}
 
 \subsubsection{Notification System}
@@ -100,14 +101,22 @@ ended (the flag is "lowered").
     \centering
     \includegraphics[width=3in]{../assets/HapticAlarmSequence.png}
     \caption{Sequence diagram for the primary responsibilities of the haptic alarm system.}
+    \label{fig:haptic-alarm-sq}
 \end{figure}
 
-\subsubsection{Firebase Real-time Database} % TODO: I'm doing this one
+\subsubsection{Firebase Real-time Database}
 
 The real-time database is responsible for storing smoke and temperature level data in real-time, as well as a database
 flag indicating emergency. User contact information will also be stored in this database. Finally, it will also contain
 user-configured settings (such as smoke level threshold for triggering an emergency). It will be cloud hosted by
 Firebase.
+
+
+% TODO: All of the components that interact with the database will have their own sequence diagrams. Do we still need
+% one for the database? Ask prof
+The interaction between the haptic alarm system and the real-time database is visible in Figure
+\ref{fig:haptic-alarm-sq}. The interaction between the smoke detector system and the real-time database is visible in
+Figure \ref{fig:smoke-detector-sq}.
 
 \subsubsection{Web GUI}
 
