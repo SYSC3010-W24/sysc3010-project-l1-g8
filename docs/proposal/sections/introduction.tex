@@ -30,8 +30,8 @@ a dangerous action that puts the user at risk of forgetting to re-enable it. \ci
 The FANS project aims to address the shortcomings of traditional systems and implement the strengths of modern systems
 by introducing a comprehensive multi-system solution. FANS will use both smoke and temperature sensors to cover
 situations where smoke cannot reach the detecting device. It will issue real-time notifications via SMS and email to
-notify homeowners of an emergency. Finally, FANS will offer configurable thresholds for smoke and temperature alarms, as
-well as configurable timeouts for the system to prevent disgruntled users from unsafely disabling their alarm system
+notify homeowners of an emergency. Finally, FANS will offer configurable thresholds for smoke and temperature alarms,
+as well as configurable timeouts for the system to prevent disgruntled users from unsafely disabling their alarm system
 while cooking.
 
 By leveraging technological advancements, FANS seeks to improve the effectiveness of fire alarm systems and reduce
@@ -56,18 +56,20 @@ users, and proactive monitoring of environmental conditions.
 The goals that the FANS development team aims to achieve in this project are as follows:
 
 \begin{enumerate}
-    \item Develop and test a smoke detection algorithm on Raspberry Pi to ensure accurate and reliable fire detection.
+    \item Develop and test a smoke detection algorithm on a Raspberry Pi to ensure accurate and reliable smoke detection.
 
-    \item Integrate various sensors with Raspberry Pi for real-time data collection, including temperature and smoke levels.
+    \item Integrate smoke and temperature sensors on the Raspberry Pi to a real-time database for real-time data collection.
 
     \item Implement a robust notification system capable of triggering alarms at installation sites and sending email alerts to
           users in affected areas.
 
-    \item Create a user-friendly web interface for monitoring and interaction, allowing users to access real-time data, configure
-          system settings, and receive alerts.
+    \item Allow configurable smoke and temperature alarm thresholds for more control over alarm sensitivity, as well as
+          configurable time-out durations on detection units that are close to cooking spaces.
 
-    \item Establish a secure and efficient database for storing employee contact information and system data, ensuring the
-          availability of necessary information for emergency response.
+    \item Create a user-friendly web interface for system monitoring and interaction, allowing users to access real-time data
+          visualizations on their dashboard. Users should be able to configure system settings, add new user contact information
+          to the notification subscriber list, and receive alerts all in the native web UI.
+
 \end{enumerate}
 
 \subsubsection{Functional Requirements}
@@ -75,21 +77,28 @@ The goals that the FANS development team aims to achieve in this project are as 
 \begin{enumerate}
     \item Consistent accuracy from the smoke sensors to avoid any false alarms/triggers.
 
-    \item Real-time data collection and monitoring of temperature and smoke levels.
+    \item Collected sensor data must be written to the cloud database in real-time for accurate monitoring.
 
-    \item Timely and reliable email notifications to users during fire emergencies.
+    \item Email and SMS notifications must be sent to all users in the notification subscriber list.
 
-    \item User-friendly web interface with intuitive design and real-time updates.
+    \item Users will be able to configure smoke and temperature alarm thresholds from the web interface.
 
-    \item Database with secure storage and retrieval of employee contact information and system data.
+    \item Users will be able to set variable length time-outs for the detection unit while they cook. The detection unit will
+          become active immediately after the time-out ends.
+
+    \item The web interface must provide time series charts that display both smoke levels and temperature levels as data is
+          written to the real-time database.
+
+    \item The detection unit must be able to signal an emergency to the both the alarm unit and the notification unit over the
+          local network.
 \end{enumerate}
 
 \subsubsection{Non-Functional Requirements}
 
 \begin{enumerate}
-    \item High system reliability and availability to ensure immediate response during emergencies.
+    \item The system must be highly reliable and available to ensure immediate response during emergencies.
 
-    \item Scalability to accommodate a growing number of users and installation sites.
+    \item The system should scale easily to accommodate a growing number of users and installation sites.
 
-    \item Data security and privacy measures to protect sensitive information.
+    \item There must be data security and privacy measures to protect sensitive contact information.
 \end{enumerate}
