@@ -1,0 +1,15 @@
+@startuml
+participant WebGui
+participant FirebaseDb
+
+loop forever
+activate WebGui
+activate FirebaseDb
+WebGui -> FirebaseDb: fetch_sensor_data()
+FirebaseDb --> WebGui: data
+deactivate FirebaseDb
+WebGui -> WebGui: display_data()
+
+
+end
+@enduml
