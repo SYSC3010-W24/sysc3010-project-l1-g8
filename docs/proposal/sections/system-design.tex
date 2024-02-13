@@ -118,6 +118,13 @@ The notification system sends its notifications following the receipt of a UDP m
 The contact information of the notification recipients are stored both on its local database and the cloud database.
 The local database is synchronized periodically with the cloud.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/NotifierSequence.png}
+    \caption{Sequence diagram for the primary responsibilities of the notification system.}
+    \label{fig:notifier-sq}
+\end{figure}
+
 \subsubsection{Alarm System}
 
 The alarm system is responsible for sounding an alarm in the building when an emergency has been detected. The alarm
@@ -126,6 +133,12 @@ point it sounds an alarm and flashes lights.
 
 The lights will be an on-board SenseHat, and the alarm is an audio-hat module. The alarm will continue to sound until
 the system receives a UDP message to stop.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/AlarmSequence.png}
+    \caption{Sequence diagram for the primary responsibilities of the alarm system.}
+\end{figure}
 
 \subsubsection{Haptic Alarm System}
 
@@ -148,9 +161,15 @@ user-configured settings (such as smoke level threshold for triggering an emerge
 Firebase.
 
 The interaction between the haptic alarm system and the real-time database is visible in Figure
-\ref{fig:haptic-alarm-sq}. The interaction between the smoke detector system and the real-time database is visible in
-Figure \ref{fig:smoke-detector-sq}. The primary interaction between the web GUI and the real-time database is
-documented in Figure \ref{fig:webui-sq}, and secondary interactions can be seen in Section \ref{s:use-cases}.
+\ref{fig:haptic-alarm-sq}.
+
+The interaction between the smoke detector system and the real-time database is visible in Figure
+\ref{fig:smoke-detector-sq}.
+
+The interaction between the notification system and the real-time database is visible in Figure \ref{fig:notifier-sq}.
+
+The primary interaction between the web GUI and the real-time database is documented in Figure \ref{fig:webui-sq}, and
+secondary interactions can be seen in Section \ref{s:use-cases}.
 
 \subsubsection{Web GUI}
 
