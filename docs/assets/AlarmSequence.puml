@@ -1,0 +1,22 @@
+@startuml
+
+SmokeDetector -> Alarm: signal_emergency() <<udp>>
+activate SmokeDetector
+activate Alarm
+deactivate SmokeDetector
+
+loop emergency active
+Alarm -> SenseHat: flash_lights()
+activate SenseHat
+Alarm -> AudioModule: sound_alarm()
+activate AudioModule
+deactivate SenseHat
+deactivate AudioModule
+end
+
+SmokeDetector -> Alarm: signal_no_emergency() <<udp>>
+activate SmokeDetector
+deactivate SmokeDetector
+deactivate Alarm
+
+@enduml
