@@ -12,7 +12,7 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/reading", methods=["GET"])
+@app.route("/settings", methods=["GET"])
 def reading():
     """Renders the settings page of the website."""
     return render_template("settings.html")
