@@ -17,12 +17,22 @@ def main() -> None:
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
 
+    # Check for configured thresholds
+    temp_threshold = float(db.child("thresholds").get("temperature").val().get("temperature"))  # type: ignore
+    db.child("emergency").set(False)
+
     # Open Sense Hat
     sensehat = SenseHat()
 
     while True:
+        # Fetch data and time stamp
         temperature = sensehat.get_temperature()
         timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
+
+        # Alert of emergency if threshold is exceeded
+        if temperature > temp_threshold:
+            db.child("emergency").set(True)
+
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
 
 
