@@ -1,50 +1,89 @@
+body {
+  background-color: #f1f1f1;
+  margin: auto;
+  font-family: "Courier New", Courier, monospace;
+}
 .main-container {
   display: flex;
   flex-direction: row;
   width: 100%;
-  margin-top: 7%;
+  margin-top: 2%;
 }
 
+.navbar {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: #ac3e31;
+  font-size: 1.5em;
+  justify-content: center;
+}
+
+.navbar ul {
+  display: flex;
+  flex-direction: row;
+}
+
+.navbar ul li {
+  list-style: none;
+  text-decoration: none;
+  padding-right: 2em;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+.navbar ul li a:hover {
+  color: white;
+}
 .telemetry-box {
-  border-style: solid;
-  border-color: red;
+  border-radius: 5px;
   padding: 2%;
   margin: 2%;
-  width: 45%;
+  width: 100%;
+  background-color: #dadada;
 }
 
 .current-temp-box {
-  border-style: solid;
-  border-color: red;
   padding: 2%;
   margin: 2%;
+  background-color: #ac3e31;
+  border-radius: 5px;
+}
+
+.box-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .data-box {
-  border-style: solid;
-  border-color: red;
+  background-color: #ac3e31;
+  border-radius: 5px;
   padding: 2%;
   margin: 2%;
 }
 
 .alarm-box {
-    border-style: solid;
-    border-color: red;
-    padding: 2%;
-    margin: 2%;
-    width: 45%;
+  background-color: #dadada;
+  border-radius: 2%;
+  padding: 2%;
+  margin: 2%;
+  width: 45%;
 }
 
 .alarm-status-box {
-    border-style: solid;
-    border-color: red;
-    padding: 2%;
-    margin: 2%;
+  background-color: #ac3e31;
+  border-radius: 5px;
+  padding: 2%;
+  margin: 2%;
 }
 
 .alarm-telemetry-box {
-    border-style: solid;
-    border-color: red;
-    padding: 2%;
-    margin: 2%;
+  background-color: #ac3e31;
+  border-radius: 5px;
+  padding: 2%;
+  margin: 2%;
 }
