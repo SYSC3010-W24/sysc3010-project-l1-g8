@@ -1,0 +1,50 @@
+.main-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 7%;
+}
+
+.telemetry-box {
+  border-style: solid;
+  border-color: red;
+  padding: 2%;
+  margin: 2%;
+  width: 45%;
+}
+
+.current-temp-box {
+  border-style: solid;
+  border-color: red;
+  padding: 2%;
+  margin: 2%;
+}
+
+.data-box {
+  border-style: solid;
+  border-color: red;
+  padding: 2%;
+  margin: 2%;
+}
+
+.alarm-box {
+    border-style: solid;
+    border-color: red;
+    padding: 2%;
+    margin: 2%;
+    width: 45%;
+}
+
+.alarm-status-box {
+    border-style: solid;
+    border-color: red;
+    padding: 2%;
+    margin: 2%;
+}
+
+.alarm-telemetry-box {
+    border-style: solid;
+    border-color: red;
+    padding: 2%;
+    margin: 2%;
+}
