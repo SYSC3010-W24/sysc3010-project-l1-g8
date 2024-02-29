@@ -1,7 +1,42 @@
-<!doctype html>
-<title>FANS Homepage</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+<html>
+  <header>
+    <title>FANS WebApp</title>
+    <link rel="stylesheet" href="static/index.css">
+  </header>
+  <a href="/" id="logo" src=""></a>
+
+  <body>
+    <main>
+      <div class="main-container">
+        
+        <div class="telemetry-box">
+          <div class="current-temp-box">
+            <p class="box-name">Temperature</p>
+          </div>
+
+          <div class="data-box">
+            <p class="box-name">Temperature History</p>
+          </div>
+
+          <div class="data-box">
+            <p class="box-name">Smoke History</p>
+          </div>
+          
+          <div class="data-box">
+            <p class="box-name">Methane Gas History</p>
+          </div>
+        </div>
+
+        <div class="alarm-box">
+          <div class="alarm-status-box">
+            <p class="box-name">Fire Alarm</p>
+          </div>
+          <div class="alarm-telemetry-box">
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </body>
+</html>
