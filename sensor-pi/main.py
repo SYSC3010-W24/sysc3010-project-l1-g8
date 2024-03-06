@@ -4,6 +4,7 @@ from sense_hat import SenseHat
 import pyrebase
 import json
 import datetime as dt
+import netifaces as ni
 
 FIREBASE_CONFIG: str = "firebase_config.json"
 
@@ -16,6 +17,10 @@ def main() -> None:
         config = json.loads(file.read())
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
+
+    # Send current IP address for LAN communication between nodes
+    ip_addr = ni.ifaddresses("wlan0")[ni.AF_INET][0]["addr"]
+    db.child("devices").child("sensor-pi").set(ip_addr)
 
     # Check for configured thresholds
     temp_threshold = float(db.child("thresholds").get("temperature").val().get("temperature"))  # type: ignore
