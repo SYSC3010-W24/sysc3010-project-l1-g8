@@ -1,0 +1,5 @@
+Dear [USER],
+
+This is an emergency notification. Please exit the building.
+
+Emergency detected: [DATE-TIME]
