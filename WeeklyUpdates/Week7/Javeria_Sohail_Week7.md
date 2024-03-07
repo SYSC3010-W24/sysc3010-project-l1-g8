@@ -27,7 +27,6 @@ I spent 6 hours working on the project this week.
 
 - Given the amount of time we have for our demos, the reports take a lot of time from us and the feedback fruits takes an hour minimum as I try my best to give fruitful feedbacks which is making us lose time
 
-- While fun, competing in the Candian Engineering Competition with another team mate took a considerable amount of development time away
 
 5. **_What are you planning to do next week_**? _(give specific goals)_
 
