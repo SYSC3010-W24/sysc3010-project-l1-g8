@@ -1,2 +1,4 @@
+venv/
 web-app-venv/*
 __pycache__/*
+firebase_config.json
