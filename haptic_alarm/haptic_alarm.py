@@ -4,9 +4,12 @@ import RPi.GPIO as GPIO
 
 # Firebase configuration
 config = { 
-  "apiKey": "AIzaSyDCrm-YWek1mShoftACTezFdzn8PoLSNrY", 
-  "databaseURL": "https://fans-38702-default-rtdb.firebaseio.com/"
+  "apiKey": "AIzaSyDCrm-YWek1mShoftACTezFdzn8PoLSNrY",
+  "authDomain": "fans-38702.firebaseapp.com",
+  "databaseURL": "https://fans-38702-default-rtdb.firebaseio.com/",
+  "storageBucket": "fans-38702.appspot.com"
 }
+
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
@@ -17,8 +20,8 @@ GPIO.setup(buzzer_pin, GPIO.OUT)
 
 def control_alarm():
     while True:
-        emergency_flag = db.child("emergency_flag").get().val()
-
+        emergency_flag = db.child("emergency").get().val()
+        print(emergency_flag)
         if emergency_flag:
             # Start buzzing
             GPIO.output(buzzer_pin, GPIO.HIGH)
