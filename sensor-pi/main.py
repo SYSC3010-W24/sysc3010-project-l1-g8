@@ -5,8 +5,10 @@ import pyrebase
 import json
 import datetime as dt
 import netifaces as ni
+import socket
 
 FIREBASE_CONFIG: str = "firebase_config.json"
+SEND_PORT: int = 2003
 
 
 def main() -> None:
@@ -29,6 +31,9 @@ def main() -> None:
     # Open Sense Hat
     sensehat = SenseHat()
 
+    # Create socket for sending
+    channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
     while True:
         # Fetch data and time stamp
         temperature = sensehat.get_temperature()
@@ -37,6 +42,9 @@ def main() -> None:
         # Alert of emergency if threshold is exceeded
         if temperature > temp_threshold:
             db.child("emergency").set(True)
+            alarm_ip = db.child("devices").child("alarm").get().val()
+            emergency_message = 0
+            channel.sendto(emergency_message.to_bytes(), (alarm_ip, SEND_PORT))
 
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
 
