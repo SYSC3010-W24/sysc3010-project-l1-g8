@@ -87,3 +87,9 @@ body {
   padding: 2%;
   margin: 2%;
 }
+
+#refresh-temp {
+    width: 100%;
+    height: 3em;
+    padding: 1em;
+}
