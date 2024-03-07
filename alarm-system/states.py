@@ -39,10 +39,10 @@ class State(ABC):
     def emergency_over(self, context: Context) -> None:
         """Handles the event of an emergency ending."""
 
-    def entry(self, context: Conext) -> None:
+    def entry(self, context: Context) -> None:
         """Performs the entry activity of the state."""
 
-    def exit(self, context: Conext) -> None:
+    def exit(self, context: Context) -> None:
         """Performs the exit activity of the state."""
         return
 
