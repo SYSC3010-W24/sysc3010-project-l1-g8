@@ -1,12 +1,13 @@
 import smtplib
 import ssl
 import json
-from notifier.template import Template
+from templates import Template
 import datetime as dt
 
 PORT: int = 465  # For SSL
 FANS_CREDENTIALS: str = "./fans_credentials.json"
 TEST_EMAILS: list[str] = ["matteo.golin@gmail.com"]
+SMTP_SERVER: str = "smtp.gmail.com"
 
 
 def main() -> None:
@@ -22,7 +23,7 @@ def main() -> None:
     # Create secure SSL connection for sending emails
     context = ssl.create_default_context()
 
-    with smtplib.SMTP_SSL(credentials["email"], PORT, context=context) as server:
+    with smtplib.SMTP_SSL(SMTP_SERVER, PORT, context=context) as server:
         server.login(credentials["email"], credentials["pass"])
 
         for email in TEST_EMAILS:
