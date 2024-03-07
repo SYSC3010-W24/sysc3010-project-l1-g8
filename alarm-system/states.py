@@ -9,10 +9,10 @@ BUFFER_SIZE: int = 100
 class Context:
     """Represents the state machine context for the alarm state machine."""
 
-    def __init__(self) -> None:
+    def __init__(self, ip_addr: str, port: int) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.bind((ip_addr, port))
         self.state: State = WaitForEmergency()  # Start by waiting for an emergency
-        self.state.entry(self)  # Start the first state in motion
 
     def emergency(self) -> None:
         """Handles the event of an emergency."""
@@ -25,7 +25,12 @@ class Context:
     def wait_for_message(self) -> Messages:
         """Waits for a message over UDP."""
         data, addr = self.socket.recvfrom(BUFFER_SIZE)
-        return Messages(int(data))
+        print(f"Received {Messages(int.from_bytes(data))} from address.")
+        return Messages(int.from_bytes(data))
+
+    def start(self) -> None:
+        """Starts the FSM."""
+        self.state.entry(self)  # Start the first state in motion
 
 
 class State(ABC):
