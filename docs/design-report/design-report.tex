@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% Proper links
+\usepackage[
+    pdftitle={SYSC3010 Computer Systems Development Project - FANS Project Proposal},
+    colorlinks=false,
+    allbordercolors={0 0 0},
+    citebordercolor={1 1 1}, % No border for citations
+    pdfborderstyle={/S/U/W 1},
+]{hyperref}
+
+% Display graphics nicely
+\usepackage{float}
+\usepackage{graphicx}
+
+% References
+\usepackage[style=ieee]{biblatex}
+\addbibresource{./references.bib}
+
+% Remove paragraph indentation and use newline to separate instead. %
+\usepackage[parfill]{parskip}
+\setlength{\parindent}{0cm}
+
+\author{
+    Grant Achuzia, 101222695 \\
+    Javeria Sohail, 101197163 \\
+    Matteo Golin, 101220709 \\
+    Saja Fawagreh, 101217326 \\
+    TA: Sean Kirkby
+}
+\title{
+    SYSC3010 Computer Systems Development Project \\
+    FANS Detailed Design Report \\
+    {\large Group L1-G8} \\
+    {
+        \vspace{0.5in}
+        \centering
+        \includegraphics[width=4in]{../assets/header-image.jpg} \\
+        \small \cite{header-img}
+    }
+}
+\date{
+    Created: March 11th, 2024 \\
+    Modified: \today
+}
+
+\begin{document}
+
+% TITLE %
+\maketitle
+\pagebreak
+
+% TABLE OF CONTENTS %
+{
+    \hypersetup{hidelinks}
+    \tableofcontents
+}
+
+% MAIN MATTER %
+\include{sections/introduction}
+\include{sections/design}
+\include{sections/software}
+\include{sections/hardware}
+\include{sections/gui}
+\include{sections/testing}
+\include{sections/project}
+
+% BIBLIOGRAPHY %
+\pagebreak
+\printbibliography
+
+\end{document}
