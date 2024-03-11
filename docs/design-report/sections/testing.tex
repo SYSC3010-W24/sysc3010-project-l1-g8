@@ -56,4 +56,70 @@ This can be manually verified.
 
 \subsection{Unit Test Demo}
 
+The purpose of the unit test demo is to demonstrate that the individual components of our system behave as expected and
+do not contain logical or physical errors. This will sanity check our hardware components and our software logic.
+
+\subsubsection{Hardware}
+
+The hardware components that will need to be tested are:
+
+\begin{itemize}
+    \item Smoke sensor
+    \item Temperature sensor
+    \item Piezoelectric buzzer
+    \item LCD screen
+\end{itemize}
+
+\textbf{Smoke Detector}
+
+The smoke detector will be difficult to test due to the nature of what it measures. It will not be possible to light a
+fire within the school or near campus because that will set of existing fire suppression systems and may be dangerous.
+Testing the smoke detector in smokey environments can be done by:
+
+\begin{itemize}
+    \item Running the data collection from the smoke detector in a smoking zone on campus.
+    \item Running the data collection from the smoke detector off campus and lighting a fire nearby.
+\end{itemize}
+
+For both of these tests, it should be verified that smoke levels are detected. This will be a one-time sanity test of
+the sensor. The smoke detector can also be tested in smokeless environments by collecting data from the sensor indoors
+on campus and ensuring that no smoke is detected.
+
+\textbf{Temperature Sensor}
+
+To test the temperature sensor, we can collect data from the sensor in the lab setting and ensure that measurements are
+within the acceptable range for room temperature.
+
+\textbf{Piezoelectric Buzzer}
+
+To test the piezoelectric buzzer, we can test turning on and off the buzzer and verifying that it produces noise.
+Additionally, we can set the buzzer to produce different frequencies and verify that they are set correctly by checking
+with a instrument tuning app.
+
+\textbf{LCD Screen}
+
+Finally, to test the LCD screen, several test messages can be displayed on screen and visually inspected for
+correctness as a sanity check.
+
+\subsubsection{Database Integrity}
+
+To test cloud database integrity, we can perform several test and security checks.
+
+\textbf{Insecure Access}
+
+To test the security of the cloud database, we can attempt to perform read and write operations using an incorrect API
+key and ensure that the requests are denied.
+
+\textbf{Stress Test}
+
+To stress test the cloud database, several instances of the sensor data collection program can be run on multiple
+Raspberry Pis, all of which will upload sensor data to the database. The database should:
+
+\begin{itemize}
+    \item Keep up with all of the simultaneous requests.
+    \item Avoid any overwriting/race conditions with concurrent write operations.
+\end{itemize}
+
+\subsubsection{Software}
+
 \subsection{Final Demo}
