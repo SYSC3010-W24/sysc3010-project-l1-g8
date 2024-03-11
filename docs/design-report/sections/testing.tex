@@ -16,6 +16,9 @@ system. In order to achieve this level of demonstration, the following communica
     \item Emergency signal from sensor data collection system to the alarm system on local network.
 \end{itemize}
 
+It should be noted that the test for the sensor data upload over internet also demonstrates I2C communication between
+the Pi 4 and the SenseHat board.
+
 First is the uploading of sensor data to the Firebase database over the internet. For this communication sequence, the
 sensor data collection system will be run on one of the Raspberry Pis. It will read temperature data from the SenseHat
 and post this data to the Firebase database using Pyrebase. The demonstration can be verified by watching the Firebase
