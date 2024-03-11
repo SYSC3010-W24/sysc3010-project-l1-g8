@@ -1,6 +1,55 @@
 \section{Test Plans}
 
+Testing is an important part of any system's design. It ensures that project iterations follow the specification,
+behave appropriately and are less likely to include bugs.
+
 \subsection{End-to-end Communication Demo}
+
+The end-to-end communication demo should demonstrate all of the major forms of communication present in the FANS
+system. In order to achieve this level of demonstration, the following communication examples will be showcased:
+
+\begin{itemize}
+    \item Sensor data upload to Firebase over internet.
+    \item Email notifications to affected users over internet (email protocol).
+    \item Haptic alarm buzzing in accordance with emergency flag in Firebase over internet.
+    \item Display of sensor data on the user interface over internet.
+    \item Emergency signal from sensor data collection system to the alarm system on local network.
+\end{itemize}
+
+First is the uploading of sensor data to the Firebase database over the internet. For this communication sequence, the
+sensor data collection system will be run on one of the Raspberry Pis. It will read temperature data from the SenseHat
+and post this data to the Firebase database using Pyrebase. The demonstration can be verified by watching the Firebase
+database console, since the data will be updated in real-time.
+
+Second will be the email notifications to affected users over the internet using email protocol. To achieve this
+demonstration, the email notification system will be run on one of the Raspberry Pis. Using Pytest, the program will
+first send an email from the FANS email back to itself. Then, the program will use \texttt{imaplib} to login to the
+FANS email account and verify that the latest message in its inbox contains the same email message that was sent in the
+test. If the messages match, Pytest will report a success. This test is fully automated.
+
+Next is the haptic alarm buzzing. For this test, the haptic alarm program will be run on one of the Raspberry Pi's to
+emulate the Pi Pico (as it has not arrived at the time of writing). When the program is run, it will poll the Firebase
+database using \texttt{pyrebase} to check if the emergency flag has been raised. The flag can either be raised by hand
+(the tester modifies the flag using the Firebase console) or it can be set by running the sensor data collection system
+with a low emergency reporting threshold for temperature. In either case, when the flag is raised, the output of the
+haptic alarm can be verified by observing the console messages. Console printing will be used in place of the buzzer
+actuator while we wait for components. A console message of "buzz" would indicate the buzzer buzzing, and no console
+messages indicate no emergency while the alarm is polling the database.
+
+To test the display of sensor data collection on the user interface, the GUI will be run on one of the Raspberry Pis
+using Flask. When a user clicks the "refresh" button, the Flask API endpoint responsible for returning temperature data
+will be hit. The endpoint will use \texttt{pyrebase} to request the latest temperature data from Firebase and then will
+respond with JSON. The GUI's JavaScript logic will simply print this JSON as text content of an HTML paragraph tag to
+show that the connection is present.
+
+Finally, to demonstrate UDP communication over the local area network, both the sensor data collection system and the
+alarm system will be run on two separate Pis. Both programs will first upload their public IP to the Firebase database
+under a 'devices' table, and then read the other device's IP. The sensor data collection system should have a
+sufficiently low emergency threshold to trigger an emergency at room temperature (only for testing purposes). Once the
+sensor data collection system detects an emergency, it will send a UDP message containing the numerical data '0' (the
+agreed upon encoding for signifying an emergency) over the LAN addressed to the alarm system. The alarm system will
+receive the emergency notification, and instead of activating an actuator it will print "Received 0" to the console.
+This can be manually verified.
 
 \subsection{Unit Test Demo}
 
