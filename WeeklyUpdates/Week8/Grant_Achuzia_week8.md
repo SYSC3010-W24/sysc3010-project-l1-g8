@@ -38,5 +38,4 @@ I spent 7 hours working on the project this week.
 
 6. **_Is anything blocking you that you need from others?_** _(What do you need from whom)_
 
-- 
-- 
+- Need components to start developing actual project.
