@@ -1,0 +1,36 @@
+@startuml
+class SensorData {
+  - timestamp: Timestamp
+  - smokeLevel: Integer
+  - temperature: Float
+}
+class Users {
+  - userId: String
+  - name: String
+  - email: String
+  - phone: String
+}
+class UserSettings {
+  - userId: String
+  - smokeThreshold: Integer
+  - temperatureThreshold: Float
+  - timeout: Integer
+}
+class Emergencies {
+  - emergencyId: String
+  - timestamp: Timestamp
+  - sensorId: String
+  - isActive: Boolean
+}
+class IPAddresses {
+  - deviceName: String
+  - IP: String
+}
+' Associations
+Users "1" --> "0..*" UserSettings : "Configures"
+SensorData "0..*" --> "1" Emergencies : "Triggers"
+IPAddresses "1" -- "0..*" SensorData : "Hosts"
+' Dependencies
+Emergencies ..> Users : "Notifies"
+UserSettings ..> SensorData : "Defines Thresholds For"
+@enduml
