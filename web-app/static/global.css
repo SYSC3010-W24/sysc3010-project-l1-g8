@@ -1,0 +1,48 @@
+:root {
+    --background-color-light: #f5f5f5;
+    --text-color-light: #23282e;
+    --link-hover-color-light: #0f9ddd;
+    --border-color-light: #fff6e0;
+    
+  
+    --background-color-dark: #23282E;
+    --text-color-dark: #f5f5f5;
+    --link-hover-color-dark: #0f9ddd;
+    --border-color-dark: #fff6e0;
+
+    --background-color-fire: #2c0000;
+    --text-color-fire: #ff4d4d;
+    --link-hover-color-fire: #ff1a1a;
+    --border-color-fire: #ff8080;
+
+  }
+  
+  [data-theme="light"] {
+    --background-color: var(--background-color-light);
+    --text-color: var(--text-color-light);
+    --link-hover-color: var(--link-hover-color-light);
+    --border-color: var(--border-color-light);
+  }
+  
+  [data-theme="dark"] {
+    --background-color: var(--background-color-dark);
+    --text-color: var(--text-color-dark);
+    --link-hover-color: var(--link-hover-color-dark);
+    --border-color: var(--border-color-dark);
+  }
+
+  [data-theme="fire"] {
+    --background-color: var(--background-color-fire);
+    --text-color: var(--text-color-fire);
+    --link-hover-color: var(--link-hover-color-fire);
+    --border-color: var(--border-color-fire);
+  }
+
+*{
+    margin: 0;
+    background-color: var(--background-color-dark);
+}
+
+p{
+    color: var(--text-color-dark)
+}
