@@ -165,4 +165,44 @@ correct response is returned. This would involve verifying JSON response structu
 
 \subsection{Final Demo}
 
-% TODO: Write final demo
+For the final demo, we will need to demonstrate several key features of our system:
+
+\begin{itemize}
+    \item Real-time display of sensor data. \\
+
+          This will require us to run the web UI while the smoke detection system is active, which will display the live data as
+          it updates.
+
+    \item Configurable emergency threshold in real-time. \\
+
+          This will require changing the temperature threshold via the UI to a low value while the smoke detection system is
+          running. The smoke detection system should receive the change in configuration and then sound an alarm because room
+          temperature will be higher than the threshold.
+
+    \item User configurable timeouts. \\
+
+          To demonstrate this feature, a timeout should be set via the web UI while the alarm is sounding. FANS should detect the
+          timeout being set and stop the alarm for the duration of the timeout. The alarm should immediately resume once the
+          timeout is complete.
+
+    \item Updating user contact information. \\
+
+          To demonstrate this functionality, a new user should be added via the web UI. The cloud database and the local database
+          of the notification system can be verified manually to contain the new user information.
+
+    \item Emergency notification emails. \\
+
+          To demonstrate this feature, one of the testers should be included as a user in the database table of contact
+          information. When the system triggers an emergency (due to a temperature threshold being set below room temperature),
+          the tester should verify that they received an email from FANS with the emergency message and a recent time stamp.
+
+    \item Alarm sounding during an emergency. \\
+
+          When the temperature threshold is set to be below room temperature, testers should verify that the alarm node sounds
+          the buzzer and flashes its LEDs.
+
+    \item Haptic alarm buzzing during an emergency. \\
+
+          When the temperature threshold is set to be below room temperature, testers should verify that the haptic alarm buzzes.
+
+\end{itemize}
