@@ -122,7 +122,46 @@ Raspberry Pis, all of which will upload sensor data to the database. The databas
 
 \subsubsection{Software}
 
-% TODO: Write unit test plans for the software
+All software unit tests will be written using Pytest to get code coverage reports and automatic test running features.
+
+\textbf{Smoke Detection System}
+
+Logic for checking if sensor data is above a configured threshold will be tested in scenarios where:
+
+\begin{itemize}
+    \item The data is \textit{above} the configured threshold.
+    \item The data is \textit{below} the configured threshold.
+\end{itemize}
+
+This will ensure that the logic correctly reports emergencies when sensor data is above a threshold and does not report
+an emergency when the data is below the threshold.
+
+\textbf{Alarm System}
+
+Unit tests can be performed by simulating the events that would cause the alarm state machine to transition states.
+Additionally, all of the logic performed in the states is called through the \texttt{Context} object that is passed to
+the states' event handler methods. A mock version of the \texttt{Context} object can be created which will run assert
+statements to verify that the correct logic is being called at the right time.
+
+\textbf{Notification System}
+
+Unit tests written for this system will guarantee that classes shown in the class diagram are constructed properly.
+
+\texttt{User} and \texttt{UserSettings} data will be constructed from JSON returned from the Firebase Database, so we
+can attempt to construct them with fake JSON data to see that they are constructed properly. Invalid JSON will be tested
+to fail construction with an exception.
+
+\textbf{Haptic Alarm System}
+
+Unit tests written for the haptic alarm system will take a similar approach to the alarm system, where the state
+machine \texttt{Context} object is mocked to contain assert statements in place of methods for performing system
+actions. The individual states can again have their event handling methods called directly by the test runner.
+
+\textbf{Web UI}
+
+The web UI is more difficult to test because much of its functionality has to do with visual display. However, the API
+endpoints used by the UI could be tested by sending GET and POST requests programmatically and verifying that the
+correct response is returned. This would involve verifying JSON response structure and contents.
 
 \subsection{Final Demo}
 
