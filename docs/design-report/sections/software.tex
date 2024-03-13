@@ -55,10 +55,11 @@ design pattern.
 % TODO: Add state machine diagram
 % TODO: Include all classes being used
 
-The notification system will be written in the Python programming language, also due to its simplicity. The
-notification system will listen for a UDP message signifying an emergency, and then send out email and SMS
-notifications to all users in the Firebase database. Once a UDP message signifying the end of the emergency is
-received, the system will send a followup email to all users that the emergency has been resolved.
+The notification system will be written in the Python programming language, also due to its simplicity and availability
+of libraries for sending email notifications \cite{python-email}. The notification system will listen for a UDP message
+signifying an emergency, and then send out email and SMS notifications to all users in the Firebase database. Once a
+UDP message signifying the end of the emergency is received, the system will send a followup email to all users that
+the emergency has been resolved.
 
 The notification system will keep a local cache of user contact information as a backup for failing internet
 connectivity. It will periodically update its local cache with any changes in the upstream Firebase database.
