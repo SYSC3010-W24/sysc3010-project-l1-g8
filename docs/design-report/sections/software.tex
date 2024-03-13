@@ -52,17 +52,23 @@ design pattern.
 
 \subsection{Notification System}
 
-% TODO: Add state machine diagram
-% TODO: Include all classes being used
-
 The notification system will be written in the Python programming language, also due to its simplicity and availability
 of libraries for sending email notifications \cite{python-email}. The notification system will listen for a UDP message
 signifying an emergency, and then send out email and SMS notifications to all users in the Firebase database. Once a
 UDP message signifying the end of the emergency is received, the system will send a followup email to all users that
 the emergency has been resolved.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../assets/NotificationSystemStateMachine.png}
+    \caption{The state machine representing the primary functionality of the notification system.}
+\end{figure}
+
 The notification system will keep a local cache of user contact information as a backup for failing internet
 connectivity. It will periodically update its local cache with any changes in the upstream Firebase database.
+
+The notification system will also have locally stored email and SMS templates for notifications. These will be loaded
+as "Templates", which provide an interface for easy customization and sending of notifications.
 
 \begin{figure}[H]
     \centering
@@ -70,8 +76,6 @@ connectivity. It will periodically update its local cache with any changes in th
     \caption{Class diagram for the notification system node.}
 \end{figure}
 
-The notification system will also have locally stored email and SMS templates for notifications. These will be loaded
-as “Templates”, which provide an interface for easy customization and sending of notifications.
 
 \subsection{Haptic Alarm System}
 
