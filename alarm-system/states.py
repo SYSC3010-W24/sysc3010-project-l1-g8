@@ -53,25 +53,38 @@ class AlarmFSM:
     def __init__(self, ip_addr: str, port: int) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((ip_addr, port))
-        self.state: State = WaitForEmergency()  # Start by waiting for an emergency
+        self.__state: State = WaitForEmergency()  # Start by waiting for an emergency
+
+    @property
+    def state(self) -> State:
+        """Gets the state attribute."""
+        return self.__state
+
+    @state.setter
+    def set_state(self, new_state: State) -> None:
+        """Sets the state attribute."""
+        self.__state = new_state
+
+        if hasattr(new_state, "entry"):
+            self.__state.entry(self)  # type: ignore
 
     def emergency(self) -> None:
         """Handles the event of an emergency."""
-        self.state.emergency(self)
+        self.__state.emergency(self)  # type: ignore
 
     def emergency_over(self) -> None:
         """Handles the event of an emergency ending."""
-        self.state.emergency_over(self)
+        self.__state.emergency_over(self)  # type: ignore
 
     def wait_for_message(self) -> Messages:
         """Waits for a message over UDP."""
-        data, addr = self.socket.recvfrom(BUFFER_SIZE)
+        data, _ = self.socket.recvfrom(BUFFER_SIZE)
         print(f"Received {Messages(int.from_bytes(data))} from address.")
         return Messages(int.from_bytes(data))
 
     def start(self) -> None:
         """Starts the FSM."""
-        self.state.entry(self)  # Start the first state in motion
+        self.__state.entry(self)  # type: ignore
 
     def set_led_state(self, state: bool) -> None:
         """
