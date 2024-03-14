@@ -1,50 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="global.css">
-    <title>FANS</title>
-</head>
-<body>
+<html>
+  <header>
+    <title>FANS Home</title>
+    <link rel="stylesheet" href="static/index.css" />
+  </header>
+
+  <div class="navbar">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/settings">Settings</a></li>
+    </ul>
+  </div>
+
+  <script>
+    const TEMPERATURE_API = {{url_for("temperature_api") | tojson}};
+    const temperature_box = document.getElementById("temperature");
+
+    function update_temp() {
+        fetch(TEMPERATURE_API).then(
+            (response) => {
+                response.json().then(
+                    temperature_data => {
+                        console.log(temperature_data);
+                        document.getElementById("temperature").textContent = JSON.stringify(temperature_data);
+                    }
+                )
+            }
+        )
+    }
+  </script>
+
+  <body>
     <main>
-        <div class="nav-bar">
-            <a href="index.html">Home</a>
-            <a href="settings.html">Settings</a>
-            <a href="login.html">Logout</a>
+      <div class="main-container">
+        <div class="telemetry-box">
+          <div class="current-temp-box">
+            <p id="temperature" class="box-name">Temperature</p>
+            <button id="refresh-temp" onclick="update_temp()">Refresh</button>
+          </div>
+
+          <div class="data-box">
+            <p class="box-name">Temperature History</p>
+          </div>
+
+          <div class="data-box">
+            <p class="box-name">Smoke History</p>
+          </div>
+
+          <div class="data-box">
+            <p class="box-name">Methane Gas History</p>
+          </div>
         </div>
 
-        <div class="fire-alarm-box">
-            <div class="box1">
-                <p>Fire Alarm 1</p>
-                <p>Status: </p>
-            </div>
-            <div class="alarm-status-box">
-
-            </div>
-            <div class="log-box">
-                <p>LOG</p>
-            </div>
-            
+        <div class="alarm-box">
+          <div class="alarm-status-box">
+            <p class="box-name">Fire Alarm</p>
+          </div>
+          <div class="alarm-telemetry-box"></div>
         </div>
-
-        <div class="content-box">
-            <div class="smoke-box">
-                <p>Smoke</p>
-                <div class="smoke-graph">
-
-                </div>
-            </div>
-            <div class="temperature-box">
-                <p>Temperature</p>
-                <div class="temperature-graph">
-
-                </div>
-            </div>
-        </div>
-
-
+      </div>
     </main>
-</body>
+  </body>
 </html>
