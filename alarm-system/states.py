@@ -63,7 +63,6 @@ class AlarmFSM:
     @state.setter
     def state(self, new_state: State) -> None:
         """Sets the state attribute after exiting the previous state, and then enters the next state."""
-        print(new_state)
         self.__state.exit(self)  # type: ignore
         self.__state = new_state
         self.__state.entry(self)  # type: ignore
