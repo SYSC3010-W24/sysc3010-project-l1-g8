@@ -94,3 +94,33 @@ def test_alarm_on_emergency_over(ctx: Context) -> None:
     state = AlarmOn()
     state.emergency_over(ctx)
     assert ctx.state.__class__ is WaitForEmergency
+
+
+def test_alarm_off_emergency_over(ctx: Context) -> None:
+    """Tests that the emergency over event handler for the AlarmOff state behaves as expected."""
+
+    ctx.state = AlarmOff()
+    ctx.state.emergency_over(ctx)
+    assert ctx.state.__class__ is WaitForEmergency
+
+
+def test_alarm_off_emergency(ctx: Context) -> None:
+    """Tests that the emergency event handler for the AlarmOff state behaves as expected."""
+
+    ctx.state = AlarmOff()
+    ctx.state.emergency(ctx)
+    assert ctx.state.__class__ is AlarmOff
+
+
+def test_alarm_off_entry(ctx: Context) -> None:
+    """Tests that the entry logic for the AlarmOff state behaves as expected."""
+
+    def _assert_off(value: bool) -> None:
+        """Fails if the passed value is true."""
+        assert not value
+
+    ctx.state = AlarmOff()
+    ctx.set_alarm_state = _assert_off  # type: ignore
+    ctx.set_led_state = _assert_off  # type: ignore
+    ctx.state.entry(ctx)
+    assert ctx.state.__class__ is AlarmOn
