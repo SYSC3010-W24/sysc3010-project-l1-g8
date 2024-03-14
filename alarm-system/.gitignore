@@ -1,4 +1,4 @@
+venv/
 **/__pycache__/
 firebase_config.json
-**/__pycache__/
-venv/
+.pytest_cache
