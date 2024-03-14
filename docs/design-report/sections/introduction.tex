@@ -23,21 +23,27 @@ across Canada \cite{smoke-alarm-gc}.
 
 \begin{enumerate}
     \item \textbf{Accurate and Reliable Detection} \\ Implement dual-sensor technology combining photoelectric and thermistor-based
-          sensors for accurate smoke and temperature detection, alongside self-testing routines to ensure reliability.
+          sensors for accurate smoke and temperature detection, alongside unit testing routines to ensure reliability.
 
-    \item \textbf{Real-time Monitoring and Alerts} \\ Utilize a cloud-based platform for continuous real-time data analysis, with a
-          reliable communication channel for immediate alert dispatch.
+    \item \textbf{Real-time Monitoring and Alerts} \\ Utilize a cloud-based platform for continuous real-time data
+          storage, with a reliable communication channel for immediate alert dispatch. The database must be able to
+          serve the stored data to multiple clients over an internet connection as it is updated in real-time.
 
-    \item \textbf{User-configurable Settings} \\ Provide an intuitive interface for users to customize alarm thresholds and notification
-          preferences, including quiet hours and primary notification channels.
+    \item \textbf{User-configurable Sensitivity} \\ Provide an interface for users to customize their alarm
+          system sensitivity preferences, including both temperature and smoke detection trigger thresholds.
+
+    \item \textbf{User-defined System Timeout} \\ Provide an interface for users to temporarily disable their alarm
+          systems for a pre-determined length of time, allowing the user to avoid triggering emergencies in high-smoke
+          environments (such as kitchens).
 
     \item \textbf{Comprehensive Notification System} \\ Initiate on-site alarms and send email to users and designated contacts to ensure
           widespread awareness during emergencies.
 
-    \item \textbf{Integration with Emergency Services} \\ Facilitate automatic emergency service alerts upon fire detection, including
-          crucial details like location and building type, to expedite response times.
+    \item \textbf{Wearable Emergency Response} \\ Incorporate a haptic alarm wearable device that will notify users
+          through vibration in active emergency situations. This is ideal for situations where auditory alarms may not
+          be effective or where users with hearing impairments are at risk of a fire hazard, ensuring maximum reach and
+          effectiveness of alerts.
 
-          % TODO: REPLACE
 \end{enumerate}
 
 By adopting these key requirements, FANS aims to deliver a technologically advanced, user-friendly system for timely
