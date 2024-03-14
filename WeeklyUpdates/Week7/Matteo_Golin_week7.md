@@ -4,7 +4,7 @@
 
 ### Student name: Matteo Golin
 
-### Week: 6 (28 Feb - 6 Mar)
+### Week: 7 (28 Feb - 6 Mar)
 
 ---
 
