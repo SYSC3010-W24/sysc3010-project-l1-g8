@@ -1,0 +1,208 @@
+\section{Test Plans}
+
+Testing is an important part of any system's design. It ensures that project iterations follow the specification,
+behave appropriately and are less likely to include bugs.
+
+\subsection{End-to-end Communication Demo}
+
+The end-to-end communication demo should demonstrate all of the major forms of communication present in the FANS
+system. In order to achieve this level of demonstration, the following communication examples will be showcased:
+
+\begin{itemize}
+    \item Sensor data upload to Firebase over internet.
+    \item Email notifications to affected users over internet (email protocol).
+    \item Haptic alarm buzzing in accordance with emergency flag in Firebase over internet.
+    \item Display of sensor data on the user interface over internet.
+    \item Emergency signal from sensor data collection system to the alarm system on local network.
+\end{itemize}
+
+It should be noted that the test for the sensor data upload over internet also demonstrates I2C communication between
+the Pi 4 and the SenseHat board.
+
+First is the uploading of sensor data to the Firebase database over the internet. For this communication sequence, the
+sensor data collection system will be run on one of the Raspberry Pis. It will read temperature data from the SenseHat
+and post this data to the Firebase database using Pyrebase. The demonstration can be verified by watching the Firebase
+database console, since the data will be updated in real-time.
+
+Second will be the email notifications to affected users over the internet using email protocol. To achieve this
+demonstration, the email notification system will be run on one of the Raspberry Pis. Using Pytest, the program will
+first send an email from the FANS email back to itself. Then, the program will use \texttt{imaplib} to login to the
+FANS email account and verify that the latest message in its inbox contains the same email message that was sent in the
+test. If the messages match, Pytest will report a success. This test is fully automated.
+
+Next is the haptic alarm buzzing. For this test, the haptic alarm program will be run on one of the Raspberry Pi's to
+emulate the Pi Pico (as it has not arrived at the time of writing). When the program is run, it will poll the Firebase
+database using \texttt{pyrebase} to check if the emergency flag has been raised. The flag can either be raised by hand
+(the tester modifies the flag using the Firebase console) or it can be set by running the sensor data collection system
+with a low emergency reporting threshold for temperature. In either case, when the flag is raised, the output of the
+haptic alarm can be verified by observing the console messages. Console printing will be used in place of the buzzer
+actuator while we wait for components. A console message of "buzz" would indicate the buzzer buzzing, and no console
+messages indicate no emergency while the alarm is polling the database.
+
+To test the display of sensor data collection on the user interface, the GUI will be run on one of the Raspberry Pis
+using Flask. When a user clicks the "refresh" button, the Flask API endpoint responsible for returning temperature data
+will be hit. The endpoint will use \texttt{pyrebase} to request the latest temperature data from Firebase and then will
+respond with JSON. The GUI's JavaScript logic will simply print this JSON as text content of an HTML paragraph tag to
+show that the connection is present.
+
+Finally, to demonstrate UDP communication over the local area network, both the sensor data collection system and the
+alarm system will be run on two separate Pis. Both programs will first upload their public IP to the Firebase database
+under a 'devices' table, and then read the other device's IP. The sensor data collection system should have a
+sufficiently low emergency threshold to trigger an emergency at room temperature (only for testing purposes). Once the
+sensor data collection system detects an emergency, it will send a UDP message containing the numerical data '0' (the
+agreed upon encoding for signifying an emergency) over the LAN addressed to the alarm system. The alarm system will
+receive the emergency notification, and instead of activating an actuator it will print "Received 0" to the console.
+This can be manually verified.
+
+\subsection{Unit Test Demo}
+
+The purpose of the unit test demo is to demonstrate that the individual components of our system behave as expected and
+do not contain logical or physical errors. This will sanity check our hardware components and our software logic.
+
+\subsubsection{Hardware}
+
+The hardware components that will need to be tested are:
+
+\begin{itemize}
+    \item Smoke sensor
+    \item Temperature sensor
+    \item Piezoelectric buzzer
+    \item LCD screen
+\end{itemize}
+
+\textbf{Smoke Detector}
+
+The smoke detector will be difficult to test due to the nature of what it measures. It will not be possible to light a
+fire within the school or near campus because that will set of existing fire suppression systems and may be dangerous.
+Testing the smoke detector in smokey environments can be done by:
+
+\begin{itemize}
+    \item Running the data collection from the smoke detector in a smoking zone on campus.
+    \item Running the data collection from the smoke detector off campus and lighting a fire nearby.
+\end{itemize}
+
+For both of these tests, it should be verified that smoke levels are detected. This will be a one-time sanity test of
+the sensor. The smoke detector can also be tested in smokeless environments by collecting data from the sensor indoors
+on campus and ensuring that no smoke is detected.
+
+\textbf{Temperature Sensor}
+
+To test the temperature sensor, we can collect data from the sensor in the lab setting and ensure that measurements are
+within the acceptable range for room temperature.
+
+\textbf{Piezoelectric Buzzer}
+
+To test the piezoelectric buzzer, we can test turning on and off the buzzer and verifying that it produces noise.
+Additionally, we can set the buzzer to produce different frequencies and verify that they are set correctly by checking
+with a instrument tuning app.
+
+\textbf{LCD Screen}
+
+Finally, to test the LCD screen, several test messages can be displayed on screen and visually inspected for
+correctness as a sanity check.
+
+\subsubsection{Database Integrity}
+
+To test cloud database integrity, we can perform several test and security checks.
+
+\textbf{Insecure Access}
+
+To test the security of the cloud database, we can attempt to perform read and write operations using an incorrect API
+key and ensure that the requests are denied.
+
+\textbf{Stress Test}
+
+To stress test the cloud database, several instances of the sensor data collection program can be run on multiple
+Raspberry Pis, all of which will upload sensor data to the database. The database should:
+
+\begin{itemize}
+    \item Keep up with all of the simultaneous requests.
+    \item Avoid any overwriting/race conditions with concurrent write operations.
+\end{itemize}
+
+\subsubsection{Software}
+
+All software unit tests will be written using Pytest to get code coverage reports and automatic test running features.
+
+\textbf{Smoke Detection System}
+
+Logic for checking if sensor data is above a configured threshold will be tested in scenarios where:
+
+\begin{itemize}
+    \item The data is \textit{above} the configured threshold.
+    \item The data is \textit{below} the configured threshold.
+\end{itemize}
+
+This will ensure that the logic correctly reports emergencies when sensor data is above a threshold and does not report
+an emergency when the data is below the threshold.
+
+\textbf{Alarm System}
+
+Unit tests can be performed by simulating the events that would cause the alarm state machine to transition states.
+Additionally, all of the logic performed in the states is called through the \texttt{Context} object that is passed to
+the states' event handler methods. A mock version of the \texttt{Context} object can be created which will run assert
+statements to verify that the correct logic is being called at the right time.
+
+\textbf{Notification System}
+
+Unit tests written for this system will guarantee that classes shown in the class diagram are constructed properly.
+
+\texttt{User} and \texttt{UserSettings} data will be constructed from JSON returned from the Firebase Database, so we
+can attempt to construct them with fake JSON data to see that they are constructed properly. Invalid JSON will be tested
+to fail construction with an exception.
+
+\textbf{Haptic Alarm System}
+
+Unit tests written for the haptic alarm system will take a similar approach to the alarm system, where the state
+machine \texttt{Context} object is mocked to contain assert statements in place of methods for performing system
+actions. The individual states can again have their event handling methods called directly by the test runner.
+
+\textbf{Web UI}
+
+The web UI is more difficult to test because much of its functionality has to do with visual display. However, the API
+endpoints used by the UI could be tested by sending GET and POST requests programmatically and verifying that the
+correct response is returned. This would involve verifying JSON response structure and contents.
+
+\subsection{Final Demo}
+
+For the final demo, we will need to demonstrate several key features of our system:
+
+\begin{itemize}
+    \item Real-time display of sensor data. \\
+
+          This will require us to run the web UI while the smoke detection system is active, which will display the live data as
+          it updates.
+
+    \item Configurable emergency threshold in real-time. \\
+
+          This will require changing the temperature threshold via the UI to a low value while the smoke detection system is
+          running. The smoke detection system should receive the change in configuration and then sound an alarm because room
+          temperature will be higher than the threshold.
+
+    \item User configurable timeouts. \\
+
+          To demonstrate this feature, a timeout should be set via the web UI while the alarm is sounding. FANS should detect the
+          timeout being set and stop the alarm for the duration of the timeout. The alarm should immediately resume once the
+          timeout is complete.
+
+    \item Updating user contact information. \\
+
+          To demonstrate this functionality, a new user should be added via the web UI. The cloud database and the local database
+          of the notification system can be verified manually to contain the new user information.
+
+    \item Emergency notification emails. \\
+
+          To demonstrate this feature, one of the testers should be included as a user in the database table of contact
+          information. When the system triggers an emergency (due to a temperature threshold being set below room temperature),
+          the tester should verify that they received an email from FANS with the emergency message and a recent time stamp.
+
+    \item Alarm sounding during an emergency. \\
+
+          When the temperature threshold is set to be below room temperature, testers should verify that the alarm node sounds
+          the buzzer and flashes its LEDs.
+
+    \item Haptic alarm buzzing during an emergency. \\
+
+          When the temperature threshold is set to be below room temperature, testers should verify that the haptic alarm buzzes.
+
+\end{itemize}

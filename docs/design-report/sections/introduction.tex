@@ -1,0 +1,51 @@
+\section{Problem Statement}
+
+The need for the Fire Alarm Notification System (FANS) stems from the alarming number of preventable fire deaths in
+Canada, where 220 people die in fires each year, with at least one in seven of these deaths occurring in homes without
+working smoke alarms \cite{fire-stats}. This critical problem underscores the shortcomings of traditional fire alarm
+systems, which often lack advanced communication capabilities and real-time monitoring capabilities
+\cite{modern-fire-alarms}. These limitations not only contribute to delayed response times, but also to preventable
+deaths, underscoring the urgent need for an advanced fire alarm solution.
+
+Traditional systems' shortcomings, coupled with the fact that smoke detection systems are sometimes unsafely disarmed
+by users to avoid false alarms—especially those installed close to kitchen spaces—further exacerbate the problem. The
+FANS project seeks to address these issues by integrating smoke and temperature sensors with Internet of Things (IoT)
+technology. This approach not only aims to cover scenarios where smoke may not reach the detecting device but also
+offers real-time notifications via SMS and email, thus notifying homeowners immediately in the event of an emergency.
+
+By providing configurable thresholds for smoke and temperature alarms and adjustable timeouts that prevent the system
+from being deactivated in an unsafe manner, FANS aims to use technological advances to significantly improve the
+effectiveness of fire detection systems. The ultimate goal of the project is to reduce response times, improve overall
+fire safety and thereby mitigate fire disasters and protect the well-being of individuals, families and communities
+across Canada \cite{smoke-alarm-gc}.
+
+\subsection{Functional Requirements}
+
+\begin{enumerate}
+    \item \textbf{Accurate and Reliable Detection} \\ Implement dual-sensor technology combining photoelectric and thermistor-based
+          sensors for accurate smoke and temperature detection, alongside unit testing routines to ensure reliability.
+
+    \item \textbf{Real-time Monitoring and Alerts} \\ Utilize a cloud-based platform for continuous real-time data
+          storage, with a reliable communication channel for immediate alert dispatch. The database must be able to
+          serve the stored data to multiple clients over an internet connection as it is updated in real-time.
+
+    \item \textbf{User-configurable Sensitivity} \\ Provide an interface for users to customize their alarm
+          system sensitivity preferences, including both temperature and smoke detection trigger thresholds.
+
+    \item \textbf{User-defined System Timeout} \\ Provide an interface for users to temporarily disable their alarm
+          systems for a pre-determined length of time, allowing the user to avoid triggering emergencies in high-smoke
+          environments (such as kitchens).
+
+    \item \textbf{Comprehensive Notification System} \\ Initiate on-site alarms and send email to users and designated contacts to ensure
+          widespread awareness during emergencies.
+
+    \item \textbf{Wearable Emergency Response} \\ Incorporate a haptic alarm wearable device that will notify users
+          through vibration in active emergency situations. This is ideal for situations where auditory alarms may not
+          be effective or where users with hearing impairments are at risk of a fire hazard, ensuring maximum reach and
+          effectiveness of alerts.
+
+\end{enumerate}
+
+By adopting these key requirements, FANS aims to deliver a technologically advanced, user-friendly system for timely
+fire detection and response, aiming to reduce fire-related fatalities and enhance safety for individuals and
+communities across Canada.
