@@ -50,16 +50,6 @@ without needing to access the system digitally.
     \caption{Schematic of the LCD display circuit.}
 \end{figure}
 
-\subsection{AudioHat Module}
-
-% TODO: we're not using this anymore...
-
-An AudioHat Module enhances the FANS project by providing high-quality audio alerts through speakers or headphones, a
-vital feature for ensuring that fire alerts are audible in a wide range of environments. Communicating over I2C and I2S
-protocols, this module is directly powered by the Raspberry Pi's GPIO pins. It was selected for its ability to deliver
-clear and loud audio notifications, an essential feature for an effective alert system in emergency situations where
-immediate human response is crucial.
-
 \subsection{Piezoelectric Buzzer}
 
 The inclusion of a simple piezoelectric buzzer in the system design offers an effective way to generate audible alerts
@@ -78,4 +68,19 @@ detection system.
     \centering
     \includegraphics[width=3in]{../assets/BuzzerSchema.png}
     \caption{Schematic of the piezoelectric buzzer circuit.}
+\end{figure}
+
+The following schematics show the connections between the piezoelectric buzzer and the Raspberry Pi Pico. There is no
+Fritzing footprint for the Pi Pico, so the Raspberry Pi 4 is used as a placeholder.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/AudiohatBB.png}
+    \caption{Bread board configuration of the piezoelectric buzzer with the Pi Pico.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/AudiohatSchema.png}
+    \caption{Schematic of the piezoelectric buzzer circuit connected to the Pi Pico.}
 \end{figure}
