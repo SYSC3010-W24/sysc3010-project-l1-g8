@@ -30,6 +30,22 @@ class Context(Protocol):
         """Starts the FSM."""
         ...
 
+    def set_led_state(self, state: bool) -> None:
+        """
+        Turns on or off the LEDs.
+        Args:
+            state: True for on, False for off.
+        """
+        ...
+
+    def set_alarm_state(self, state: bool) -> None:
+        """
+        Turns on or off the alarm buzzer.
+        Args:
+            state: True for on, False for off.
+        """
+        ...
+
 
 class AlarmFSM:
     """Represents the state machine context for the alarm state machine."""
@@ -56,6 +72,28 @@ class AlarmFSM:
     def start(self) -> None:
         """Starts the FSM."""
         self.state.entry(self)  # Start the first state in motion
+
+    def set_led_state(self, state: bool) -> None:
+        """
+        Turns on or off the LEDs.
+        Args:
+            state: True for on, False for off.
+        """
+        if state:
+            print("LEDs ON!")
+        else:
+            print("LEDs OFF!")
+
+    def set_alarm_state(self, state: bool) -> None:
+        """
+        Turns on or off the alarm buzzer.
+        Args:
+            state: True for on, False for off.
+        """
+        if state:
+            print("Alarm ON!")
+        else:
+            print("Alarm OFF!")
 
 
 class State(ABC):
@@ -116,8 +154,8 @@ class AlarmOn(State):
     """Represents the state where the alarm has its buzzer and LED on."""
 
     def entry(self, context: Context) -> None:
-        print("LEDS on.")
-        print("Buzzer on.")
+        context.set_led_state(True)
+        context.set_alarm_state(True)
         time.sleep(1)
         context.state = AlarmOff()
 
@@ -127,8 +165,8 @@ class AlarmOn(State):
 
     def emergency_over(self, context: Context) -> None:
         """Handles the event of the emergency ending."""
-        print("LEDS off.")
-        print("Buzzer off.")
+        context.set_led_state(False)
+        context.set_alarm_state(False)
         context.state = WaitForEmergency()
 
 
@@ -136,8 +174,8 @@ class AlarmOff(State):
     """Represents the state where the alarm has its buzzer and LED off."""
 
     def entry(self, context: Context) -> None:
-        print("LEDS off.")
-        print("Buzzer off.")
+        context.set_alarm_state(False)
+        context.set_led_state(False)
         time.sleep(1)
         context.state = AlarmOn()
 
