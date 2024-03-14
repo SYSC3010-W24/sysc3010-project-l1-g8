@@ -22,21 +22,19 @@ def home():
 
 
 @app.route("/settings", methods=["GET"])
-def reading():
+def settings():
     """Renders the settings page of the website."""
     return render_template("settings.html")
 
+@app.route("/login", methods=["GET"])
+def login():
+    """Renders the login page of the website."""
+    return render_template("login.html")
 
-@app.route("/api/temperature", methods=["GET"])
-def temperature_api():
-    """Gets the latest temperature from Firebase."""
-
-    temperature_data = db.child("sensordata/temperature").get().each()
-    if temperature_data is None:
-        return []
-
-    return [{t.key(): t.val()} for t in temperature_data]
-
+@app.route("/signup", methods=["GET"])
+def sign_up():
+    """Renders the sign up page of the website."""
+    return render_template("sign-up.html")
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=PORT)
