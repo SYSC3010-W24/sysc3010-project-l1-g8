@@ -147,26 +147,42 @@ The messages sent over UDP use numerical value to encode messages. The represent
 
 \subsubsection{Cloud Database Communication}
 
-% TODO: implement sensor data upload
-% TODO: implement sensor data get by UI
-
 \begin{table}[H]
     \centering
     \begin{tabular}{| c | c | c | c | c |}
         \hline
-        Sender          & Receiver & Message                                    & Data Format                     & Protocol    \\
+        Sender          & Receiver & Message                                    & Data Format                      & Protocol    \\
         \hline
-        Smoke Detection & Cloud DB & \texttt{put\_sensor\_data()}               &                                 & HTTP (JSON) \\
+        Smoke Detection & Cloud DB & \texttt{put\_sensor\_data()}               & See listing \ref{lst:sensor}     & HTTP (JSON) \\
         \hline
-        GUI             & Cloud DB & \texttt{update\_threshold(new\_threshold)} & See listing \ref{lst:threshold} & HTTP (JSON) \\
+        GUI             & Cloud DB & \texttt{update\_threshold(new\_threshold)} & See listing \ref{lst:threshold}  & HTTP (JSON) \\
         \hline
-        Notification    & Cloud DB & \texttt{query\_contact\_information()}     & See listing \ref{lst:contact}   & HTTP (JSON) \\
+        Notification    & Cloud DB & \texttt{query\_contact\_information()}     & See listing \ref{lst:contact}    & HTTP (JSON) \\
         \hline
-        Haptic Alarm    & Cloud DB & \texttt{emergency()}                       & See listing \ref{lst:emergency} & HTTP (JSON) \\
+        Haptic Alarm    & Cloud DB & \texttt{emergency()}                       & See listing \ref{lst:emergency}  & HTTP (JSON) \\
+        \hline
+        GUI             & Cloud DB & \texttt{get\_sensor\_data()}               & See listing \ref{lst:sensor-get} & HTTP (JSON) \\
         \hline
     \end{tabular}
     \caption{Messages for cloud database communication in FANS.}
 \end{table}
+
+\begin{lstlisting}[language=json,label={lst:sensor},caption={Update sensor data message.}]
+{
+  "method": "PUT",
+  "path": "/sensor-data/temperature",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+  },
+  "body": {
+      "data": {
+          "temperature": 21.2,
+          "timestamp": "2024-03-13T08:37:22"
+      }
+  }
+}
+\end{lstlisting}
 
 \begin{lstlisting}[language=json,label={lst:threshold},caption={Threshold update message.}]
 {
@@ -196,6 +212,16 @@ The messages sent over UDP use numerical value to encode messages. The represent
 {
   "method": "GET",
   "path": "/system/emergency",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=json,label={lst:sensor-get},caption={Request for latest sensor data.}]
+{
+  "method": "GET",
+  "path": "/sensor-data",
   "headers": {
     "Authorization": "Bearer YOUR_ACCESS_TOKEN"
   }
