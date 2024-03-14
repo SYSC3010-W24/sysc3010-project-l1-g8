@@ -1,12 +1,37 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 import time
 import socket
 from messages import Messages
+from typing import Protocol
 
 BUFFER_SIZE: int = 100
 
 
-class Context:
+class Context(Protocol):
+    """Defines the interface for the context required for the AlarmFSM."""
+
+    socket: socket.socket
+    state: State
+
+    def emergency(self) -> None:
+        """Handles the event of an emergency."""
+        ...
+
+    def emergency_over(self) -> None:
+        """Handles the event of an emergency ending."""
+        ...
+
+    def wait_for_message(self) -> Messages:
+        """Waits for a message over UDP."""
+        ...
+
+    def start(self) -> None:
+        """Starts the FSM."""
+        ...
+
+
+class AlarmFSM:
     """Represents the state machine context for the alarm state machine."""
 
     def __init__(self, ip_addr: str, port: int) -> None:

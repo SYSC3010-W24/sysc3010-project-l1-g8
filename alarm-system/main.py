@@ -1,4 +1,4 @@
-from states import Context
+from states import AlarmFSM
 import netifaces as ni
 import pyrebase
 import json
@@ -18,7 +18,7 @@ def main():
     ip_addr = ni.ifaddresses("wlan0")[ni.AF_INET][0]["addr"]
     db.child("devices").child("alarm").set(ip_addr)
 
-    alarm_fsm = Context(ip_addr, RECEIVE_PORT)
+    alarm_fsm = AlarmFSM(ip_addr, RECEIVE_PORT)
     alarm_fsm.start()
 
 
