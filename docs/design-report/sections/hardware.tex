@@ -1,7 +1,5 @@
 \section{Hardware Design}
 
-% TODO: include diagrams
-
 FANS is composed of various hardware components to perform its desired functionality.
 
 \subsection{Raspberry Pi SenseHat}
@@ -20,6 +18,18 @@ promptly identify fire hazards, triggering alerts and activating safety measures
 analog-to-digital converter (ADC) when used with a Raspberry Pi, ensuring accurate detection levels are communicated to
 the system for processing and response.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/MQ2SensorBB.png}
+    \caption{Bread board configuration of the smoke sensor.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/MQ2SensorSchematic.png}
+    \caption{Schematic of the smoke sensor circuit.}
+\end{figure}
+
 \subsection{LCD Display}
 
 The project incorporates a 16x2 character LCD Display for real-time monitoring, utilizing the I2C communication
@@ -27,6 +37,18 @@ protocol for easy interfacing with the Raspberry Pi . This display operates on e
 in an emergency to indicate as smoke levels and temperature rise directly to the user. The choice of an LCD display
 ensures that information about the environmental condition is immediately accessible, providing a quick overview
 without needing to access the system digitally.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/LCDBB.png}
+    \caption{Bread board configuration of the LCD display.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/LCDSchema.png}
+    \caption{Schematic of the LCD display circuit.}
+\end{figure}
 
 \subsection{AudioHat Module}
 
@@ -45,3 +67,15 @@ when smoke or high temperatures are detected. Operating between 3.3V to 5V and c
 can produce a range of tones, making it a versatile component for different alert types. It ensures that the system can
 attract attention through sound, complementing visual alerts and enhancing the overall effectiveness of the fire
 detection system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/BuzzerBB.png}
+    \caption{Bread board configuration of the piezoelectric buzzer.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3in]{../assets/BuzzerSchema.png}
+    \caption{Schematic of the piezoelectric buzzer circuit.}
+\end{figure}
