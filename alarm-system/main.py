@@ -2,6 +2,7 @@ from states import AlarmFSM
 import netifaces as ni
 import pyrebase
 import json
+from messages import Messages
 
 FIREBASE_CONFIG: str = "./firebase_config.json"
 RECEIVE_PORT: int = 2003

@@ -1,5 +1,5 @@
 import pytest
-from states import State, Context, WaitForEmergency, AlarmActive, AlarmOn, AlarmOff
+from states import State, Context, WaitForEmergency, AlarmOn, AlarmOff
 from messages import Messages
 
 
@@ -23,7 +23,7 @@ def test_wait_for_emergency_entry(ctx: Context) -> None:
 
     state = WaitForEmergency()
     state.entry(ctx)
-    assert ctx.state.__class__ is AlarmActive
+    assert ctx.state.__class__ is AlarmOn
 
 
 def test_wait_for_emergency_emergency(ctx: Context) -> None:
@@ -31,29 +31,13 @@ def test_wait_for_emergency_emergency(ctx: Context) -> None:
 
     state = WaitForEmergency()
     state.emergency(ctx)
-    assert ctx.state.__class__ is AlarmActive
+    assert ctx.state.__class__ is AlarmOn
 
 
 def test_wait_for_emergency_emergency_over(ctx: Context) -> None:
     """Tests that the emergency over event handler for the WaitForEmergency state behaves as expected."""
 
     state = WaitForEmergency()
-    state.emergency_over(ctx)
-    assert ctx.state.__class__ is WaitForEmergency
-
-
-def test_alarm_active_emergency(ctx: Context) -> None:
-    """Tests that the emergency event handler for the AlarmActive state behaves as expected."""
-
-    state = AlarmActive()
-    state.emergency(ctx)
-    assert ctx.state.__class__ is AlarmOn
-
-
-def test_alarm_active_emergency_over(ctx: Context) -> None:
-    """Tests that the emergency over event handler for the AlarmActive state behaves as expected."""
-
-    state = AlarmActive()
     state.emergency_over(ctx)
     assert ctx.state.__class__ is WaitForEmergency
 

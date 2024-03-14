@@ -61,12 +61,12 @@ class AlarmFSM:
         return self.__state
 
     @state.setter
-    def set_state(self, new_state: State) -> None:
-        """Sets the state attribute."""
+    def state(self, new_state: State) -> None:
+        """Sets the state attribute after exiting the previous state, and then enters the next state."""
+        print(new_state)
+        self.__state.exit(self)  # type: ignore
         self.__state = new_state
-
-        if hasattr(new_state, "entry"):
-            self.__state.entry(self)  # type: ignore
+        self.__state.entry(self)  # type: ignore
 
     def emergency(self) -> None:
         """Handles the event of an emergency."""
@@ -122,6 +122,7 @@ class State(ABC):
 
     def entry(self, context: Context) -> None:
         """Performs the entry activity of the state."""
+        return
 
     def exit(self, context: Context) -> None:
         """Performs the exit activity of the state."""
@@ -144,22 +145,10 @@ class WaitForEmergency(State):
 
     def emergency(self, context: Context) -> None:
         """Handles the event of an emergency."""
-        context.state = AlarmActive()
-
-    def emergency_over(self, context: Context) -> None:
-        """Handles the event of the emergency ending. In this case, do nothing."""
-        return
-
-
-class AlarmActive(State):
-    """Represents the superstate where the alarm is active."""
-
-    def emergency(self, context: Context) -> None:
-        """Handles the event of an emergency."""
         context.state = AlarmOn()
 
     def emergency_over(self, context: Context) -> None:
-        """Handles the event of the emergency ending."""
+        """Handles the event of the emergency ending. In this case, do nothing except wait again."""
         context.state = WaitForEmergency()
 
 
