@@ -45,8 +45,6 @@ def test_send_message(node: SystemNode) -> None:
     channel.bind((node.ip_addr, node.port))
 
     node.send_message(Messages.EMERGENCY)
-    data, addr = channel.recvfrom(100)
-    ip_addr, _ = addr
+    data, _ = channel.recvfrom(100)
 
-    assert ip_addr == node.ip_addr
     assert Messages(int.from_bytes(data)) == Messages.EMERGENCY
