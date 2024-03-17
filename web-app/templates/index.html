@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/index.css">
-    <link rel="stylesheet" href="static/global.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/index.css" />
+    <link rel="stylesheet" href="static/global.css" />
     <title>FANS</title>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-        <div class="nav-bar">
-            <a href="/">Home</a>
-            <a href="/settings">Settings</a>
-            <a href="">Logout</a>
-        </div>
+      <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/settings">Settings</a>
+        <a href="">Logout</a>
+      </div>
 
+      <div class="content-box">
         <div class="fire-alarm-box">
-            <div class="box1">
-                <p>Fire Alarm 1</p>
-                <p>Status: </p>
-            </div>
-            <div class="alarm-status-box">
-
-            </div>
-            <div class="log-box">
-                <p>LOG</p>
-            </div>
-            
+          <div class="alarm-name-box">
+            <p class="alarm-name">Fire Alarm 1</p>
+            <p class="title-2">Status:</p>
+          </div>
+          <div class="alarm-status-box">
+            <p>FIRE DETECTED</p>
+          </div>
+          <div class="log-box">
+            <p class="title-2">LOG</p>
+          </div>
         </div>
 
-        <div class="content-box">
-            <div class="smoke-box">
-                <p>Smoke</p>
-                <div class="smoke-graph">
+        <div class="vertical-line"></div>
 
-                </div>
-            </div>
-            <div class="temperature-box">
-                <p>Temperature</p>
-                <div class="temperature-graph">
-
-                </div>
-            </div>
+        <div class="data-box">
+          <div class="smoke-box">
+            <p class="title-2">Smoke</p>
+            <div class="smoke-graph"></div>
+          </div>
+          <div class="temperature-box">
+            <p class="title-2">Temperature</p>
+            <div class="temperature-graph"></div>
+          </div>
         </div>
-
-
+      </div>
     </main>
-</body>
+  </body>
 </html>
