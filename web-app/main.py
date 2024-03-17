@@ -13,7 +13,6 @@ db = firebase.database()
 
 app = Flask(__name__)
 
-
 # HTML Pages
 @app.route("/", methods=["GET"])
 def home():
@@ -37,4 +36,5 @@ def sign_up():
     return render_template("sign-up.html")
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=PORT)
+    app.run("0.0.0.0", port=PORT, debug=True)
+
