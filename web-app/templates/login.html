@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/auth.css">
-    <link rel="stylesheet" href="static/global.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/auth.css" />
+    <link rel="stylesheet" href="static/global.css" />
     <title>FANS</title>
 </head>
+
 <body>
     <main>
         <div class="nav-bar">
             <a href="/">Home</a>
-            <a href="/settings">Login</a>
+            <a href="/login">Login</a>
         </div>
 
         <form>
             <div class="form-box">
-                <p>Login</p>
                 <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Email" name="email" required>
+                <input type="text" placeholder="Enter Email" name="email" required />
                 <label for="email"><b>Password</b></label>
-                <input type="text" placeholder="Enter Password" name="password" required>
-                <p>Forgot your password? <a><bold>Reset Password</bold></a></p>
-                <div>
-                    <button type="submit" class="login">Login</button>
+                <input type="text" placeholder="Enter Password" name="password" required />
+                <p class="reset-p-box">
+                    Forgot your password? &nbsp<a href="" class="reset-p"><b>Reset Password</b></a>
+                </p>
+                <div class="login-btn-box">
+                    <button type="submit" class="login-btn">Login</button>
                 </div>
             </div>
         </form>
     </main>
 </body>
+
 </html>

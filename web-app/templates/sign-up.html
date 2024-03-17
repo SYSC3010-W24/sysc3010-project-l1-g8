@@ -1,37 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/auth.css">
-    <link rel="stylesheet" href="static/global.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/auth.css" />
+    <link rel="stylesheet" href="static/global.css" />
     <title>FANS</title>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-        <div class="nav-bar">
-            <a href="/">Home</a>
-            <a href="/login">Login</a>
+      <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+      </div>
+      <form>
+        <div class="form-box">
+          <label for="f-name"><b>First Name</b></label>
+          <input
+            type="text"
+            placeholder="Enter First Name"
+            name="f-name"
+            required
+          />
+          <label for="l-name"><b>Last Name</b></label>
+          <input
+            type="text"
+            placeholder="Enter Last Name"
+            name="l-name"
+            required
+          />
+          <label for="email"><b>Email</b></label>
+          <input type="text" placeholder="Enter Email" name="email" required />
+          <label for="email"><b>Password</b></label>
+          <input
+            type="text"
+            placeholder="Enter Password"
+            name="password"
+            required
+          />
+          <p class="reset-p-box">
+            Already a member?&nbsp<a href="" class="reset-p"><b>Login</b></a>
+          </p>
+          <div class="login-btn-box">
+            <button type="submit" class="login-btn">Sign Up</button>
+          </div>
         </div>
-        <form>
-            <div class="form-box">
-                <p>Sign Up</p>
-                <label for="f-name"><b>First Name</b></label>
-                <input type="text" placeholder="Enter First Name" name="f-name" required>
-                <label for="l-name"><b>Last Name</b></label>
-                <input type="text" placeholder="Enter Last Name" name="l-name" required>
-                <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Email" name="email" required>
-                <label for="email"><b>Password</b></label>
-                <input type="text" placeholder="Enter Password" name="password" required>
-                <p>Already a member? <a href="login.html"><bold>Login</bold></a></p>
-                <div>
-                    <button type="submit" class="signup">Sign Up</button>
-                </div>
-            </div>
-        </form>
-
-
+      </form>
     </main>
-</body>
+  </body>
 </html>
