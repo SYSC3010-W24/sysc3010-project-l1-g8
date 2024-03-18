@@ -4,8 +4,11 @@ import time
 import socket
 from messages import Messages
 from typing import Protocol
+from gpiozero import TonalBuzzer
+from gpiozero.tones import Tone
 
 BUFFER_SIZE: int = 100
+B_FLAT: Tone = Tone.from_frequency(466.164)
 
 
 class Context(Protocol):
@@ -30,14 +33,6 @@ class Context(Protocol):
         """Starts the FSM."""
         ...
 
-    def set_led_state(self, state: bool) -> None:
-        """
-        Turns on or off the LEDs.
-        Args:
-            state: True for on, False for off.
-        """
-        ...
-
     def set_alarm_state(self, state: bool) -> None:
         """
         Turns on or off the alarm buzzer.
@@ -50,9 +45,10 @@ class Context(Protocol):
 class AlarmFSM:
     """Represents the state machine context for the alarm state machine."""
 
-    def __init__(self, ip_addr: str, port: int) -> None:
+    def __init__(self, ip_addr: str, port: int, buzzer: TonalBuzzer) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((ip_addr, port))
+        self.buzzer: TonalBuzzer = buzzer
         self.__state: State = WaitForEmergency()  # Start by waiting for an emergency
 
     @property
@@ -85,27 +81,16 @@ class AlarmFSM:
         """Starts the FSM."""
         self.__state.entry(self)  # type: ignore
 
-    def set_led_state(self, state: bool) -> None:
-        """
-        Turns on or off the LEDs.
-        Args:
-            state: True for on, False for off.
-        """
-        if state:
-            print("LEDs ON!")
-        else:
-            print("LEDs OFF!")
-
     def set_alarm_state(self, state: bool) -> None:
         """
-        Turns on or off the alarm buzzer.
+        Turns on or off the alarm buzzer in sync with the LEDS.
         Args:
             state: True for on, False for off.
         """
         if state:
-            print("Alarm ON!")
+            self.buzzer.play(B_FLAT)
         else:
-            print("Alarm OFF!")
+            self.buzzer.stop()
 
 
 class State(ABC):
@@ -155,7 +140,6 @@ class AlarmOn(State):
     """Represents the state where the alarm has its buzzer and LED on."""
 
     def entry(self, context: Context) -> None:
-        context.set_led_state(True)
         context.set_alarm_state(True)
         time.sleep(1)
         context.state = AlarmOff()
@@ -166,7 +150,6 @@ class AlarmOn(State):
 
     def emergency_over(self, context: Context) -> None:
         """Handles the event of the emergency ending."""
-        context.set_led_state(False)
         context.set_alarm_state(False)
         context.state = WaitForEmergency()
 
@@ -176,7 +159,6 @@ class AlarmOff(State):
 
     def entry(self, context: Context) -> None:
         context.set_alarm_state(False)
-        context.set_led_state(False)
         time.sleep(1)
         context.state = AlarmOn()
 
