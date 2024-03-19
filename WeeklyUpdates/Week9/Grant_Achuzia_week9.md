@@ -33,8 +33,8 @@ I spent 10 hours working on the project this week.
 5. **_What are you planning to do next week_**? _(give specific goals)_
 
 - Add themes to the web UI
-- Finish implementing web GUI, learn how to do user authentication with Flask
-- Start building containers for the varying components of *FANS* 
+- Finish implementing web GUI, do user authentication with Flask
+- See if I can help other team members with their parts
 
 6. **_Is anything blocking you that you need from others?_** _(What do you need from whom)_
 
