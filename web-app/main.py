@@ -3,10 +3,10 @@ import pyrebase
 import json
 
 PORT: int = 8000
-CREDENTIALS: str = "./firebase_config.json"
+FIREBASE_CONFIG: str = "firebase_config.json"
 
 # Initialize DB connection
-with open(CREDENTIALS, "r") as file:
+with open(FIREBASE_CONFIG, "r") as file:
     config = json.load(file)
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
@@ -17,13 +17,24 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def home():
     """Renders the home page of the website."""
-    return render_template("index.html")
+    # Get temperature data from Firebase
+    temperature_data = db.child("sensordata").child("temperature").get().val()
+    latest_timestamp = max(temperature_data.keys())
+    current_temperature = round(temperature_data[latest_timestamp],2)
+
+    # Get emergency flag from Firebase
+    emergency_flag = db.child("emergency").get().val()
+    color_class= "fire" if emergency_flag else "no-fire"
+    return render_template("index.html", current_temperature=current_temperature, emergency_flag=emergency_flag, color_class=color_class)
 
 
 @app.route("/settings", methods=["GET"])
 def settings():
     """Renders the settings page of the website."""
-    return render_template("settings.html")
+    # Get thresholds data from firebase
+    temperature_threshold = db.child("thresholds").child("temperature").get().val()
+    smoke_threshold = db.child("thresholds").child("smoke").get().val()
+    return render_template("settings.html", temperature_threshold=temperature_threshold)
 
 @app.route("/login", methods=["GET"])
 def login():

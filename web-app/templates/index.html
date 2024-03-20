@@ -21,11 +21,15 @@
             <p class="alarm-name">Fire Alarm 1</p>
             <p class="title-2">Status:</p>
           </div>
-          <div class="alarm-status-box">
-            <p>FIRE DETECTED</p>
+          <div class="alarm-status-box {{ color_class }}">
+            {% if emergency_flag %}
+              <p class="fire">FIRE DETECTED</p>
+            {% else %}
+              <p class="no-fire">No Fire</p>
+            {% endif %}
           </div>
           <div class="log-box">
-            <p class="title-2">LOG</p>
+            <p class="title-2">ACTIVITY LOG</p>
           </div>
         </div>
 
@@ -38,6 +42,9 @@
           </div>
           <div class="temperature-box">
             <p class="title-2">Temperature</p>
+            <p class="current-temp">
+              Current Temperature: {{current_temperature}}
+            </p>
             <div class="temperature-graph"></div>
           </div>
         </div>
