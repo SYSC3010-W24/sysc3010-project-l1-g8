@@ -1,14 +1,43 @@
 __author__ = "Matteo Golin"
 
+from types import FrameType
 from sense_hat import SenseHat
 import pyrebase
+from pyrebase.pyrebase import Database
 import json
 import datetime as dt
 import netifaces as ni
 import socket
+from multiprocessing import Queue, Process, active_children
+from signal import signal, SIGTERM
 
 FIREBASE_CONFIG: str = "firebase_config.json"
 SEND_PORT: int = 2003
+
+
+def collect_data(temp: Queue, smoke: Queue) -> None:
+    """Process for collecting data from sensors."""
+
+    # Open Sense Hat
+    sensehat = SenseHat()
+
+    while True:
+        # Fetch temperature data and time stamp
+        temperature = sensehat.get_temperature()
+        timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
+        temp.put((timestamp, temperature))  # Put data on shared queue
+
+
+def get_temperature_threshold(db: Database) -> float:
+    """Gets the configured temperature threshold from the Firebase database."""
+    return float(db.child("thresholds").get("temperature").val().get("temperature"))  # type: ignore
+
+
+def shutdown(sig: int, frame: FrameType) -> None:
+    """Kills all child processes before terminating."""
+    for child in active_children():
+        child.terminate()
+        exit(0)
 
 
 def main() -> None:
@@ -25,19 +54,26 @@ def main() -> None:
     db.child("devices").child("sensor-pi").set(ip_addr)
 
     # Check for configured thresholds
-    temp_threshold = float(db.child("thresholds").get("temperature").val().get("temperature"))  # type: ignore
+    temp_threshold = get_temperature_threshold(db)
     db.child("emergency").set(False)
-
-    # Open Sense Hat
-    sensehat = SenseHat()
 
     # Create socket for sending
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+    # Handle shutdown signal
+    signal(SIGTERM, shutdown)  # type: ignore
+
+    # Start data collection
+    temp = Queue()
+    smoke = Queue()
+
+    data_collection = Process(target=collect_data, args=(temp, smoke))
+    data_collection.start()
+
     while True:
-        # Fetch data and time stamp
-        temperature = sensehat.get_temperature()
-        timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
+
+        # Get latest measurement
+        timestamp, temperature = temp.get()
 
         # Alert of emergency if threshold is exceeded
         if temperature > temp_threshold:
@@ -46,7 +82,11 @@ def main() -> None:
             emergency_message = 0
             channel.sendto(emergency_message.to_bytes(), (alarm_ip, SEND_PORT))
 
+        # Write measurement to database
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
+
+        # Check configuration
+        temp_threshold = get_temperature_threshold(db)
 
 
 if __name__ == "__main__":
