@@ -6,6 +6,7 @@ import re
 from datetime import datetime
 import json
 import smtplib
+from datetime import timedelta
 
 class TestCreateEmail(unittest.TestCase):
 
@@ -40,15 +41,14 @@ class TestCreateEmail(unittest.TestCase):
             extracted_date = datetime.strptime(match.group(), "%Y-%m-%d %H:%M:%S")
             now = datetime.now()
             
-            # Ensure date-time components match current time and are not in the future
-            self.assertEqual(extracted_date.year, now.year)
-            self.assertEqual(extracted_date.month, now.month)
-            self.assertEqual(extracted_date.day, now.day)
-            self.assertEqual(extracted_date.hour, now.hour)
+            # Calculate the time difference
+            time_difference = now - extracted_date
             
-            self.assertTrue((extracted_date.minute < now.minute) or 
-                            (extracted_date.minute == now.minute and extracted_date.second <= now.second),
-                            "The extracted time should be less than or equal to the current time.")
+            # Ensure the extracted datetime is not in the future
+            self.assertGreaterEqual(time_difference, timedelta(0), "The extracted datetime is in the future.")
+            
+            # Ensure the extracted datetime is within the last hour
+            self.assertLessEqual(time_difference, timedelta(hours=1), "The extracted datetime is more than an hour in the past.")
 
 @patch('email_notification_system.pyrebase')
 class TestFirebaseConnection(unittest.TestCase):
@@ -66,7 +66,7 @@ class TestFirebaseConnection(unittest.TestCase):
             "storageBucket": "testBucket"
         }
         
-        # Set up the mock to simulate Firebase app initialization
+        # Set up the mock to simulate the database object that pyrebase would normally return
         mock_db = MagicMock()
         mock_pyrebase.initialize_app.return_value.database.return_value = mock_db
         
@@ -95,25 +95,46 @@ class TestFirebaseConnection(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             connectFirebase(config)
         
-        # Optionally, assert the exception message if specific error handling is expected
+        # Verify the specific exception message
         self.assertTrue("Failed to initialize Firebase" in str(context.exception))
 
 class TestGetEmergencyValue(unittest.TestCase):
 
-    @patch('email_notification_system.connectFirebase')
-    def test_get_emergency_value(self, mock_connect):
+    def test_get_emergency_value(self):
         """
         Test the getEmergencyValue function to confirm it retrieves the correct emergency value from Firebase.
         """
         # Set up the mock Firebase database object
         mock_db = MagicMock()
         mock_db.child.return_value.get.return_value.val.return_value = True
-        mock_connect.return_value = mock_db
         
         # Execute and assert expected emergency value
         emergency_value = getEmergencyValue(mock_db)
+        
+        # Check that the database object was used correctly
         mock_db.child.assert_called_once_with('emergency')
+        mock_db.child.return_value.get.assert_called_once()
         self.assertTrue(emergency_value)
+
+    def test_get_emergency_value_exception(self):
+        """
+        Test the getEmergencyValue function to ensure it handles exceptions properly
+        when the "emergency" key doesn't exist or an error occurs during retrieval.
+        """
+        # Set up the mock Firebase database object to raise an exception on .val() call
+        mock_db = MagicMock()
+        mock_db.child.return_value.get.side_effect = Exception("Firebase retrieval error")
+
+        with self.assertRaises(Exception) as context:
+            # Attempt to retrieve emergency value, expecting an exception
+            getEmergencyValue(mock_db)
+
+        # Verify the specific exception message
+        self.assertTrue("Firebase retrieval error" in str(context.exception))
+
+        # Ensure the database object's methods were called as expected
+        mock_db.child.assert_called_once_with('emergency')
+        mock_db.child.return_value.get.assert_called_once()
 
 @patch('email_notification_system.smtplib.SMTP_SSL')
 class TestSendEmail(unittest.TestCase):
@@ -152,7 +173,7 @@ class TestSendEmail(unittest.TestCase):
         
         # Verify that attempting to send an email with incorrect credentials raises the expected exception
         with self.assertRaises(smtplib.SMTPAuthenticationError):
-            sendemail(email_message, email, password)
+            sendemail(email_message, email, password) 
 
 if __name__ == '__main__':
     unittest.main()
