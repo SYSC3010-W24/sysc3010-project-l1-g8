@@ -25,7 +25,6 @@ def shutdown(sig: int, frame: FrameType) -> None:
 def wait_for_message(channel: socket.socket) -> Messages:
     """Waits for a message over UDP."""
     data, _ = channel.recvfrom(BUFFER_SIZE)
-    print(f"Received {Messages(int.from_bytes(data))} from address.")
     return Messages(int.from_bytes(data))
 
 
