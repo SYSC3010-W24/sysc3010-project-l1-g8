@@ -13,7 +13,7 @@ def config() -> dict[str, str]:
     return config
 
 
-def insecure_access(config: dict[str, str]) -> None:
+def test_insecure_access(config: dict[str, str]) -> None:
     """Ensures that insecure access to the database is not possible."""
     config["apiKey"] = "obviously wrong"
     with pytest.raises(Exception):
