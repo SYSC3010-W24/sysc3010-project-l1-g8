@@ -1,20 +1,16 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-import time
-import socket
-from messages import Messages
+from threading import Timer
 from typing import Protocol
 from gpiozero import TonalBuzzer
 from gpiozero.tones import Tone
 
-BUFFER_SIZE: int = 100
 B_FLAT: Tone = Tone.from_frequency(466.164)
 
 
 class Context(Protocol):
     """Defines the interface for the context required for the AlarmFSM."""
 
-    socket: socket.socket
     state: State
 
     def emergency(self) -> None:
@@ -25,8 +21,8 @@ class Context(Protocol):
         """Handles the event of an emergency ending."""
         ...
 
-    def wait_for_message(self) -> Messages:
-        """Waits for a message over UDP."""
+    def timeout(self) -> None:
+        """Handles the event of a timeout."""
         ...
 
     def start(self) -> None:
@@ -41,13 +37,15 @@ class Context(Protocol):
         """
         ...
 
+    def set_timeout(self, n: int) -> None:
+        """Will trigger a timeout event in `n` seconds, applied to the context's current state."""
+        ...
+
 
 class AlarmFSM:
     """Represents the state machine context for the alarm state machine."""
 
-    def __init__(self, ip_addr: str, port: int, buzzer: TonalBuzzer) -> None:
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind((ip_addr, port))
+    def __init__(self, buzzer: TonalBuzzer) -> None:
         self.buzzer: TonalBuzzer = buzzer
         self.__state: State = WaitForEmergency()  # Start by waiting for an emergency
 
@@ -71,11 +69,9 @@ class AlarmFSM:
         """Handles the event of an emergency ending."""
         self.__state.emergency_over(self)  # type: ignore
 
-    def wait_for_message(self) -> Messages:
-        """Waits for a message over UDP."""
-        data, _ = self.socket.recvfrom(BUFFER_SIZE)
-        print(f"Received {Messages(int.from_bytes(data))} from address.")
-        return Messages(int.from_bytes(data))
+    def timeout(self) -> None:
+        """Handles the event of a timeout."""
+        self.__state.timeout(self)  # type: ignore
 
     def start(self) -> None:
         """Starts the FSM."""
@@ -92,6 +88,10 @@ class AlarmFSM:
         else:
             self.buzzer.stop()
 
+    def set_timeout(self, n: int) -> None:
+        """Will trigger a timeout event in `n` seconds, applied to the context's current state."""
+        Timer(n, self.timeout).start()
+
 
 class State(ABC):
     """Represents the interface that all states must implement to handle incoming events."""
@@ -103,6 +103,10 @@ class State(ABC):
     @abstractmethod
     def emergency_over(self, context: Context) -> None:
         """Handles the event of an emergency ending."""
+
+    @abstractmethod
+    def timeout(self, context: Context) -> None:
+        """Handles a timer event."""
 
     def entry(self, context: Context) -> None:
         """Performs the entry activity of the state."""
@@ -118,14 +122,7 @@ class WaitForEmergency(State):
 
     def entry(self, context: Context) -> None:
         """Performs the entry activity for this state."""
-        msg = context.wait_for_message()
-
-        # Handle the received message
-        match msg:
-            case Messages.EMERGENCY:
-                self.emergency(context)
-            case Messages.EMERGENCY_OVER:
-                self.emergency_over(context)
+        return
 
     def emergency(self, context: Context) -> None:
         """Handles the event of an emergency."""
@@ -133,7 +130,11 @@ class WaitForEmergency(State):
 
     def emergency_over(self, context: Context) -> None:
         """Handles the event of the emergency ending. In this case, do nothing except wait again."""
-        context.state = WaitForEmergency()
+        return
+
+    def timeout(self, context: Context) -> None:
+        """Handles the event of a timeout event."""
+        return
 
 
 class AlarmOn(State):
@@ -141,8 +142,7 @@ class AlarmOn(State):
 
     def entry(self, context: Context) -> None:
         context.set_alarm_state(True)
-        time.sleep(1)
-        context.state = AlarmOff()
+        context.set_timeout(1)
 
     def emergency(self, context: Context) -> None:
         """Handles the event of an emergency."""
@@ -152,6 +152,10 @@ class AlarmOn(State):
         """Handles the event of the emergency ending."""
         context.set_alarm_state(False)
         context.state = WaitForEmergency()
+
+    def timeout(self, context: Context) -> None:
+        """Handles the event of a timeout event."""
+        context.state = AlarmOff()
 
 
 class AlarmOff(State):
@@ -159,8 +163,7 @@ class AlarmOff(State):
 
     def entry(self, context: Context) -> None:
         context.set_alarm_state(False)
-        time.sleep(1)
-        context.state = AlarmOn()
+        context.set_timeout(1)
 
     def emergency(self, context: Context) -> None:
         """Handles the event of an emergency."""
@@ -169,3 +172,7 @@ class AlarmOff(State):
     def emergency_over(self, context: Context) -> None:
         """Handles the event of the emergency ending."""
         context.state = WaitForEmergency()
+
+    def timeout(self, context: Context) -> None:
+        """Handles the event of a timeout event."""
+        context.state = AlarmOn()
