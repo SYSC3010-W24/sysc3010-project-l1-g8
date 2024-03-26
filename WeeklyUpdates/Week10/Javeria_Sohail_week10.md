@@ -4,7 +4,7 @@
 
 ### Student name: Javeria Sohail
 
-### Week: 9 (19Mar - 26 Mar)
+### Week: 10 (19Mar - 26 Mar)
 
 ---
 
@@ -17,11 +17,11 @@ I dedicated 8 hours to the project this week.
 
    1. Getting the Pico to work with the buzzer: 5 hours
    2. Working on the Technical Memo: 2 hours
-   3. Demo of the unit tests 
+   3. Demo of the unit tests preperation: 1 hr
 
 3. **_What did you accomplish this week?_** _(Be specific)_
 
-- Decomposed the main script into functions to facilitate testing and got review for the technical memo from peers.
+- Decomposed the main script into functions to facilitate testing and got reviews for the technical memo from peers.
 - Acquired knowledge on setting up the PiCo 
 
 4. **_How do you feel about your progress?_** _(brief, free-form reflection)_
