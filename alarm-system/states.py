@@ -38,7 +38,10 @@ class Context(Protocol):
         ...
 
     def set_timeout(self, n: int) -> None:
-        """Will trigger a timeout event in `n` seconds, applied to the context's current state."""
+        """
+        Will trigger a timeout event in `n` seconds, applied to the context's
+        current state.
+        """
         ...
 
 
@@ -47,7 +50,9 @@ class AlarmFSM:
 
     def __init__(self, buzzer: TonalBuzzer) -> None:
         self.buzzer: TonalBuzzer = buzzer
-        self.__state: State = WaitForEmergency()  # Start by waiting for an emergency
+        self.__state: State = (
+            WaitForEmergency()
+        )  # Start by waiting for an emergency
 
     @property
     def state(self) -> State:
@@ -56,7 +61,10 @@ class AlarmFSM:
 
     @state.setter
     def state(self, new_state: State) -> None:
-        """Sets the state attribute after exiting the previous state, and then enters the next state."""
+        """
+        Sets the state attribute after exiting the previous state, and then
+        enters the next state.
+        """
         self.__state.exit(self)  # type: ignore
         self.__state = new_state
         self.__state.entry(self)  # type: ignore
@@ -89,12 +97,18 @@ class AlarmFSM:
             self.buzzer.stop()
 
     def set_timeout(self, n: int) -> None:
-        """Will trigger a timeout event in `n` seconds, applied to the context's current state."""
+        """
+        Will trigger a timeout event in `n` seconds, applied to the context's
+        current state.
+        """
         Timer(n, self.timeout).start()
 
 
 class State(ABC):
-    """Represents the interface that all states must implement to handle incoming events."""
+    """
+    Represents the interface that all states must implement to handle incoming
+    events.
+    """
 
     @abstractmethod
     def emergency(self, context: Context) -> None:
@@ -129,7 +143,10 @@ class WaitForEmergency(State):
         context.state = AlarmOn()
 
     def emergency_over(self, context: Context) -> None:
-        """Handles the event of the emergency ending. In this case, do nothing except wait again."""
+        """
+        Handles the event of the emergency ending. In this case, do nothing
+        except wait again.
+        """
         return
 
     def timeout(self, context: Context) -> None:
