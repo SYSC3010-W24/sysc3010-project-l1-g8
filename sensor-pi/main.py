@@ -10,9 +10,11 @@ import netifaces as ni
 import socket
 from multiprocessing import Queue, Process, active_children
 from signal import signal, SIGTERM
+from gpiozero import Button
 
 FIREBASE_CONFIG: str = "firebase_config.json"
 SEND_PORT: int = 2003
+SMOKE_ALARM_GPIO: int = 22
 
 
 def collect_data(temp: Queue, smoke: Queue) -> None:
@@ -21,11 +23,20 @@ def collect_data(temp: Queue, smoke: Queue) -> None:
     # Open Sense Hat
     sensehat = SenseHat()
 
+    # Set up smoke pin
+    smoke_detector = Button(SMOKE_ALARM_GPIO)
+
     while True:
         # Fetch temperature data and time stamp
         temperature = sensehat.get_temperature()
+
+        # Fetch smoke status
+        smoke_detected = smoke_detector.is_active
+
+        # Give timestamp for measurements
         timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
         temp.put((timestamp, temperature))  # Put data on shared queue
+        smoke.put((timestamp, smoke_detected))
 
 
 def get_temperature_threshold(db: Database) -> float:
@@ -71,12 +82,12 @@ def main() -> None:
     data_collection.start()
 
     while True:
-
         # Get latest measurement
         timestamp, temperature = temp.get()
+        timestamp, smoke_detected = smoke.get()
 
-        # Alert of emergency if threshold is exceeded
-        if temperature > temp_threshold:
+        # Alert of emergency if threshold is exceeded or if there is smoke
+        if temperature > temp_threshold or smoke_detected:
             db.child("emergency").set(True)
             alarm_ip = db.child("devices").child("alarm").get().val()
             emergency_message = 0
@@ -84,6 +95,7 @@ def main() -> None:
 
         # Write measurement to database
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
+        db.child("sensordata").child("smoke").child(timestamp).set(smoke_detected)
 
         # Check configuration
         temp_threshold = get_temperature_threshold(db)
