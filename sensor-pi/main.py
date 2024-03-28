@@ -10,11 +10,17 @@ import netifaces as ni
 import socket
 from multiprocessing import Queue, Process, active_children
 from signal import signal, SIGTERM
-from gpiozero import Button
+from smoke_sensor import SmokeSensor
+import time
 
 FIREBASE_CONFIG: str = "firebase_config.json"
 SEND_PORT: int = 2003
-SMOKE_ALARM_GPIO: int = 22
+
+# Smoke detector settings
+SCLK: int = 11
+MISO: int = 9
+MOSI: int = 10
+CHIP_SELECT: int = 22
 
 
 def collect_data(temp: Queue, smoke: Queue) -> None:
@@ -23,25 +29,32 @@ def collect_data(temp: Queue, smoke: Queue) -> None:
     # Open Sense Hat
     sensehat = SenseHat()
 
-    # Set up smoke pin
-    smoke_detector = Button(SMOKE_ALARM_GPIO)
+    # Create smoke sensor instance
+    smoke_detector = SmokeSensor(sclk=SCLK, miso=MISO, mosi=MOSI, chip_select=CHIP_SELECT)
 
     while True:
+        time.sleep(0.5)  # Don't burn through CPU
+
         # Fetch temperature data and time stamp
         temperature = sensehat.get_temperature()
 
         # Fetch smoke status
-        smoke_detected = smoke_detector.is_active
+        smoke_ppm = smoke_detector.read_ppm()
 
         # Give timestamp for measurements
         timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
         temp.put((timestamp, temperature))  # Put data on shared queue
-        smoke.put((timestamp, smoke_detected))
+        smoke.put((timestamp, smoke_ppm))
 
 
 def get_temperature_threshold(db: Database) -> float:
     """Gets the configured temperature threshold from the Firebase database."""
     return float(db.child("thresholds").get("temperature").val().get("temperature"))  # type: ignore
+
+
+def get_smoke_threshold(db: Database) -> float:
+    """Gets the configured smoke PPM threshold from the Firebase database."""
+    return float(db.child("thresholds").get("smoke").val().get("smoke"))  # type: ignore
 
 
 def shutdown(sig: int, frame: FrameType) -> None:
@@ -66,7 +79,8 @@ def main() -> None:
 
     # Check for configured thresholds
     temp_threshold = get_temperature_threshold(db)
-    db.child("emergency").set(False)
+    smoke_threshold = get_smoke_threshold(db)
+    db.child("emergency").set(False)  # Start with emergency disabled
 
     # Create socket for sending
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -84,10 +98,10 @@ def main() -> None:
     while True:
         # Get latest measurement
         timestamp, temperature = temp.get()
-        timestamp, smoke_detected = smoke.get()
+        timestamp, smoke_ppm = smoke.get()
 
         # Alert of emergency if threshold is exceeded or if there is smoke
-        if temperature > temp_threshold or smoke_detected:
+        if temperature > temp_threshold or smoke_ppm > smoke_threshold:
             db.child("emergency").set(True)
             alarm_ip = db.child("devices").child("alarm").get().val()
             emergency_message = 0
@@ -95,10 +109,11 @@ def main() -> None:
 
         # Write measurement to database
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
-        db.child("sensordata").child("smoke").child(timestamp).set(smoke_detected)
+        db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
 
         # Check configuration
         temp_threshold = get_temperature_threshold(db)
+        smoke_threshold = get_smoke_threshold(db)
 
 
 if __name__ == "__main__":
