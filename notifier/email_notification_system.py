@@ -28,7 +28,6 @@ def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
 
     return em
 
-
 def sendemail(emailMessage, email, password):
     context = ssl.create_default_context()
     smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context)
@@ -40,7 +39,6 @@ def connectFirebase(config: dict):
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     return db
-
 
 def getEmergencyValue(db):
     emergencyValue = db.child('emergency').get().val()
@@ -55,16 +53,10 @@ def getUsers(db):
         for name, detail in value.items():
             user_info = (name, detail)
             users[email] = user_info
-    print(users)
     return users
 
-
 def addUserToSQLite(cursor, email, name, password):
-    # Try to insert the user into the SQLite table, including the password
-    try:
-        cursor.execute("INSERT OR IGNORE INTO users (email, name, password) VALUES (?, ?, ?)", (email, name, password))
-    except sqlite3.IntegrityError:
-        print(f"User {email} already exists in the database.")
+    cursor.execute("REPLACE INTO users (email, name, password) VALUES (?, ?, ?)", (email, name, password))
 
 def print_users_table(cursor):
     cursor.execute("SELECT email, name, password FROM users")
@@ -72,7 +64,6 @@ def print_users_table(cursor):
     print("Contents of users table:")
     for row in rows:
         print(row)
-
 
 def main():
     with open("./fans_credentials.json", "r") as file:
@@ -95,18 +86,18 @@ def main():
         emergencyValue = getEmergencyValue(db)
         while emergencyValue:
             users = getUsers(db)
-            for email, details in users.items():
-                name = details[0]
-                userPassword = details[1]
+            for email, detail in users.items():
+                name = detail[0]
+                userPassword = detail[1]
                 addUserToSQLite(cursor, email, name, userPassword)
-                print_users_table(cursor)
-                emailMessage = createEmail(name, email, credentials["email"])
                 username = credentials["email"]
                 password = credentials["pass"]
+                emailMessage = createEmail(name, email, username)
                 #sendemail(emailMessage, username, password)
                 print("Email sent to " + name)
                 time.sleep(1)
-
+                
+            emergencyValue = getEmergencyValue(db)                
             dbconnect.commit()
 
         time.sleep(1)
