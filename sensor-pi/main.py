@@ -96,6 +96,14 @@ def main() -> None:
     # Check for configured thresholds
     temp_threshold = get_temperature_threshold(db)
     smoke_threshold = get_smoke_threshold(db)
+
+    # This function is too large to fit in a lambda but needs access to threshold variables
+    def refresh_thresholds() -> None:
+        """Refresh the thresholds when the timer expires."""
+        global temp_threshold, smoke_threshold
+        temp_threshold = get_temperature_threshold(db)
+        smoke_threshold = get_smoke_threshold(db)
+
     db.child("emergency").set(False)  # Start with emergency disabled
 
     # Get the latest timeout configuration to start the timeout
@@ -155,15 +163,10 @@ def main() -> None:
             time_expired = (dt.datetime.now() - current_timeout).total_seconds()
             actual_duration = duration - int(time_expired)
 
-            # This function is too large to fit in a lambda but needs access to threshold variables
-            def refresh_thresholds() -> None:
-                """Refresh the thresholds when the timer expires."""
-                global temp_threshold, smoke_threshold
-                temp_threshold = get_temperature_threshold(db)
-                smoke_threshold = get_smoke_threshold(db)
-
-            current_timer = Timer(actual_duration, refresh_thresholds)
-            current_timer.start()
+            # Make sure timer is not too old to be relevant
+            if actual_duration > 0:
+                current_timer = Timer(actual_duration, refresh_thresholds)
+                current_timer.start()
 
         # Check for differing emergency status in database (user deactivated)
         if local_emergency and not db.child("emergency").get().val():
