@@ -17,6 +17,12 @@ db = firebase.database()
 app = Flask(__name__)
 
 
+def timestamp_just_time(timestamp: str) -> str:
+    """Returns just the time portion of an ISO timestamp."""
+    # Remove the last two fractions of a second as well
+    return timestamp.split("T")[-1][:-2]
+
+
 # HTML Pages
 @app.route("/", methods=["GET"])
 def home():
@@ -93,7 +99,7 @@ def get_temperature():
     timestamps = list(temp_data.keys())
     values = list(temp_data.values())
 
-    return {"timestamps": timestamps, "vals": values}, 200
+    return {"timestamps": [timestamp_just_time(t) for t in timestamps], "vals": values}, 200
 
 
 @app.route("/api/smoke", methods=["GET"])
@@ -103,7 +109,7 @@ def get_smoke():
     timestamps = list(smoke_data.keys())
     values = list(smoke_data.values())
 
-    return {"timestamps": timestamps, "vals": values}, 200
+    return {"timestamps": [timestamp_just_time(t) for t in timestamps], "vals": values}, 200
 
 
 if __name__ == "__main__":

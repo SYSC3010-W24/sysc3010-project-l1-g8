@@ -102,7 +102,7 @@
           <div class="temperature-box">
             <p class="title-2">Temperature</p>
             <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
-            <canvas id="temperature-graph" width="400" height="400"></canvas>
+            <canvas id="temperature-graph" width="600" height="400"></canvas>
         </div>
 
             <script>
@@ -123,9 +123,23 @@
                     ]
                   },
                   options: {
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Temperature (C)"
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Time",
+                            }
+                        }]
+                    },
                     title: {
                       display: true,
-                      text: 'Positive Cases of COVID in provinces of Canada'
+                      text: "Temperature of system environment"
                     },
                     hover: {
                      mode: 'index',
@@ -148,7 +162,7 @@
           <div class="smoke-box">
             <p class="title-2">Smoke</p>
             <p>Current Smoke Level: {{current_smoke}} PPM</p>
-            <canvas id="smoke-graph" width="400" height="400"></canvas>
+            <canvas id="smoke-graph" width="600" height="400"></canvas>
           </div>
 
             <script>
@@ -162,16 +176,30 @@
                     labels: [],
                     datasets: [{
                         data: [],
-                        label: "Smoke",
+                        label: "Smoke Concentration",
                         borderColor: "#ff4d4d",
                         fill: false
                       }
                     ]
                   },
                   options: {
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Smoke (PPM)"
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: "Time",
+                            }
+                        }]
+                    },
                     title: {
                       display: true,
-                      text: 'Positive Cases of COVID in provinces of Canada'
+                      text: "Smoke concentration of system environment"
                     },
                     hover: {
                      mode: 'index',
