@@ -130,3 +130,7 @@ body {
     border-color: var(--text-color-fire);
     color: var(--text-color-fire);
 }
+
+input, button {
+    color: white;
+}
