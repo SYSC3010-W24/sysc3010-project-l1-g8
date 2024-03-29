@@ -12,6 +12,7 @@ import socket
 from messages import Messages
 
 RECEIVE_PORT: int = 2003
+BUFFER_SIZE: int = 100
 
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
     
@@ -68,6 +69,11 @@ def print_users_table(cursor):
     print("Contents of users table:")
     for row in rows:
         print(row)
+
+def wait_for_message(channel: socket.socket) -> Messages:
+    """Waits for a message over UDP."""
+    data, _ = channel.recvfrom(BUFFER_SIZE)
+    return Messages(int.from_bytes(data))
 
 def main():
     with open("./fans_credentials.json", "r") as file:
