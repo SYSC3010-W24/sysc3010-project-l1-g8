@@ -7,6 +7,7 @@ import time
 import json
 from templates import Template
 from datetime import datetime
+import netifaces as ni
 
 
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
