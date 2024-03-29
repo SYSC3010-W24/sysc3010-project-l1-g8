@@ -9,6 +9,7 @@ from templates import Template
 from datetime import datetime
 import netifaces as ni
 import socket
+from messages import Messages
 
 RECEIVE_PORT: int = 2003
 BUZZER_PIN: int = 22
