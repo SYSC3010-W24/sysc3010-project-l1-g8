@@ -12,7 +12,7 @@ import socket
 from messages import Messages
 
 RECEIVE_PORT: int = 2003
-BUZZER_PIN: int = 22
+BUFFER_SIZE: int = 100
 
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
     
