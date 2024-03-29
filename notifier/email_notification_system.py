@@ -8,11 +8,6 @@ import json
 from templates import Template
 from datetime import datetime
 import netifaces as ni
-import socket
-from messages import Messages
-
-RECEIVE_PORT: int = 2003
-BUFFER_SIZE: int = 100
 
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
     
@@ -45,10 +40,6 @@ def connectFirebase(config: dict):
     db = firebase.database()
     return db
 
-def getEmergencyValue(db):
-    emergencyValue = db.child('emergency').get().val()
-    return emergencyValue
-
 def getUsers(db):
     users_raw = db.child('users').get().val()
     users = {}
@@ -69,11 +60,6 @@ def print_users_table(cursor):
     print("Contents of users table:")
     for row in rows:
         print(row)
-
-def wait_for_message(channel: socket.socket) -> Messages:
-    """Waits for a message over UDP."""
-    data, _ = channel.recvfrom(BUFFER_SIZE)
-    return Messages(int.from_bytes(data))
 
 def main():
     with open("./fans_credentials.json", "r") as file:
@@ -120,10 +106,10 @@ def main():
                     emails_sent = True
                     dbconnect.commit()
 
-                elif not emergencyValue:
-                    emails_sent = False
+            case Messages.EMERGENCY_OVER:
+                emails_sent = False
 
-                time.sleep(2)
+        time.sleep(2)
 
 
 if __name__ == "__main__":
