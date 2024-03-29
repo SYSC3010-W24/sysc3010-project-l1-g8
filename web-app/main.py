@@ -20,21 +20,18 @@ def home():
     """Renders the home page of the website."""
     # Get temperature data from Firebase
 
-    sorted_temperature = db.child("sensordata/temperature").order_by_key()
-    sorted_smoke = db.child("sensordata/smoke").order_by_key()
-
-    latest_temperature: list[float] = list(sorted_temperature.limit_to_last(10).get().val().values())
-    latest_temperature = [0]
-    current_temperature = latest_temperature[-1]
-
-    latest_smoke: list[float] = list(sorted_smoke.limit_to_last(10).get().val().values())
-    current_smoke = latest_smoke[-1]
+    latest_temperature = list(db.child("sensordata/temperature").order_by_key().limit_to_last(10).get().val().values())
+    latest_smoke = list(db.child("sensordata/smoke").order_by_key().limit_to_last(10).get().val().values())
 
     # Get emergency flag from Firebase
     emergency_flag = db.child("emergency").get().val()
     color_class = "fire" if emergency_flag else "no-fire"
     return render_template(
-        "index.html", current_temperature=current_temperature, emergency_flag=emergency_flag, color_class=color_class
+        "index.html",
+        current_temperature=round(latest_temperature[-1], 2),
+        emergency_flag=emergency_flag,
+        color_class=color_class,
+        current_smoke=round(latest_smoke[-1], 2),
     )
 
 
