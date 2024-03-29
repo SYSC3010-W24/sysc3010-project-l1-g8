@@ -11,11 +11,35 @@
     <script>
 
       const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
+      const TIMEOUT_URL = {{url_for("set_timeout", duration="3600") | tojson}};
 
       function deactivate_emergency() {
           fetch(DEACTIVATE_URL).then((response) => {
               window.location.reload();
           });
+      }
+
+      function submit_timeout() {
+          const field = document.getElementById("timeout");
+          const duration = field.value;
+          const timeout_with_duration = TIMEOUT_URL.replace("3600", duration);
+          fetch(timeout_with_duration).then((response) => {
+
+              console.log(response.status);
+              if (response.status != 200){
+                  response.json().then(message => {
+                      document.getElementById("timeout-success").textContent = message.message;
+                  })
+                  return;
+              }
+
+              document.getElementById("timeout-success").textContent = "Timeout set successfully!";
+
+              // Remove success message after 10s
+              setTimeout(() => {
+                  document.getElementById("timeout-success").textContent = "";
+              }, 5000);
+          })
       }
     </script>
 
@@ -60,6 +84,16 @@
             <p class="title-2">Activity Log</p>
             <p>Last fire on BLANK</p>
             <div class="activity-box"></div>
+          </div>
+          <br />
+          <div class="timer-settings">
+            <p class="title-2">Timeout System</p>
+            <input id="timeout" type="number" min="1", max="1440" step="60" value="3600"></input>
+            <br/>
+            <label for="timeout">System timeout in seconds (maximum 4 hours/7200 seconds).</label>
+            <br/>
+            <button id="submit-timeout" onclick="submit_timeout()">Submit Timeout</button>
+            <p id="timeout-success"></p>
           </div>
         </div>
 

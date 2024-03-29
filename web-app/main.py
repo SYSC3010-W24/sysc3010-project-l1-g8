@@ -1,9 +1,11 @@
+import json
+import datetime as dt
 from flask import Flask, jsonify, render_template
 import pyrebase
-import json
 
 PORT: int = 8000
 FIREBASE_CONFIG: str = "firebase_config.json"
+MAX_TIMEOUT: int = 14400  # Four hours, in seconds
 
 # Initialize DB connection
 with open(FIREBASE_CONFIG, "r") as file:
@@ -62,7 +64,25 @@ def sign_up():
 def deactivate_alarm():
     """Deactivates the alarm flag in Firebase to signal the emergency is over."""
     db.child("emergency").set(False)
-    return jsonify(success=True)
+    return jsonify(success=True), 200
+
+
+@app.route("/api/timeout/<duration>", methods=["GET"])
+def set_timeout(duration: str):
+    """Sets a timeout duration in Firebase."""
+
+    numeric_duration = int(duration)
+
+    if numeric_duration > MAX_TIMEOUT:
+        return jsonify(success=False, message=f"Timeout must be less than {MAX_TIMEOUT} seconds!"), 400
+
+    elif numeric_duration <= 0:
+        return jsonify(success=False, message="Timeout must be longer than 0 seconds!"), 400
+
+    timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
+    db.child("timeout").child(timestamp).set(numeric_duration)
+
+    return jsonify(success=True), 200
 
 
 if __name__ == "__main__":
