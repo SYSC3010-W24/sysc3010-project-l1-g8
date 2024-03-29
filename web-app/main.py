@@ -6,6 +6,7 @@ import pyrebase
 PORT: int = 8000
 FIREBASE_CONFIG: str = "firebase_config.json"
 MAX_TIMEOUT: int = 14400  # Four hours, in seconds
+NUM_SAMPLES_PLOTTED: int = 10
 
 # Initialize DB connection
 with open(FIREBASE_CONFIG, "r") as file:
@@ -22,8 +23,8 @@ def home():
     """Renders the home page of the website."""
     # Get temperature data from Firebase
 
-    latest_temperature = list(db.child("sensordata/temperature").order_by_key().limit_to_last(10).get().val().values())
-    latest_smoke = list(db.child("sensordata/smoke").order_by_key().limit_to_last(10).get().val().values())
+    latest_temperature = list(db.child("sensordata/temperature").order_by_key().limit_to_last(1).get().val().values())
+    latest_smoke = list(db.child("sensordata/smoke").order_by_key().limit_to_last(1).get().val().values())
 
     # Get emergency flag from Firebase
     emergency_flag = db.child("emergency").get().val()
@@ -83,6 +84,26 @@ def set_timeout(duration: str):
     db.child("timeout").child(timestamp).set(numeric_duration)
 
     return jsonify(success=True), 200
+
+
+@app.route("/api/tempdata", methods=["GET"])
+def get_temperature():
+    """Gets the latest temperature time series data and returns it in JSON format."""
+    temp_data = db.child("sensordata/temperature").order_by_key().limit_to_last(10).get().val()
+    timestamps = list(temp_data.keys())
+    values = list(temp_data.values())
+
+    return {"timestamps": timestamps, "vals": values}, 200
+
+
+@app.route("/api/smoke", methods=["GET"])
+def get_smoke():
+    """Gets the latest temperature time series data and returns it in JSON format."""
+    smoke_data = db.child("sensordata/smoke").order_by_key().limit_to_last(10).get().val()
+    timestamps = list(smoke_data.keys())
+    values = list(smoke_data.values())
+
+    return {"timestamps": timestamps, "vals": values}, 200
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="static/index.css" />
     <link rel="stylesheet" href="static/global.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <title>FANS</title>
   </head>
   <body>
@@ -101,18 +102,105 @@
           <div class="temperature-box">
             <p class="title-2">Temperature</p>
             <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
-            <div class="temperature-graph">
-              <p>GRAPH GOES HERE</p>
-            </div>
-          </div>
+            <canvas id="temperature-graph" width="400" height="400"></canvas>
+        </div>
+
+            <script>
+
+                const GET_TEMPERATURE = {{url_for("get_temperature") | tojson}};
+
+                // Temperature line chart
+                let temperature_chart = new Chart(document.getElementById("temperature-graph"), {
+                  type: 'line',
+                  data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        label: "Temperature",
+                        borderColor: "#ff4d4d",
+                        fill: false
+                      }
+                    ]
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: 'Positive Cases of COVID in provinces of Canada'
+                    },
+                    hover: {
+                     mode: 'index',
+                     intersect: true
+                    },
+                  }
+                });
+
+                function refresh_temp_values() {
+                    fetch(GET_TEMPERATURE).then((response) => {
+                        response.json().then(data => {
+                            temperature_chart.data.labels = data.timestamps;
+                            temperature_chart.data.datasets[0].data = data.vals;
+                            temperature_chart.update();
+                        })
+                    })
+                }
+            </script>
 
           <div class="smoke-box">
             <p class="title-2">Smoke</p>
             <p>Current Smoke Level: {{current_smoke}} PPM</p>
-            <div class="smoke-graph">
-              <p>GRAPH GOES HERE</p>
-            </div>
+            <canvas id="smoke-graph" width="400" height="400"></canvas>
           </div>
+
+            <script>
+
+                const GET_SMOKE = {{url_for("get_smoke") | tojson}};
+
+                // Temperature line chart
+                let smoke_chart = new Chart(document.getElementById("smoke-graph"), {
+                  type: 'line',
+                  data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        label: "Smoke",
+                        borderColor: "#ff4d4d",
+                        fill: false
+                      }
+                    ]
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: 'Positive Cases of COVID in provinces of Canada'
+                    },
+                    hover: {
+                     mode: 'index',
+                     intersect: true
+                    },
+                  }
+                });
+
+                function refresh_smoke_values() {
+                    fetch(GET_SMOKE).then((response) => {
+                        response.json().then(data => {
+                            smoke_chart.data.labels = data.timestamps;
+                            smoke_chart.data.datasets[0].data = data.vals;
+                            smoke_chart.update();
+                        })
+                    })
+                }
+
+                function refresh_charts() {
+                    refresh_smoke_values()
+                    refresh_temp_values()
+                    // Refresh every three seconds
+                    setTimeout(() => {
+                        refresh_charts();
+                    }, 3000);
+                }
+
+                refresh_charts(); // Refresh when page loads
+            </script>
         </div>
       </div>
     </main>
