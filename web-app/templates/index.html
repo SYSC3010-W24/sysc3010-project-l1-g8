@@ -17,35 +17,56 @@
 
       <div class="content-box">
         <div class="fire-alarm-box">
-          <div class="alarm-name-box">
-            <p class="alarm-name">Fire Alarm 1</p>
-            <p class="title-2">Status:</p>
-          </div>
-          <div class="alarm-status-box {{ color_class }}">
-            {% if emergency_flag %}
+          <p class="title1">Welcome, BLANK</p>
+          <p class="alarm-name">Fire Alarm: BLANK's Alarm</p>
+
+          <div class="alarm-status-box1 {{ color_class }}">
+            <p class="title2">Status:</p>
+            <div class="alarm-status-box2 {{color_class}}">
+              {% if emergency_flag %}
               <p class="fire">FIRE DETECTED</p>
-            {% else %}
-              <p class="no-fire">No Fire</p>
-            {% endif %}
+              {% else %}
+              <p class="no-fire">Clear</p>
+              {% endif %}
+            </div>
           </div>
+
+          <p class="title2">Accessory Device: BLANK's Pager</p>
+          <div class="alarm-status-box1">
+            <p>Status:</p>
+            <div class="alarm-status-box2 {{color_class}}">
+              {% if emergency_flag %}
+              <p class="fire">Disconnected</p>
+              {% else %}
+              <p class="no-fire">Connected</p>
+              {% endif %}
+            </div>
+          </div>
+
           <div class="log-box">
-            <p class="title-2">ACTIVITY LOG</p>
+            <p class="title-2">Activity Log</p>
+            <p class="titl">Last fire on BLANK</p>
+            <div class="activity-box"></div>
           </div>
         </div>
 
-        <div class="vertical-line"></div>
-
         <div class="data-box">
-          <div class="smoke-box">
-            <p class="title-2">Smoke</p>
-            <div class="smoke-graph"></div>
-          </div>
           <div class="temperature-box">
             <p class="title-2">Temperature</p>
             <p class="current-temp">
               Current Temperature: {{current_temperature}}
             </p>
-            <div class="temperature-graph"></div>
+            <div class="temperature-graph">
+              <p>GRAPH GOES HERE</p>
+            </div>
+          </div>
+
+          <div class="smoke-box">
+            <p class="title-2">Smoke</p>
+            <p>Current Smoke Level: BLANK</p>
+            <div class="smoke-graph">
+              <p>GRAPH GOES HERE</p>
+            </div>
           </div>
         </div>
       </div>

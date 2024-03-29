@@ -21,21 +21,43 @@
             <p>Last Name:</p>
             <p>Email:</p>
             <p>Password:</p>
+            <button type="submit" class="login-btn">Save</button>
+        </div>
+
+        <div class="account-box">
+            <p class="title-2">Administration Controls</p>
+            <p>Administrator: </p>
+            <form action="/add_task" method="POST">
+                <div class="form1">
+                  <input
+                    type="text"
+                    class="form1-input"
+                    id="add_new_user"
+                    name="add_new_user"
+                    placeholder="Add a new user here"
+                  />
+                  <button type="submit" class="add-btn">Add</button>
+                </div>
+              </form>
+            <p>User List </p>
         </div>
 
         <div class="alarm-settings-box">
             <p class="title-2">Alarm Settings</p>
             <p>Smoke Threshold: {{smoke_threshold}}</p>
             <p>Temperature Threshold: {{ temperature_threshold}}</p>
+            <p>Alarm Notification: </p>
+            <p>Accessory Device Notification: </p>
         </div>
 
         <div class="appearance-box">
-            <p class="title-2">Appearance</p>
-            <p>Theme</p>
+            <p class="title-2">Website Appearance</p>
+            <p>Theme: </p>
+            <p>Font: </p>
         </div>
         
         <div class="login-btn-box">
-            <button type="submit" class="login-btn">Save</button>
+            
           </div>
 
 

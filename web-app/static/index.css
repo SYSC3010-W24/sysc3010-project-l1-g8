@@ -14,68 +14,78 @@ body {
 }
 
 .fire-alarm-box {
-  padding: 0.5em 0.25em 0.5em 0.25em;
+  padding: 0.5em 1em 0.5em 1em;
   margin-right: 0.5em;
   flex: 1;
+  border: 2px solid #f5f5f5;
+  border-radius: 3px;
 }
 
-.alarm-name-box {
-  padding: 1em;
-  margin-bottom: 0.5em;
+.welcome-user p {
+  font-size: 0.5em;
 }
 
-.alarm-status-box {
-  border: 2px solid #fff;
+.fire-alarm-box p {
+  font-size: 1.5em;
+}
+
+.alarm-status-box1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.alarm-status-box2 {
+  border: 2px solid #f5f5f5;
+  border-radius: 3px;
   padding: 0.2em;
   margin-bottom: 0.5em;
-  font-size: 2.5em;
+  font-size: 1.5em;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  white-space: nowrap;
 }
 
-.alarm-status-box.fire {
+.alarm-status-box2.fire {
   border: 2px solid #ff4d4d;
 }
 
-.alarm-status-box.no-fire {
-  border: 2px solid #4dff4d; 
+.alarm-status-box2.no-fire {
+  border: 2px solid #4dff4d;
 }
 
 .fire {
   color: #ff4d4d;
 }
 
-.no-fire{
-  color:#4dff4d;
-}
-.alarm-name {
-  margin-bottom: 0.5em;
-  font-size: 2.5em;
-  white-space: nowrap;
+.no-fire {
+  color: #4dff4d;
 }
 
-.title-2 {
+.alarm-name {
+  margin-bottom: 0.5em;
   font-size: 1.5em;
   white-space: nowrap;
 }
 
-.log-box {
-  padding: 1em;
-  margin-bottom: 0.5em;
+.title1 {
+  font-size: 1.5em;
+  white-space: nowrap;
 }
 
-.vertical-line {
-  border-left: 1px solid #f5f5f5;
-  margin: 0 1em;
+.title2 {
+  font-size: 0.5em;
+  white-space: nowrap;
 }
 
 .data-box {
-  padding: 2em 1em 2em 1em;
+  padding: 0.5em 1em 0.5em 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex: 1;
+  border: 2px solid #f5f5f5;
+  border-radius: 3px;
 }
 
 .smoke-box {
@@ -88,8 +98,18 @@ body {
   margin-bottom: 0.5em;
 }
 
-.current-temp p{
+.current-temp p {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.temperature-graph {
+  border: 2px solid #f5f5f5;
+  padding: 2em;
+}
+
+.smoke-graph {
+  border: 2px solid #f5f5f5;
+  padding: 2em;
 }
