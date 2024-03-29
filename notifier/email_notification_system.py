@@ -69,12 +69,8 @@ def main():
     with open("./fans_credentials.json", "r") as file:
         credentials: dict[str, str] = json.load(file)
 
-    config = {
-        "apiKey": "AIzaSyDCrm-YWek1mShoftACTezFdzn8PoLSNrY",
-        "authDomain": "fans-38702.firebaseapp.com",
-        "databaseURL": "https://fans-38702-default-rtdb.firebaseio.com/",
-        "storageBucket": "fans-38702.appspot.com"
-    }
+    with open("./firebase_config.json", "r") as file:
+        config = json.loads(file.read())
 
     db = connectFirebase(config)
 
@@ -82,9 +78,12 @@ def main():
 
     cursor = dbconnect.cursor()
 
+    emails_sent = False  # Flag to control email sending
+
     while True:
         emergencyValue = getEmergencyValue(db)
-        while emergencyValue:
+
+        if emergencyValue and not emails_sent:
             users = getUsers(db)
             for email, detail in users.items():
                 name = detail[0]
@@ -93,14 +92,17 @@ def main():
                 username = credentials["email"]
                 password = credentials["pass"]
                 emailMessage = createEmail(name, email, username)
-                #sendemail(emailMessage, username, password)
+                sendemail(emailMessage, username, password)
                 print("Email sent to " + name)
-                time.sleep(1)
-                
-            emergencyValue = getEmergencyValue(db)                
+                time.sleep(2) 
+
+            emails_sent = True
             dbconnect.commit()
 
-        time.sleep(1)
+        elif not emergencyValue:
+            emails_sent = False
+
+        time.sleep(2)
 
 
 if __name__ == "__main__":
