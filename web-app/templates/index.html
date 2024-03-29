@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -53,9 +53,7 @@
         <div class="data-box">
           <div class="temperature-box">
             <p class="title-2">Temperature</p>
-            <p class="current-temp">
-              Current Temperature: {{current_temperature}}
-            </p>
+            <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
             <div class="temperature-graph">
               <p>GRAPH GOES HERE</p>
             </div>
@@ -63,7 +61,7 @@
 
           <div class="smoke-box">
             <p class="title-2">Smoke</p>
-            <p>Current Smoke Level: BLANK</p>
+            <p>Current Smoke Level: {{current_smoke}} PPM</p>
             <div class="smoke-graph">
               <p>GRAPH GOES HERE</p>
             </div>
