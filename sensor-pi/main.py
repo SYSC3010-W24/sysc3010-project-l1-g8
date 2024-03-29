@@ -14,6 +14,7 @@ from multiprocessing import Queue, Process, active_children
 from signal import signal, SIGTERM
 from smoke_sensor import SmokeSensor
 import time
+from messages import Messages
 
 FIREBASE_CONFIG: str = "firebase_config.json"
 SEND_PORT: int = 2003
@@ -104,6 +105,10 @@ def main() -> None:
     # Create socket for sending
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+    # Track if an emergency has been triggered locally. This will allow comparison with the database for turning off
+    # emergencies
+    local_emergency = False
+
     # Handle shutdown signal
     signal(SIGTERM, shutdown)  # type: ignore
 
@@ -123,8 +128,8 @@ def main() -> None:
         if temperature > temp_threshold or smoke_ppm > smoke_threshold:
             db.child("emergency").set(True)
             alarm_ip = db.child("devices").child("alarm").get().val()
-            emergency_message = 0
-            channel.sendto(emergency_message.to_bytes(), (alarm_ip, SEND_PORT))
+            channel.sendto(Messages.EMERGENCY.value.to_bytes(), (alarm_ip, SEND_PORT))
+            local_emergency = True
 
         # Write measurement to database
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
@@ -159,6 +164,14 @@ def main() -> None:
 
             current_timer = Timer(actual_duration, refresh_thresholds)
             current_timer.start()
+
+        # Check for differing emergency status in database (user deactivated)
+        if local_emergency and not db.child("emergency").get().val():
+            local_emergency = False
+
+            # Notify other nodes that emergency is over
+            alarm_ip = db.child("devices").child("alarm").get().val()
+            channel.sendto(Messages.NO_EMERGENCY.value.to_bytes(), (alarm_ip, SEND_PORT))
 
 
 if __name__ == "__main__":
