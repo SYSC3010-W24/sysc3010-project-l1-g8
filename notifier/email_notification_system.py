@@ -8,6 +8,10 @@ import json
 from templates import Template
 from datetime import datetime
 import netifaces as ni
+import socket
+
+RECEIVE_PORT: int = 2003
+BUZZER_PIN: int = 22
 
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
     
