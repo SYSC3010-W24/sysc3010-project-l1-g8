@@ -6,7 +6,10 @@ import pyrebase
 PORT: int = 8000
 FIREBASE_CONFIG: str = "firebase_config.json"
 MAX_TIMEOUT: int = 14400  # Four hours, in seconds
+MAX_TEMP_THRESH: int = 100  # Degrees Celsius
+MAX_SMOKE_THRESH: int = 10000  # PPM
 NUM_SAMPLES_PLOTTED: int = 10
+
 
 # Initialize DB connection
 with open(FIREBASE_CONFIG, "r") as file:
@@ -110,6 +113,46 @@ def get_smoke():
     values = list(smoke_data.values())
 
     return {"timestamps": [timestamp_just_time(t) for t in timestamps], "vals": values}, 200
+
+
+@app.route("/api/tempthresh/<degrees>", methods=["GET"])
+def set_temperature_threshold(degrees: str):
+    """Sets the temperature threshold in Firebase."""
+
+    numeric_degrees = int(degrees)
+
+    if numeric_degrees > MAX_TEMP_THRESH:
+        return (
+            jsonify(success=False, message=f"Tempereature threshold must be less than {MAX_TEMP_THRESH} degrees!"),
+            400,
+        )
+
+    elif numeric_degrees <= 0:
+        return jsonify(success=False, message="Tempereature threshold must be higher than 0 degrees!"), 400
+
+    db.child("thresholds/temperature").set(numeric_degrees)
+
+    return jsonify(success=True), 200
+
+
+@app.route("/api/smokethresh/<degrees>", methods=["GET"])
+def set_smoke_threshold(ppm: str):
+    """Sets the smoke threshold in Firebase."""
+
+    numeric_ppm = int(ppm)
+
+    if numeric_ppm > MAX_TEMP_THRESH:
+        return (
+            jsonify(success=False, message=f"Smoke threshold must be less than {MAX_SMOKE_THRESH} ppm!"),
+            400,
+        )
+
+    elif numeric_ppm <= 0:
+        return jsonify(success=False, message="Smoke threshold must be higher than 0 ppm!"), 400
+
+    db.child("thresholds/smoke").set(numeric_ppm)
+
+    return jsonify(success=True), 200
 
 
 if __name__ == "__main__":
