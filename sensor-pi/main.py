@@ -86,9 +86,15 @@ def shutdown(sig: int, frame: FrameType) -> None:
         exit(0)
 
 
+temp_threshold = float("inf")
+smoke_threshold = float("inf")
+current_timer = None
+
+
 def main() -> None:
     """Runs the primary logic of the sensor data fetcher."""
 
+    global temp_threshold, smoke_threshold, current_timer
     # Connect using configuration
     with open(FIREBASE_CONFIG, "r") as file:
         config = json.loads(file.read())
@@ -103,19 +109,21 @@ def main() -> None:
     temp_threshold = get_temperature_threshold(db)
     smoke_threshold = get_smoke_threshold(db)
 
-    # This function is too large to fit in a lambda but needs access to threshold variables
-    def refresh_thresholds() -> None:
-        """Refresh the thresholds when the timer expires."""
-        global temp_threshold, smoke_threshold
-        temp_threshold = get_temperature_threshold(db)
-        smoke_threshold = get_smoke_threshold(db)
-        current_timer = None
-
     db.child("emergency").set(False)  # Start with emergency disabled
 
     # Get the latest timeout configuration to start the timeout
     _, current_timeout, _ = get_latest_timeout(None, db)
-    current_timer: Optional[Timer] = None
+    current_timer = None
+
+    # This function is too large to fit in a lambda but needs access to threshold variables
+    def refresh_thresholds() -> tuple:
+        """Refresh the thresholds when the timer expires."""
+        global temp_threshold, smoke_threshold, current_timer
+        temp_threshold = get_temperature_threshold(db)
+        smoke_threshold = get_smoke_threshold(db)
+        current_timer = None
+        print("TIMER WENT OFF")
+        return temp_threshold, smoke_threshold, current_timer
 
     # Create socket for sending
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -151,6 +159,7 @@ def main() -> None:
         db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
 
         # Update configuration unless there's a timeout
+        print(temp_threshold, smoke_threshold)
         if current_timer is None:
             temp_threshold = get_temperature_threshold(db)
             smoke_threshold = get_smoke_threshold(db)
@@ -159,14 +168,10 @@ def main() -> None:
         timeout_changed, current_timeout, duration = get_latest_timeout(current_timeout, db)
 
         if timeout_changed:
-            print("TIMEOUT RECEIVED")
+            print("TIMER RECEIVED")
             # If a timer is already running, stop it
             if current_timer is not None:
                 current_timer.cancel()
-
-            # Make thresholds so high that nothing will happen
-            temp_threshold = float("inf")
-            smoke_threshold = float("inf")
 
             time_expired = (dt.datetime.now() - current_timeout).total_seconds()
             actual_duration = duration - int(time_expired)
@@ -174,7 +179,12 @@ def main() -> None:
             # Make sure timer is not too old to be relevant
             if actual_duration > 0:
                 current_timer = Timer(actual_duration, refresh_thresholds)
-                current_timer.start()
+
+                # Make thresholds so high that nothing will happen
+                temp_threshold = float("inf")
+                smoke_threshold = float("inf")
+
+                current_timer.start()  # Start timer
 
         # Check for differing emergency status in database (user deactivated)
         if local_emergency and not db.child("emergency").get().val():
