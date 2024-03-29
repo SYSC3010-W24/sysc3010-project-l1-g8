@@ -11,6 +11,7 @@ import netifaces as ni
 import socket
 from messages import Messages
 
+RECEIVE_PORT: int = 2003
 
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
     
