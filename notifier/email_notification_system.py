@@ -118,6 +118,7 @@ def main():
 
             case Messages.EMERGENCY_OVER:
                 emails_sent = False
+                print("False")
 
         time.sleep(2)
 
