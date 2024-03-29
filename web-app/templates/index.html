@@ -26,7 +26,6 @@
           const timeout_with_duration = TIMEOUT_URL.replace("3600", duration);
           fetch(timeout_with_duration).then((response) => {
 
-              console.log(response.status);
               if (response.status != 200){
                   response.json().then(message => {
                       document.getElementById("timeout-success").textContent = message.message;

@@ -1,66 +1,120 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/settings.css">
-    <link rel="stylesheet" href="static/global.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/settings.css" />
+    <link rel="stylesheet" href="static/global.css" />
     <title>FANS</title>
-</head>
-<body>
+  </head>
+  <script>
+    const TEMP_THRESH = {{url_for("set_temperature_threshold", degrees="40") | tojson}};
+    const SMOKE_THRESH = {{url_for("set_smoke_threshold", ppm="500") | tojson}};
+
+    function set_temp_thresh() {
+        const field = document.getElementById("temp-thresh");
+        const degrees = field.value;
+        const new_temp_thresh = TEMP_THRESH.replace("40", degrees);
+
+        fetch(new_temp_thresh).then((response) => {
+            if (response.status != 200){
+                response.json().then(message => {
+                    document.getElementById("threshold-success").textContent = message.message;
+                })
+                return;
+            }
+            document.getElementById("timeout-success").textContent = "Threshold set successfully!";
+            // Remove success message after 10s
+            setTimeout(() => {
+                document.getElementById("timeout-success").textContent = "";
+            }, 5000);
+        })
+    }
+
+    function set_smoke_thresh() {
+
+        const field = document.getElementById("smoke-thresh");
+        const ppm = field.value;
+        const new_smoke_thresh = SMOKE_THRESH.replace("500", ppm);
+
+        fetch(new_smoke_thresh).then((response) => {
+            if (response.status != 200){
+                response.json().then(message => {
+                    document.getElementById("threshold-success").textContent = message.message;
+                })
+                return;
+            }
+
+            document.getElementById("timeout-success").textContent = "Threshold set successfully!";
+
+            // Remove success message after 10s
+            setTimeout(() => {
+                document.getElementById("timeout-success").textContent = "";
+            }, 5000);
+        })
+    }
+  </script>
+  <body>
     <main>
-        <div class="nav-bar">
-            <a href="/">Home</a>
-            <a href="/settings">Settings</a>
-            <a href="">Logout</a>
-        </div>
+      <div class="nav-bar">
+        <a href="/">Home</a>
+        <a href="/settings">Settings</a>
+        <a href="">Logout</a>
+      </div>
 
-        <div class="account-box">
-            <p class="title-2">Account Information</p>
-            <p>First Name:</p>
-            <p>Last Name:</p>
-            <p>Email:</p>
-            <p>Password:</p>
-            <button type="submit" class="login-btn">Save</button>
-        </div>
+      <div class="account-box">
+        <p class="title-2">Account Information</p>
+        <p>First Name:</p>
+        <p>Last Name:</p>
+        <p>Email:</p>
+        <p>Password:</p>
+        <button type="submit" class="login-btn">Save</button>
+      </div>
 
-        <div class="account-box">
-            <p class="title-2">Administration Controls</p>
-            <p>Administrator: </p>
-            <form action="/add_task" method="POST">
-                <div class="form1">
-                  <input
-                    type="text"
-                    class="form1-input"
-                    id="add_new_user"
-                    name="add_new_user"
-                    placeholder="Add a new user here"
-                  />
-                  <button type="submit" class="add-btn">Add</button>
-                </div>
-              </form>
-            <p>User List </p>
-        </div>
-
-        <div class="alarm-settings-box">
-            <p class="title-2">Alarm Settings</p>
-            <p>Smoke Threshold: {{ smoke_threshold }}</p>
-            <p>Temperature Threshold: {{ temperature_threshold}}</p>
-            <p>Alarm Notification: </p>
-            <p>Accessory Device Notification: </p>
-        </div>
-
-        <div class="appearance-box">
-            <p class="title-2">Website Appearance</p>
-            <p>Theme: </p>
-            <p>Font: </p>
-        </div>
-        
-        <div class="login-btn-box">
-            
+      <div class="account-box">
+        <p class="title-2">Administration Controls</p>
+        <p>Administrator:</p>
+        <form action="/add_task" method="POST">
+          <div class="form1">
+            <input
+              type="text"
+              class="form1-input"
+              id="add_new_user"
+              name="add_new_user"
+              placeholder="Add a new user here"
+            />
+            <button type="submit" class="add-btn">Add</button>
           </div>
+        </form>
+        <p>User List</p>
+      </div>
 
+      <div class="alarm-settings-box">
+        <p class="title-2">Alarm Settings</p>
+        <p>Temperature Threshold: {{ temperature_threshold}}</p>
+        <input id="temp-thresh" type="number" min="1", max="100" step="1" value="40"></input>
+        <br/>
+        <label for="temp-thresh">Temperature threshold in degrees.</label>
+        <button onclick="set_temp_thresh()">Submit Temperature Threshold</button>
+        <br/>
+        <p>Smoke Threshold: {{ smoke_threshold }}</p>
+        <input id="smoke-thresh" type="number" min="1", max="10000" step="50" value="500"></input>
+        <br/>
+        <label for="smoke-thresh">Smoke threshold in PPM.</label>
+        <button onclick="set_smoke_thresh()">Submit Smoke Threshold</button>
+        <br/>
+        <p id="threshold-success"></p>
+        <p>Alarm Notification:</p>
+        <p>Accessory Device Notification:</p>
+      </div>
 
+      <div class="appearance-box">
+        <p class="title-2">Website Appearance</p>
+        <p>Theme:</p>
+        <p>Font:</p>
+      </div>
+
+      <div class="login-btn-box"></div>
     </main>
-</body>
+  </body>
 </html>

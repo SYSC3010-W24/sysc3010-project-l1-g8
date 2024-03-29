@@ -135,13 +135,13 @@ def set_temperature_threshold(degrees: str):
     return jsonify(success=True), 200
 
 
-@app.route("/api/smokethresh/<degrees>", methods=["GET"])
+@app.route("/api/smokethresh/<ppm>", methods=["GET"])
 def set_smoke_threshold(ppm: str):
     """Sets the smoke threshold in Firebase."""
 
     numeric_ppm = int(ppm)
 
-    if numeric_ppm > MAX_TEMP_THRESH:
+    if numeric_ppm > MAX_SMOKE_THRESH:
         return (
             jsonify(success=False, message=f"Smoke threshold must be less than {MAX_SMOKE_THRESH} ppm!"),
             400,
