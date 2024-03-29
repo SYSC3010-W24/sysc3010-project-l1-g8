@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
 import pyrebase
 import json
 
@@ -56,6 +56,13 @@ def login():
 def sign_up():
     """Renders the sign up page of the website."""
     return render_template("sign-up.html")
+
+
+@app.route("/api/deactivate", methods=["GET"])
+def deactivate_alarm():
+    """Deactivates the alarm flag in Firebase to signal the emergency is over."""
+    db.child("emergency").set(False)
+    return jsonify(success=True)
 
 
 if __name__ == "__main__":

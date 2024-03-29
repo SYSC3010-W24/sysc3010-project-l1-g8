@@ -8,6 +8,17 @@
     <title>FANS</title>
   </head>
   <body>
+    <script>
+
+      const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
+
+      function deactivate_emergency() {
+          fetch(DEACTIVATE_URL).then((response) => {
+              window.location.reload();
+          });
+      }
+    </script>
+
     <main>
       <div class="nav-bar">
         <a href="/">Home</a>
@@ -19,10 +30,9 @@
         <div class="fire-alarm-box">
           <p class="title1">Welcome, BLANK</p>
           <br />
-          <p class="alarm-name">Fire Alarm: BLANK's Alarm</p>
+          <p class="alarm-name"><strong>Fire Alarm:</strong> BLANK's Alarm</p>
 
           <div class="alarm-status-box1 {{ color_class }}">
-            <p class="title2">Status:</p>
             <div class="alarm-status-box2 {{color_class}}">
               {% if emergency_flag %}
               <p class="fire">FIRE DETECTED</p>
@@ -30,11 +40,13 @@
               <p class="no-fire">Clear</p>
               {% endif %}
             </div>
+            {% if emergency_flag %}
+            <button id="deactivate" onclick="deactivate_emergency()">Deactivate Emergency</button>
+            {% endif %}
           </div>
           <br />
-          <p class="title2">Accessory Device: BLANK's Pager</p>
+          <p class="title2"><strong>Accessory Device:</strong> BLANK's Pager</p>
           <div class="alarm-status-box1">
-            <p>Status:</p>
             <div class="alarm-status-box2 {{color_class}}">
               {% if emergency_flag %}
               <p class="fire">Disconnected</p>
@@ -46,7 +58,7 @@
           <br />
           <div class="log-box">
             <p class="title-2">Activity Log</p>
-            <p class="titl">Last fire on BLANK</p>
+            <p>Last fire on BLANK</p>
             <div class="activity-box"></div>
           </div>
         </div>

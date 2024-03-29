@@ -1,11 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-/*
+
+:root {
     --background-color-light: #f5f5f5;
     --text-color-light: #23282e;
     --link-hover-color-light: #0f9ddd;
     --border-color-light: #fff6e0;
 
-    --background-color-dark: #23282E;
+    --background-color-dark: #23282e;
     --text-color-dark: #f5f5f5;
     --link-hover-color-dark: #0f9ddd;
     --border-color-dark: #fff6e0;
@@ -14,7 +15,7 @@
     --text-color-fire: #ff4d4d;
     --link-hover-color-fire: #ff1a1a;
     --border-color-fire: #ff8080;
-*/
+}
 
 * {
     margin: 0;
