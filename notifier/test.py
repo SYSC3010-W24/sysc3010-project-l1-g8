@@ -1,5 +1,6 @@
 from messages import Messages
 import socket
+import netifaces as ni
 
 # Create the receiving socket
 ip_addr = ni.ifaddresses("wlan0")[ni.AF_INET][0]["addr"]
