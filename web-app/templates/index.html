@@ -52,9 +52,9 @@
 
       <div class="content-box">
         <div class="fire-alarm-box">
-          <p class="title1">Welcome, BLANK</p>
+          <p class="title1">Welcome, Grant</p>
           <br />
-          <p class="alarm-name"><strong>Fire Alarm:</strong> BLANK's Alarm</p>
+          <p class="alarm-name"><strong>Fire Alarm:</strong> Grant's Alarm</p>
 
           <div class="alarm-status-box1 {{ color_class }}">
             <div class="alarm-status-box2 {{color_class}}">
@@ -69,7 +69,7 @@
             {% endif %}
           </div>
           <br />
-          <p class="title2"><strong>Accessory Device:</strong> BLANK's Pager</p>
+          <p class="title2"><strong>Accessory Device:</strong> Grant's Pager</p>
           <div class="alarm-status-box1">
             <div class="alarm-status-box2 {{color_class}}">
               {% if emergency_flag %}
@@ -80,17 +80,11 @@
             </div>
           </div>
           <br />
-          <div class="log-box">
-            <p class="title-2">Activity Log</p>
-            <p>Last fire on BLANK</p>
-            <div class="activity-box"></div>
-          </div>
-          <br />
           <div class="timer-settings">
             <p class="title-2">Timeout System</p>
             <input id="timeout" type="number" min="1", max="1440" step="60" value="3600"></input>
             <br/>
-            <label for="timeout">System timeout in seconds (maximum 4 hours/7200 seconds).</label>
+            <label for="timeout" style="color: white;">System timeout in seconds (maximum 4 hours/7200 seconds).</label>
             <br/>
             <button id="submit-timeout" onclick="submit_timeout()">Submit Timeout</button>
             <p id="timeout-success"></p>
@@ -159,7 +153,7 @@
             </script>
 
           <div class="smoke-box">
-            <p class="title-2">Smoke</p>
+            <p class="title-2" styles="align-items:center;">Smoke</p>
             <p>Current Smoke Level: {{current_smoke}} PPM</p>
             <canvas id="smoke-graph" width="600" height="400"></canvas>
           </div>
