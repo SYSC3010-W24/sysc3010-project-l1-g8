@@ -28,7 +28,7 @@ def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
 
     return em
 
-def sendemail(emailMessage, email, password):
+def sendEmail(emailMessage, email, password):
     context = ssl.create_default_context()
     smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context)
     smtp.login(email, password)
@@ -92,7 +92,7 @@ def main():
                 username = credentials["email"]
                 password = credentials["pass"]
                 emailMessage = createEmail(name, email, username)
-                sendemail(emailMessage, username, password)
+                sendEmail(emailMessage, username, password)
                 print("Email sent to " + name)
                 time.sleep(2) 
 
