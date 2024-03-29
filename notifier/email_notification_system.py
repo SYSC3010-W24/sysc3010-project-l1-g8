@@ -80,29 +80,40 @@ def main():
 
     emails_sent = False  # Flag to control email sending
 
+    # Send current IP address for LAN communication between nodes
+    ip_addr = ni.ifaddresses("wlan0")[ni.AF_INET][0]["addr"]
+    db.child("devices").child("notifier").set(ip_addr)
+
+    # Set up socket
+    channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    channel.bind((ip_addr, RECEIVE_PORT))
+
     while True:
-        emergencyValue = getEmergencyValue(db)
+        msg = wait_for_message(channel)
 
-        if emergencyValue and not emails_sent:
-            users = getUsers(db)
-            for email, detail in users.items():
-                name = detail[0]
-                userPassword = detail[1]
-                addUserToSQLite(cursor, email, name, userPassword)
-                username = credentials["email"]
-                password = credentials["pass"]
-                emailMessage = createEmail(name, email, username)
-                sendEmail(emailMessage, username, password)
-                print("Email sent to " + name)
-                time.sleep(2) 
+        # Forward the received message as an FSM event
+        match msg:
+            case Messages.EMERGENCY:
+                if not emails_sent:
+                    users = getUsers(db)
+                    for email, detail in users.items():
+                        name = detail[0]
+                        userPassword = detail[1]
+                        addUserToSQLite(cursor, email, name, userPassword)
+                        username = credentials["email"]
+                        password = credentials["pass"]
+                        emailMessage = createEmail(name, email, username)
+                        sendEmail(emailMessage, username, password)
+                        print("Email sent to " + name)
+                        time.sleep(2) 
 
-            emails_sent = True
-            dbconnect.commit()
+                    emails_sent = True
+                    dbconnect.commit()
 
-        elif not emergencyValue:
-            emails_sent = False
+                elif not emergencyValue:
+                    emails_sent = False
 
-        time.sleep(2)
+                time.sleep(2)
 
 
 if __name__ == "__main__":
