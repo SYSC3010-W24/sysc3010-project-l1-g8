@@ -66,11 +66,17 @@ def get_latest_timeout(current_timeout: Optional[dt.datetime], db: Database) -> 
     Returns the latest configured timeout from the database and a boolean which describes whether or not the timeout has
     changed in comparison to the currently active one.
     """
-    latest_timeout_timestamp = list(db.child("timeout").order_by_key().limit_to_last(1).get().keys())[0]
-    duration = list(db.child("timeout").order_by_key().limit_to_last(1).get().val())[0]
+    data = db.child("timeout").order_by_key().limit_to_last(1).get().val()
+    latest_timeout_timestamp = list(data.keys())[0]  # type: ignore
+    duration = list(data.values())[0]  # type: ignore
     latest_timeout = dt.datetime.strptime(latest_timeout_timestamp, TIMESTAMP_FORMAT)
 
-    return (latest_timeout == current_timeout, latest_timeout, duration)
+    if current_timeout is not None:
+        timeout_changed = latest_timeout > current_timeout
+    else:
+        timeout_changed = True
+
+    return (timeout_changed, latest_timeout, duration)
 
 
 def shutdown(sig: int, frame: FrameType) -> None:
@@ -103,6 +109,7 @@ def main() -> None:
         global temp_threshold, smoke_threshold
         temp_threshold = get_temperature_threshold(db)
         smoke_threshold = get_smoke_threshold(db)
+        current_timer = None
 
     db.child("emergency").set(False)  # Start with emergency disabled
 
@@ -143,15 +150,16 @@ def main() -> None:
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
         db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
 
-        # Check configuration
-        temp_threshold = get_temperature_threshold(db)
-        smoke_threshold = get_smoke_threshold(db)
+        # Update configuration unless there's a timeout
+        if current_timer is None:
+            temp_threshold = get_temperature_threshold(db)
+            smoke_threshold = get_smoke_threshold(db)
 
         # Check for timeout
         timeout_changed, current_timeout, duration = get_latest_timeout(current_timeout, db)
 
         if timeout_changed:
-
+            print("TIMEOUT RECEIVED")
             # If a timer is already running, stop it
             if current_timer is not None:
                 current_timer.cancel()
