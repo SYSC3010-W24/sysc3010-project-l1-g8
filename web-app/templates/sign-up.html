@@ -1,51 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/auth.css" />
-    <link rel="stylesheet" href="static/global.css" />
-    <title>FANS</title>
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='global.css') }}">
+    <title>Sign Up</title>
+</head>
+<body>
     <main>
-      <div class="nav-bar">
-        <a href="/">Home</a>
-        <a href="/signup">Sign Up</a>
-      </div>
-      <form>
-        <div class="form-box">
-          <label for="f-name"><b>First Name</b></label>
-          <input
-            type="text"
-            placeholder="Enter First Name"
-            name="f-name"
-            required
-          />
-          <label for="l-name"><b>Last Name</b></label>
-          <input
-            type="text"
-            placeholder="Enter Last Name"
-            name="l-name"
-            required
-          />
-          <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" required />
-          <label for="email"><b>Password</b></label>
-          <input
-            type="text"
-            placeholder="Enter Password"
-            name="password"
-            required
-          />
-          <p class="reset-p-box">
-            Already a member?&nbsp<a href="" class="reset-p"><b>Login</b></a>
-          </p>
-          <div class="login-btn-box">
-            <button type="submit" class="login-btn">Sign Up</button>
-          </div>
+        <div class="nav-bar">
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
         </div>
-      </form>
+        <form method="POST">
+            <div class="form-box">
+                <label for="username"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" required>
+                <label for="email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Email" name="email" required>
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+                {% if error_message %}
+                <p class="error">{{ error_message }}</p>
+                {% endif %}
+                <div class="login-btn-box">
+                    <button type="submit" class="login-btn">Sign Up</button>
+                </div>
+            </div>
+        </form>
     </main>
-  </body>
+</body>
 </html>
