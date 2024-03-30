@@ -52,51 +52,55 @@
 
       <div class="content-box">
         <div class="fire-alarm-box">
-          <p class="title1">Welcome, Grant</p>
+          <p class="title-1">Welcome Grant</p>
           <br />
-          <p class="alarm-name"><strong>Fire Alarm:</strong> Grant's Alarm</p>
-
-          <div class="alarm-status-box1 {{ color_class }}">
-            <div class="alarm-status-box2 {{color_class}}">
+          <div class="status-and-timer-container">
+            <div class="alarm-status-box1 {{ color_class }}">
+              <p><b>Grant's Fire Alarm</b></p>
+              <div class="alarm-status-box2 {{color_class}}">
+                {% if emergency_flag %}
+                <p class="fire">FIRE DETECTED</p>
+                {% else %}
+                <p class="no-fire">Clear</p>
+                {% endif %}
+              </div>
               {% if emergency_flag %}
-              <p class="fire">FIRE DETECTED</p>
-              {% else %}
-              <p class="no-fire">Clear</p>
+              <button id="deactivate" onclick="deactivate_emergency()">Deactivate Emergency</button>
               {% endif %}
             </div>
-            {% if emergency_flag %}
-            <button id="deactivate" onclick="deactivate_emergency()">Deactivate Emergency</button>
-            {% endif %}
-          </div>
-          <br />
-          <p class="title2"><strong>Accessory Device:</strong> Grant's Pager</p>
-          <div class="alarm-status-box1">
-            <div class="alarm-status-box2 {{color_class}}">
-              {% if emergency_flag %}
-              <p class="fire">Disconnected</p>
-              {% else %}
-              <p class="no-fire">Connected</p>
-              {% endif %}
+            <div class="alarm-status-box1">
+              <p><b>Grant's Pager</b></p>
+              <div class="alarm-status-box2 {{color_class}}">
+                {% if emergency_flag %}
+                <p class="fire">Disconnected</p>
+                {% else %}
+                <p class="no-fire">Connected</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="timer-settings">
+              <p class="title-2">Timeout System</p>
+              <input id="timeout" type="number" min="1" max="1440" step="60" value="3600"></input>
+              <br />
+              <label for="timeout" style="color: white; font-size: 0.8em; align-items: center;">System timeout in seconds (maximum 4 hours/7200 seconds).</label>
+              <br />
+              <button id="submit-timeout" onclick="submit_timeout()">Submit Timeout</button>
+              <p id="timeout-success"></p>
             </div>
           </div>
-          <br />
-          <div class="timer-settings">
-            <p class="title-2">Timeout System</p>
-            <input id="timeout" type="number" min="1", max="1440" step="60" value="3600"></input>
-            <br/>
-            <label for="timeout" style="color: white;">System timeout in seconds (maximum 4 hours/7200 seconds).</label>
-            <br/>
-            <button id="submit-timeout" onclick="submit_timeout()">Submit Timeout</button>
-            <p id="timeout-success"></p>
-          </div>
+        </div>
+        
         </div>
 
         <div class="data-box">
-          <div class="temperature-box">
-            <p class="title-2">Temperature</p>
-            <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
-            <canvas id="temperature-graph" width="600" height="400"></canvas>
-        </div>
+          <div class="graph-container">
+            <div class="temperature-box">
+              <p class="title-2">Temperature</p>
+              <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
+              <canvas id="temperature-graph" width="420" height="420"></canvas>
+            </div>
+          
+          
 
             <script>
 
@@ -155,7 +159,7 @@
           <div class="smoke-box">
             <p class="title-2" styles="align-items:center;">Smoke</p>
             <p>Current Smoke Level: {{current_smoke}} PPM</p>
-            <canvas id="smoke-graph" width="600" height="400"></canvas>
+            <canvas id="smoke-graph" width="420" height="420"></canvas>
           </div>
 
             <script>
@@ -222,7 +226,8 @@
 
                 refresh_charts(); // Refresh when page loads
             </script>
-        </div>
+      </div>  
+      </div>
       </div>
     </main>
   </body>
