@@ -54,6 +54,7 @@
         })
     }
   </script>
+
   <body>
     <main>
       <div class="nav-bar">
@@ -62,18 +63,16 @@
         <a href="">Logout</a>
       </div>
 
-      <div class="account-box">
-        <p class="title-2">Account Information</p>
-        <p>First Name:</p>
-        <p>Last Name:</p>
+      <div class="settings-box">
+        <p class="title-2"><b>Account Information</b></p>
+        <p>Name:</p>
         <p>Email:</p>
-        <p>Password:</p>
-        <button type="submit" class="login-btn">Save</button>
       </div>
 
-      <div class="account-box">
-        <p class="title-2">Administration Controls</p>
+      <div class="settings-box">
+        <p class="title-2"><b>Administration Controls</b></p>
         <p>Administrator:</p>
+        <p>User List</p>
         <form action="/add_task" method="POST">
           <div class="form1">
             <input
@@ -86,11 +85,10 @@
             <button type="submit" class="add-btn">Add</button>
           </div>
         </form>
-        <p>User List</p>
       </div>
 
-      <div class="alarm-settings-box">
-        <p class="title-2">Alarm Settings</p>
+      <div class="settings-box">
+        <p class="title-2"><b>Alarm Settings</b></p>
         <p>Temperature Threshold: {{ temperature_threshold}}</p>
         <input id="temp-thresh" type="number" min="1", max="100" step="1" value="40"></input>
         <br/>
@@ -108,8 +106,8 @@
         <p>Accessory Device Notification:</p>
       </div>
 
-      <div class="appearance-box">
-        <p class="title-2">Website Appearance</p>
+      <div class="settings-box">
+        <p class="title-2"><b>Website Appearance</b></p>
         <p>Theme:</p>
         <p>Font:</p>
       </div>
