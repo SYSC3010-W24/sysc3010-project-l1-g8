@@ -14,15 +14,19 @@ def connectFirebase(config: dict):
     db = firebase.database()
     return db
 
+
 def control_alarm(emergency_flag):
     if emergency_flag:
         # Start buzzing
-        buzzer.play('A4')  # Example tone, you can adjust the frequency as needed
+        buzzer.play(
+            "A4"
+        )  # Example tone, you can adjust the frequency as needed
         print("Emergency! Haptic alarm buzzing.")
     else:
         # Stop buzzing
         buzzer.stop()
         print("Emergency resolved. Haptic alarm stopped.")
+
 
 def main() -> None:
     # Firebase configuration
@@ -30,7 +34,7 @@ def main() -> None:
         "apiKey": "AIzaSyDCrm-YWek1mShoftACTezFdzn8PoLSNrY",
         "authDomain": "fans-38702.firebaseapp.com",
         "databaseURL": "https://fans-38702-default-rtdb.firebaseio.com/",
-        "storageBucket": "fans-38702.appspot.com"
+        "storageBucket": "fans-38702.appspot.com",
     }
 
     db = connectFirebase(config)
@@ -42,6 +46,6 @@ def main() -> None:
         control_alarm(emergency_flag)
         time.sleep(1)  # Poll DB every second
 
+
 if __name__ == "__main__":
     main()
-

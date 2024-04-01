@@ -51,7 +51,8 @@ def main() -> None:
     alarm_system = Process(target=alarm_fsm.start)
     alarm_system.start()
 
-    # In main thread, constantly wait for UDP communication and trigger the correct event
+    # In main thread, constantly wait for UDP communication and trigger the
+    # correct event
     while True:
         msg = wait_for_message(channel)
 

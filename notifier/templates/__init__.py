@@ -18,8 +18,9 @@ class Template:
         Updates the contents of the template by finding the fields (keys) and replacing them with the values specified.
         """
         for item in fields:
-            self.custom_content = self.custom_content.replace(item, fields[item])
-
+            self.custom_content = self.custom_content.replace(
+                item, fields[item]
+            )
 
     def reset(self) -> None:
         """Resets the contents of this template to the original version."""
