@@ -1,10 +1,17 @@
 import json
 import datetime as dt
-from flask import Flask, jsonify, render_template, request, url_for, session, redirect
+from flask import (
+    Flask,
+    jsonify,
+    render_template,
+    request,
+    url_for,
+    session,
+    redirect,
+)
 import pyrebase
 import secrets
 import string
-
 
 
 PORT: int = 8000
@@ -15,9 +22,8 @@ MAX_SMOKE_THRESH: int = 10000  # PPM
 NUM_SAMPLES_PLOTTED: int = 10
 
 
-alphabet = string.ascii_letters + string.digits + '!@#$%^&*(-_=+)'
-secret_key = ''.join(secrets.choice(alphabet) for _ in range(24))
-
+alphabet = string.ascii_letters + string.digits + "!@#$%^&*(-_=+)"
+secret_key = "".join(secrets.choice(alphabet) for _ in range(24))
 
 
 # Initialize DB connection
@@ -28,6 +34,7 @@ db = firebase.database()
 
 app = Flask(__name__)
 app.secret_key = secret_key
+
 
 def timestamp_just_time(timestamp: str) -> str:
     """Returns just the time portion of an ISO timestamp."""
@@ -41,23 +48,37 @@ def home():
     """Renders the home page of the website."""
     # Get temperature data from Firebase
 
-    latest_temperature = list(db.child("sensordata/temperature").order_by_key().limit_to_last(1).get().val().values())
-    latest_smoke = list(db.child("sensordata/smoke").order_by_key().limit_to_last(1).get().val().values())
+    latest_temperature = list(
+        db.child("sensordata/temperature")
+        .order_by_key()
+        .limit_to_last(1)
+        .get()
+        .val()
+        .values()
+    )
+    latest_smoke = list(
+        db.child("sensordata/smoke")
+        .order_by_key()
+        .limit_to_last(1)
+        .get()
+        .val()
+        .values()
+    )
 
     # Get emergency flag from Firebase
     emergency_flag = db.child("emergency").get().val()
     color_class = "fire" if emergency_flag else "no-fire"
-    
+
     # Check if the user is logged in
-    if 'email' in session:
-        user_email = session['email']
-        user_ref = db.child('users').child(user_email.replace('.', ',')).get()
+    if "email" in session:
+        user_email = session["email"]
+        user_ref = db.child("users").child(user_email.replace(".", ",")).get()
         user_data = user_ref.val()
-        full_username = user_data['Name'] if 'Name' in user_data else 'User'
-        
+        full_username = user_data["Name"] if "Name" in user_data else "User"
+
         # Extract the first part of the username before a space
         username_parts = full_username.split()
-        username = username_parts[0] if username_parts else 'User'
+        username = username_parts[0] if username_parts else "User"
 
     if "logged_in" in session:
 
@@ -71,100 +92,113 @@ def home():
             username=username,
             user_email=user_email,
         )
-    
+
     else:
         return redirect(url_for("signup"))
-
 
 
 @app.route("/settings", methods=["GET"])
 def settings():
     """Renders the settings page of the website."""
     # Get thresholds data from firebase
-    temperature_threshold = db.child("thresholds").child("temperature").get().val()
+    temperature_threshold = (
+        db.child("thresholds").child("temperature").get().val()
+    )
     smoke_threshold = db.child("thresholds").child("smoke").get().val()
-    
+
     # Check if the user is logged in
-    if 'email' in session:
-        user_email = session['email']
-        user_ref = db.child('users').child(user_email.replace('.', ',')).get()
+    if "email" in session:
+        user_email = session["email"]
+        user_ref = db.child("users").child(user_email.replace(".", ",")).get()
         user_data = user_ref.val()
-        full_username = user_data['Name'] if 'Name' in user_data else 'User'
-        
+        full_username = user_data["Name"] if "Name" in user_data else "User"
+
         # Extract the first part of the username before a space
         username_parts = full_username.split()
-        username = username_parts[0] if username_parts else 'User'
+        username = username_parts[0] if username_parts else "User"
 
     return render_template(
-    "settings.html",
-    temperature_threshold=temperature_threshold,
-    smoke_threshold=smoke_threshold,
-    full_username=full_username,
-    username=username,
-    user_email=user_email,
-)
+        "settings.html",
+        temperature_threshold=temperature_threshold,
+        smoke_threshold=smoke_threshold,
+        full_username=full_username,
+        username=username,
+        user_email=user_email,
+    )
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
 
         # Replace dots with commas in the email for Firebase query
-        email_key = email.replace('.', ',')
+        email_key = email.replace(".", ",")
 
         # Check if the user exists and the password is correct
-        user_ref = db.child('users').child(email_key).get()
+        user_ref = db.child("users").child(email_key).get()
 
         if user_ref.val():
             user_data = user_ref.val()
-            if 'Password' in user_data and user_data['Password'] == password:
-                session['email'] = email
-                session['logged_in'] = True
-                return redirect(url_for('home'))
+            if "Password" in user_data and user_data["Password"] == password:
+                session["email"] = email
+                session["logged_in"] = True
+                return redirect(url_for("home"))
             else:
-                return render_template('login.html', error_message='Incorrect password')
+                return render_template(
+                    "login.html", error_message="Incorrect password"
+                )
         else:
-            return render_template('login.html', error_message='User not found')
+            return render_template("login.html", error_message="User not found")
 
-    return render_template('login.html')
+    return render_template("login.html")
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
-    if request.method == 'POST':
+    if request.method == "POST":
         print(request.form)
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        phone_number = request.form.get('phone_number')
-        print(f"Received data - Username: {username}, Email: {email}, Password: {password}, Phone Number: {phone_number}")
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        phone_number = request.form.get("phone_number")
+        print(
+            f"Received data - Username: {username}, Email: {email}, Password: {password}, Phone Number: {phone_number}"
+        )
 
         if not username or not email or not phone_number:
-            return jsonify({'success': False, 'message': 'Username, email, and phone number are required'}), 400
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "message": "Username, email, and phone number are required",
+                    }
+                ),
+                400,
+            )
 
         # Check if the username or email is already taken
-        user_ref = db.child('users').child(email.replace('.', ',')).get().val()
+        user_ref = db.child("users").child(email.replace(".", ",")).get().val()
 
         if user_ref:
-            return jsonify({'success': False, 'message': 'Email already taken'}), 409
+            return (
+                jsonify({"success": False, "message": "Email already taken"}),
+                409,
+            )
 
         # Create a new user in the database
         user_data = {
-            'Name': username,
-            'Password': password,
-            'Phone Number': phone_number
+            "Name": username,
+            "Password": password,
+            "Phone Number": phone_number,
         }
-        db.child('users').child(email.replace('.', ',')).set(user_data)
+        db.child("users").child(email.replace(".", ",")).set(user_data)
 
         # Redirect to home page after successful signup
-        return redirect(url_for('home'))
+        return redirect(url_for("home"))
 
-    return render_template('signup.html')
-
-
-
+    return render_template("signup.html")
 
 
 @app.route("/logout", methods=["GET"])
@@ -172,6 +206,7 @@ def logout():
     """Logs out the user by clearing the session and redirects to the login page."""
     session.clear()
     return redirect("/login")
+
 
 @app.route("/api/deactivate", methods=["GET"])
 def deactivate_alarm():
@@ -187,12 +222,25 @@ def set_timeout(duration: str):
     numeric_duration = int(duration)
 
     if numeric_duration > MAX_TIMEOUT:
-        return jsonify(success=False, message=f"Timeout must be less than {MAX_TIMEOUT} seconds!"), 400
+        return (
+            jsonify(
+                success=False,
+                message=f"Timeout must be less than {MAX_TIMEOUT} seconds!",
+            ),
+            400,
+        )
 
     elif numeric_duration <= 0:
-        return jsonify(success=False, message="Timeout must be longer than 0 seconds!"), 400
+        return (
+            jsonify(
+                success=False, message="Timeout must be longer than 0 seconds!"
+            ),
+            400,
+        )
 
-    timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
+    timestamp = (
+        dt.datetime.now().isoformat().replace(".", "+")
+    )  # Remove . because Firebase doesn't allow it
     db.child("timeout").child(timestamp).set(numeric_duration)
 
     return jsonify(success=True), 200
@@ -201,21 +249,39 @@ def set_timeout(duration: str):
 @app.route("/api/tempdata", methods=["GET"])
 def get_temperature():
     """Gets the latest temperature time series data and returns it in JSON format."""
-    temp_data = db.child("sensordata/temperature").order_by_key().limit_to_last(10).get().val()
+    temp_data = (
+        db.child("sensordata/temperature")
+        .order_by_key()
+        .limit_to_last(10)
+        .get()
+        .val()
+    )
     timestamps = list(temp_data.keys())
     values = list(temp_data.values())
 
-    return {"timestamps": [timestamp_just_time(t) for t in timestamps], "vals": values}, 200
+    return {
+        "timestamps": [timestamp_just_time(t) for t in timestamps],
+        "vals": values,
+    }, 200
 
 
 @app.route("/api/smoke", methods=["GET"])
 def get_smoke():
     """Gets the latest temperature time series data and returns it in JSON format."""
-    smoke_data = db.child("sensordata/smoke").order_by_key().limit_to_last(10).get().val()
+    smoke_data = (
+        db.child("sensordata/smoke")
+        .order_by_key()
+        .limit_to_last(10)
+        .get()
+        .val()
+    )
     timestamps = list(smoke_data.keys())
     values = list(smoke_data.values())
 
-    return {"timestamps": [timestamp_just_time(t) for t in timestamps], "vals": values}, 200
+    return {
+        "timestamps": [timestamp_just_time(t) for t in timestamps],
+        "vals": values,
+    }, 200
 
 
 @app.route("/api/tempthresh/<degrees>", methods=["GET"])
@@ -226,12 +292,21 @@ def set_temperature_threshold(degrees: str):
 
     if numeric_degrees > MAX_TEMP_THRESH:
         return (
-            jsonify(success=False, message=f"Tempereature threshold must be less than {MAX_TEMP_THRESH} degrees!"),
+            jsonify(
+                success=False,
+                message=f"Tempereature threshold must be less than {MAX_TEMP_THRESH} degrees!",
+            ),
             400,
         )
 
     elif numeric_degrees <= 0:
-        return jsonify(success=False, message="Tempereature threshold must be higher than 0 degrees!"), 400
+        return (
+            jsonify(
+                success=False,
+                message="Tempereature threshold must be higher than 0 degrees!",
+            ),
+            400,
+        )
 
     db.child("thresholds/temperature").set(numeric_degrees)
 
@@ -246,16 +321,26 @@ def set_smoke_threshold(ppm: str):
 
     if numeric_ppm > MAX_SMOKE_THRESH:
         return (
-            jsonify(success=False, message=f"Smoke threshold must be less than {MAX_SMOKE_THRESH} ppm!"),
+            jsonify(
+                success=False,
+                message=f"Smoke threshold must be less than {MAX_SMOKE_THRESH} ppm!",
+            ),
             400,
         )
 
     elif numeric_ppm <= 0:
-        return jsonify(success=False, message="Smoke threshold must be higher than 0 ppm!"), 400
+        return (
+            jsonify(
+                success=False,
+                message="Smoke threshold must be higher than 0 ppm!",
+            ),
+            400,
+        )
 
     db.child("thresholds/smoke").set(numeric_ppm)
 
     return jsonify(success=True), 200
+
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
@@ -264,7 +349,7 @@ def add_user():
         "Name": request.form.get("name"),
         "Password": request.form.get("password"),
         "Phone Number": request.form.get("phone_number"),
-        "Email": request.form.get("email")
+        "Email": request.form.get("email"),
     }
     email = request.form.get("email")
 

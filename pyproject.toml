@@ -4,7 +4,7 @@ description = "SYSC3010 Computer Systems Development Project for detecting and m
 license = {text = "MIT"}
 authors = [
     {name = "Grant Achuzia"},
-    {name = "Javeria Sohail"}
+    {name = "Javeria Sohail"},
     {name = "Matteo Golin", email = "matteo.golin@gmail.com"},
     {name = "Saja Fawagreh"},
 ]

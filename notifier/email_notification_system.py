@@ -14,8 +14,9 @@ from messages import Messages
 RECEIVE_PORT: int = 2003
 BUFFER_SIZE: int = 100
 
+
 def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
-    
+
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message = Template.from_file("./templates/emergency.txt")
     fields = {"[DATE-TIME]": str(current_datetime), "[USER]": name}
@@ -26,16 +27,17 @@ def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
 
     em = EmailMessage()
 
-    em['From'] = fromEmailAddress
-    em['To'] = toEmailAddress
-    em['Subject'] = subject
+    em["From"] = fromEmailAddress
+    em["To"] = toEmailAddress
+    em["Subject"] = subject
     em.set_content(str(message))
 
     return em
 
+
 def sendEmail(emailMessage, email, password):
     context = ssl.create_default_context()
-    smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context)
+    smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context)
     smtp.login(email, password)
     smtp.send_message(emailMessage)
 
@@ -45,19 +47,25 @@ def connectFirebase(config: dict):
     db = firebase.database()
     return db
 
+
 def getUsers(db):
-    users_raw = db.child('users').get().val()
+    users_raw = db.child("users").get().val()
     users = {}
     for key, value in users_raw.items():
         # Convert the key back to its original email format
-        email = key.replace(',', '.')
+        email = key.replace(",", ".")
         for name, detail in value.items():
             user_info = (name, detail)
             users[email] = user_info
     return users
 
+
 def addUserToSQLite(cursor, email, name, password):
-    cursor.execute("REPLACE INTO users (email, name, password) VALUES (?, ?, ?)", (email, name, password))
+    cursor.execute(
+        "REPLACE INTO users (email, name, password) VALUES (?, ?, ?)",
+        (email, name, password),
+    )
+
 
 def print_users_table(cursor):
     cursor.execute("SELECT email, name, password FROM users")
@@ -65,11 +73,13 @@ def print_users_table(cursor):
     print("Contents of users table:")
     for row in rows:
         print(row)
-        
+
+
 def wait_for_message(channel: socket.socket) -> Messages:
     """Waits for a message over UDP."""
     data, _ = channel.recvfrom(BUFFER_SIZE)
     return Messages(int.from_bytes(data))
+
 
 def main():
     with open("./fans_credentials.json", "r") as file:
@@ -111,7 +121,7 @@ def main():
                         emailMessage = createEmail(name, email, username)
                         sendEmail(emailMessage, username, password)
                         print("Email sent to " + name)
-                        time.sleep(2) 
+                        time.sleep(2)
 
                     emails_sent = True
                     dbconnect.commit()
