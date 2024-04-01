@@ -138,6 +138,7 @@ def main() -> None:
         # Write measurement to database
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
         db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
+        print(thresholds)
 
         # Update configuration unless there's a timeout
         if not current_timer.is_alive():
@@ -157,7 +158,7 @@ def main() -> None:
 
             # Make sure timer is not too old to be relevant
             if actual_duration > 0:
-                current_timer = Timer(actual_duration, thresholds.update)
+                current_timer = Timer(actual_duration, lambda : thresholds.update(db))
 
                 # Make thresholds so high that nothing will happen
                 thresholds.max_out()
