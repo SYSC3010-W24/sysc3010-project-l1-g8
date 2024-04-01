@@ -1,3 +1,8 @@
+"""
+This file defines the UDP messages which can be received over UDP. Each one
+triggers an event in the state machine.
+"""
+
 from enum import IntEnum
 
 

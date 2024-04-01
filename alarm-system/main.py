@@ -1,3 +1,9 @@
+"""
+This is the main file of the alarm system which controls its behaviour. It
+instantiates the alarm system finite state machine and starts it in motion,
+while another thread waits for UDP events sent over the local network.
+"""
+
 from states import AlarmFSM
 import netifaces as ni
 import pyrebase
@@ -10,9 +16,9 @@ from types import FrameType
 import warnings
 
 FIREBASE_CONFIG: str = "./firebase_config.json"
-RECEIVE_PORT: int = 2003
+UDP_RECEIVE_PORT: int = 2003
 BUZZER_PIN: int = 22
-BUFFER_SIZE: int = 100
+UDP_BUFFER_SIZE: int = 100
 
 
 def shutdown(sig: int, frame: FrameType) -> None:
@@ -24,7 +30,7 @@ def shutdown(sig: int, frame: FrameType) -> None:
 
 def wait_for_message(channel: socket.socket) -> Messages:
     """Waits for a message over UDP."""
-    data, _ = channel.recvfrom(BUFFER_SIZE)
+    data, _ = channel.recvfrom(UDP_BUFFER_SIZE)
     return Messages(int.from_bytes(data))
 
 
@@ -38,21 +44,21 @@ def main() -> None:
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
 
-    # Send current IP address for LAN communication between nodes
+    # Store current IP address for LAN communication between nodes
     ip_addr = ni.ifaddresses("wlan0")[ni.AF_INET][0]["addr"]
     db.child("devices").child("alarm").set(ip_addr)
 
-    # Set up socket
+    # Set up socket for UDP
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    channel.bind((ip_addr, RECEIVE_PORT))
+    channel.bind((ip_addr, UDP_RECEIVE_PORT))
 
-    # Set up alarm system handling thread
+    # Set up thread for the state machine
     alarm_fsm = AlarmFSM(TonalBuzzer(BUZZER_PIN))
     alarm_system = Process(target=alarm_fsm.start)
     alarm_system.start()
 
     # In main thread, constantly wait for UDP communication and trigger the
-    # correct event
+    # correct event upon receipt
     while True:
         msg = wait_for_message(channel)
 

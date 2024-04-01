@@ -1,3 +1,7 @@
+"""
+This file tests that messages can be parsed from plain integers.
+"""
+
 import pytest
 from messages import Messages
 
