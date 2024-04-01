@@ -18,7 +18,7 @@ other loop. It will collect data from all sensors, and that is its sole responsi
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{../assets/DataCollectionStateMachine.png}
+    \includegraphics[width=\linewidth]{../assets/state-machine/DataCollectionStateMachine.png}
     \caption{The polling loop for sensor data collection.}
 \end{figure}
 
@@ -31,7 +31,7 @@ sensor data thresholds from the Firebase database and apply them to the next ite
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{../assets/DataCollectionLogicLoop.png}
+    \includegraphics[width=\linewidth]{../assets/state-machine/DataCollectionLogicLoop.png}
     \caption{State machine diagram for the second process of the sensor data collection system.}
 \end{figure}
 
@@ -46,7 +46,7 @@ design pattern.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{../assets/AlarmSystemStateMachine.png}
+    \includegraphics[width=\linewidth]{../assets/state-machine/AlarmSystemStateMachine.png}
     \caption{State machine diagram for the alarm system node.}
 \end{figure}
 
@@ -60,7 +60,7 @@ the emergency has been resolved.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=4in]{../assets/NotificationSystemStateMachine.png}
+    \includegraphics[width=4in]{../assets/state-machine/NotificationSystemStateMachine.png}
     \caption{The state machine representing the primary functionality of the notification system.}
 \end{figure}
 
@@ -72,7 +72,7 @@ as "Templates", which provide an interface for easy customization and sending of
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=3in]{../assets/NotificationSystemClassDiagram.png}
+    \includegraphics[width=3in]{../assets/class/NotificationSystemClassDiagram.png}
     \caption{Class diagram for the notification system node.}
 \end{figure}
 
@@ -86,6 +86,6 @@ alarm will stop buzzing, signifying the end of the emergency.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=4in]{../assets/HapticAlarmStateMachine.png}
+    \includegraphics[width=4in]{../assets/state-machine/HapticAlarmStateMachine.png}
     \caption{State machine diagram for the haptic alarm system node.}
 \end{figure}
