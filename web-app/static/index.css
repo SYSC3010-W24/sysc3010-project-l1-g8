@@ -26,7 +26,7 @@ main {
   align-items: center;
   padding: 0.5em 1em 0.5em 1em;
   flex: 1;
-  border: 2px solid #f5f5f5;
+  border: 2px solid var(--text-color-dark);
   border-radius: 3px;
   margin-bottom: 1em;
   width: 100vh;
@@ -53,12 +53,12 @@ main {
   align-items: center;
   padding: 1em;
   margin-bottom: 1em;
-  border: 2px solid #f5f5f5;
+  border: 2px solid var(--text-color-dark);
   border-radius: 3px;
 }
 
 .alarm-status-box2 {
-  border: 2px solid #f5f5f5;
+  border: 2px solid var(--text-color-dark);
   border-radius: 3px;
   padding: 0.2em;
   margin-bottom: 0.5em;
@@ -70,7 +70,7 @@ main {
 }
 
 .alarm-status-box2.fire {
-  border: 2px solid #ff4d4d;
+  border: 2px solid var(--red);
 }
 
 .alarm-status-box2.no-fire {
@@ -78,7 +78,7 @@ main {
 }
 
 .fire {
-  color: #ff4d4d;
+  color: var(--red);
   font-size: 1em;
 }
 
@@ -111,7 +111,7 @@ main {
   flex-direction: column;
   justify-content: center;
   flex: 1;
-  border: 2px solid #f5f5f5;
+  border: 2px solid var(--text-color-dark);
   border-radius: 3px;
   width: 100vh;
 }
@@ -124,7 +124,6 @@ main {
 .temperature-box {
   padding: 1em;
   margin-bottom: 0.5em;
-
 }
 
 .current-temp p {
@@ -135,13 +134,16 @@ main {
 
 .temperature-graph,
 .smoke-graph {
-  border: 2px solid #f5f5f5;
-  padding: 1em; /* Adjust padding as needed */
-  width: 300px; /* Set the width to a smaller value */
-  height: 200px; /* Set the height to a smaller value */
-  margin-bottom: 1em; /* Add some space between the graphs */
+  border: 2px solid var(--text-color-dark);
+  padding: 1em;
+  width: 300px;
+  height: 200px;
 }
 
+.temperature-graph,
+.smoke-graph p {
+  color: var(--text-color-dark);
+}
 .temperature-box,
 .smoke-box {
   text-align: center;
@@ -172,12 +174,12 @@ main {
   color: var(--text-color-fire);
   cursor: pointer;
   padding: 14px 17px; /* Increase padding on hover */
-  font-size: .75em; 
+  font-size: 0.75em;
 }
 
 input,
 button {
-  color: white;
+  color: var(--text-color-dark);
   padding: 10px;
   text-transform: uppercase;
   border-width: 3px;
@@ -193,11 +195,11 @@ button {
   align-items: center;
   padding: 1em;
   margin-bottom: 1em;
-  border: 2px solid #f5f5f5;
+  border: 2px solid var(--text-color-dark);
   border-radius: 3px;
 }
 
-#submit-timeout{
+#submit-timeout {
   padding: 10px;
   text-transform: uppercase;
   border-width: 4px;
@@ -208,10 +210,24 @@ button {
   margin-top: 5px;
 }
 
-#submit-timeout:hover{
-  border-color: var(--text-color-fire);
-  color: var(--text-color-fire);
+#submit-timeout:hover {
+  border-color: var(--red);
+  color: var(--red);
   cursor: pointer;
   padding: 14px 17px; /* Increase padding on hover */
-  font-size: .75em; 
+  font-size: 0.75em;
+}
+
+#timeout-success {
+  font-size: 1em;
+  margin: 5px 0 0 0;
+}
+
+#timeout-label {
+  color: var(--text-color-dark);
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5px 0 5px 0;
 }
