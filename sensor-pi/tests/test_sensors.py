@@ -1,3 +1,9 @@
+"""
+This file tests that the temperature sensor is functioning within the normal
+range for room temperature. The Sense Hat must be connected to the Raspberry Pi
+before this test is run.
+"""
+
 import pytest
 from sense_hat import SenseHat
 

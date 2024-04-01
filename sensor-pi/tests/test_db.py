@@ -1,3 +1,8 @@
+"""
+This file tests that trying to access Firebase without the correct API key
+results in an error.
+"""
+
 import pyrebase
 import pytest
 import json

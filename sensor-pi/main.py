@@ -1,3 +1,10 @@
+"""
+Contains the main code for controlling the sensor data collection system node of
+FANS. Sensor data is constantly read in a separate thread while the main thread
+periodically uploads the recorded data to Firebase, reads user settings, checks
+for data above thresholds and sends UDP messages to other system nodes when an
+emergency has been activated or deactivated.
+"""
 __author__ = "Matteo Golin"
 
 from types import FrameType
@@ -17,7 +24,7 @@ import time
 from messages import Messages
 
 FIREBASE_CONFIG: str = "firebase_config.json"
-SEND_PORT: int = 2003
+UDP_SEND_PORT: int = 2003
 TIMESTAMP_FORMAT: str = "%Y-%m-%dT%H:%M:%S+%f"
 
 # Smoke detector settings
@@ -160,7 +167,7 @@ def main() -> None:
             db.child("emergency").set(True)
             alarm_ip = db.child("devices").child("alarm").get().val()
             channel.sendto(
-                Messages.EMERGENCY.value.to_bytes(), (alarm_ip, SEND_PORT)
+                Messages.EMERGENCY.value.to_bytes(), (alarm_ip, UDP_SEND_PORT)
             )
             local_emergency = True
 
@@ -207,7 +214,7 @@ def main() -> None:
             # Notify other nodes that emergency is over
             alarm_ip = db.child("devices").child("alarm").get().val()
             channel.sendto(
-                Messages.NO_EMERGENCY.value.to_bytes(), (alarm_ip, SEND_PORT)
+                Messages.NO_EMERGENCY.value.to_bytes(), (alarm_ip, UDP_SEND_PORT)
             )
 
 

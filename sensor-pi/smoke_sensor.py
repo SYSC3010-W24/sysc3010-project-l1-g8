@@ -1,3 +1,9 @@
+"""
+This file contains a helper class for controlling and reading the MQ2 smoke
+sensor over the serial peripheral interface (SPI) protocol with the MCP3008
+analog-to-digital converter.
+"""
+
 import busio
 import digitalio
 import adafruit_mcp3xxx.mcp3008 as MCP
@@ -8,11 +14,12 @@ MAX_PPM: float = 10000
 
 
 class SmokeSensor:
-    """Represents the Flying-Fish MQ2 smoke sensor connected to the Raspberry Pi SPI interface."""
+    """
+    Represents the Flying-Fish MQ2 smoke sensor connected to the Raspberry Pi
+    SPI interface through the MCP3008 ADC.
+    """
 
-    def __init__(
-        self, sclk: int, miso: int, mosi: int, chip_select: int
-    ) -> None:
+    def __init__(self, sclk: int, miso: int, mosi: int, chip_select: int) -> None:
         self.spi = busio.SPI(clock=sclk, MISO=miso, MOSI=mosi)
         self.cs = digitalio.DigitalInOut(digitalio.Pin(chip_select))
         self.mcp = MCP.MCP3008(self.spi, self.cs)

@@ -1,14 +1,20 @@
+"""
+This file tests that messages can be instantiated correctly using the enum
+constructor, and that messages sent using the SystemNode class are properly
+received.
+"""
+
 import pytest
 from messages import Messages, SystemNode
 import socket
 
-PORT: int = 2993
+TEST_UDP_PORT: int = 2993
 
 
 @pytest.fixture
 def node() -> SystemNode:
     """A system node with the test runner's IP address."""
-    return SystemNode(socket.gethostbyname(socket.gethostname()), PORT)
+    return SystemNode(socket.gethostbyname(socket.gethostname()), TEST_UDP_PORT)
 
 
 def test_valid_message() -> None:
