@@ -23,4 +23,4 @@ def test_insecure_access(config: dict[str, str]) -> None:
     config["apiKey"] = "obviously wrong"
     with pytest.raises(Exception):
         firebase = pyrebase.initialize_app(config)
-        db = firebase.database()
+        _ = firebase.database()

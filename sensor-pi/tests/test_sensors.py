@@ -18,6 +18,9 @@ def sensors() -> SenseHat:
 
 
 def test_temperature(sensors: SenseHat) -> None:
-    """Tests that the temperature sensor reports data within a realistic range for room temperature."""
+    """
+    Tests that the temperature sensor reports data within a realistic range for
+    room temperature.
+    """
 
     assert MIN_TEMP <= sensors.get_temperature() <= MAX_TEMP

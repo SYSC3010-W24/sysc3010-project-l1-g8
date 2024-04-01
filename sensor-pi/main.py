@@ -1,9 +1,9 @@
 """
-Contains the main code for controlling the sensor data collection system node of
-FANS. Sensor data is constantly read in a separate thread while the main thread
-periodically uploads the recorded data to Firebase, reads user settings, checks
-for data above thresholds and sends UDP messages to other system nodes when an
-emergency has been activated or deactivated.
+Contains the main code for controlling the sensor data collection system node
+of FANS. Sensor data is constantly read in a separate thread while the main
+thread periodically uploads the recorded data to Firebase, reads user settings,
+checks for data above thresholds and sends UDP messages to other system nodes
+when an emergency has been activated or deactivated.
 """
 
 __author__ = "Matteo Golin"
@@ -43,7 +43,9 @@ def collect_data(temp: Queue, smoke: Queue) -> None:
     sensehat = SenseHat()
 
     # Create smoke sensor instance
-    smoke_detector = SmokeSensor(sclk=SCLK, miso=MISO, mosi=MOSI, chip_select=CHIP_SELECT)
+    smoke_detector = SmokeSensor(
+        sclk=SCLK, miso=MISO, mosi=MOSI, chip_select=CHIP_SELECT
+    )
 
     while True:
         time.sleep(0.5)  # Don't burn through CPU
@@ -55,20 +57,27 @@ def collect_data(temp: Queue, smoke: Queue) -> None:
         smoke_ppm = smoke_detector.read_ppm()
 
         # Give timestamp for measurements
-        timestamp = dt.datetime.now().isoformat().replace(".", "+")  # Remove . because Firebase doesn't allow it
+        timestamp = (
+            dt.datetime.now().isoformat().replace(".", "+")
+        )  # Remove . because Firebase doesn't allow it
         temp.put((timestamp, temperature))  # Put data on shared queue
         smoke.put((timestamp, smoke_ppm))
 
 
-def get_latest_timeout(current_timeout: Optional[dt.datetime], db: Database) -> tuple[bool, dt.datetime, int]:
+def get_latest_timeout(
+    current_timeout: Optional[dt.datetime], db: Database
+) -> tuple[bool, dt.datetime, int]:
     """
-    Returns the latest configured timeout from the database and a boolean which describes whether or not the timeout has
-    changed in comparison to the currently active one.
+    Returns the latest configured timeout from the database and a boolean which
+    describes whether or not the timeout has changed in comparison to the
+    currently active one.
     """
     data = db.child("timeout").order_by_key().limit_to_last(1).get().val()
     latest_timeout_timestamp = list(data.keys())[0]  # type: ignore
     duration = list(data.values())[0]  # type: ignore
-    latest_timeout = dt.datetime.strptime(latest_timeout_timestamp, TIMESTAMP_FORMAT)
+    latest_timeout = dt.datetime.strptime(
+        latest_timeout_timestamp, TIMESTAMP_FORMAT
+    )
 
     if current_timeout is not None:
         timeout_changed = latest_timeout > current_timeout
@@ -110,8 +119,8 @@ def main() -> None:
     # Create socket for sending
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    # Track if an emergency has been triggered locally. This will allow comparison with the database for turning off
-    # emergencies
+    # Track if an emergency has been triggered locally. This will allow
+    # comparison with the database for turning off emergencies
     local_emergency = False
 
     # Handle shutdown signal
@@ -129,14 +138,20 @@ def main() -> None:
         timestamp, smoke_ppm = smoke.get()
 
         # Alert of emergency if threshold is exceeded or if there is smoke
-        if thresholds.temperature_exceeded(temperature) or thresholds.smoke_exceeded(smoke_ppm):
+        if thresholds.temperature_exceeded(
+            temperature
+        ) or thresholds.smoke_exceeded(smoke_ppm):
             db.child("emergency").set(True)
             alarm_ip = db.child("devices").child("alarm").get().val()
-            channel.sendto(Messages.EMERGENCY.value.to_bytes(), (alarm_ip, UDP_SEND_PORT))
+            channel.sendto(
+                Messages.EMERGENCY.value.to_bytes(), (alarm_ip, UDP_SEND_PORT)
+            )
             local_emergency = True
 
         # Write measurement to database
-        db.child("sensordata").child("temperature").child(timestamp).set(temperature)
+        db.child("sensordata").child("temperature").child(timestamp).set(
+            temperature
+        )
         db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
 
         # Update configuration unless there's a timeout
@@ -144,19 +159,23 @@ def main() -> None:
             thresholds.update(db)
 
         # Check for timeout
-        timeout_changed, current_timeout, duration = get_latest_timeout(current_timeout, db)
+        timeout_changed, current_timeout, duration = get_latest_timeout(
+            current_timeout, db
+        )
 
         if timeout_changed:
             # If a timer is already running, stop it
             if current_timer.is_alive():
                 current_timer.cancel()
 
-            time_expired = (dt.datetime.now() - current_timeout).total_seconds()
-            actual_duration = duration - int(time_expired)
+            time_expired = dt.datetime.now() - current_timeout
+            actual_duration = duration - int(time_expired.total_seconds())
 
             # Make sure timer is not too old to be relevant
             if actual_duration > 0:
-                current_timer = Timer(actual_duration, lambda: thresholds.update(db))
+                current_timer = Timer(
+                    actual_duration, lambda: thresholds.update(db)
+                )
 
                 # Make thresholds so high that nothing will happen
                 thresholds.max_out()
@@ -168,7 +187,10 @@ def main() -> None:
 
             # Notify other nodes that emergency is over
             alarm_ip = db.child("devices").child("alarm").get().val()
-            channel.sendto(Messages.NO_EMERGENCY.value.to_bytes(), (alarm_ip, UDP_SEND_PORT))
+            channel.sendto(
+                Messages.NO_EMERGENCY.value.to_bytes(),
+                (alarm_ip, UDP_SEND_PORT),
+            )
 
 
 if __name__ == "__main__":

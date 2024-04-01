@@ -1,6 +1,6 @@
 """
-This file contains the definitions of the messages that can be sent over UDP, as
-well as a helper class for sending UDP messages to other system nodes.
+This file contains the definitions of the messages that can be sent over UDP,
+as well as a helper class for sending UDP messages to other system nodes.
 """
 
 from enum import IntEnum
@@ -8,7 +8,9 @@ import socket
 
 
 class Messages(IntEnum):
-    """Describes the possible messages that can be sent over UDP to other nodes."""
+    """
+    Describes the possible messages that can be sent over UDP to other nodes.
+    """
 
     EMERGENCY = 0
     NO_EMERGENCY = 1

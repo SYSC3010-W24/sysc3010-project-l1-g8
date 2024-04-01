@@ -19,7 +19,9 @@ class SmokeSensor:
     SPI interface through the MCP3008 ADC.
     """
 
-    def __init__(self, sclk: int, miso: int, mosi: int, chip_select: int) -> None:
+    def __init__(
+        self, sclk: int, miso: int, mosi: int, chip_select: int
+    ) -> None:
         self.spi = busio.SPI(clock=sclk, MISO=miso, MOSI=mosi)
         self.cs = digitalio.DigitalInOut(digitalio.Pin(chip_select))
         self.mcp = MCP.MCP3008(self.spi, self.cs)
