@@ -1,3 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --background-color-dark: #23282e;
+  --text-color-dark: #f5f5f5;
+  --link-hover-color-dark: #ff4d4d;
+  --border-color-dark: #fff6e0;
+  --connection-color-dark: #4dff4d;
+
+  --background-color-light: #ffffff; /* Updated background color */
+  --text-color-light: #23282e; /* Updated text color */
+  --link-hover-color-light: #0c7bb3;
+  --border-color-light: #23282e;
+  --connection-color-light: #2ecc71;
+
+}
+
+[data-theme="light"] {
+  --background-color: var(--background-color-light);
+  --text-color: var(--text-color-light);
+  --link-hover-color: var(--link-hover-color-light);
+  --border-color: var(--border-color-light);
+  --connection-color: var(--connection-color-light);
+}
+
+[data-theme="dark"] {
+  --background-color: var(--background-color-dark);
+  --text-color: var(--text-color-dark);
+  --link-hover-color: var(--link-hover-color-dark);
+  --border-color: var(--border-color-dark);
+  --connection-color: var(--connection-color-dark);
+}
+
+
 html,
 body {
   height: 100%;
@@ -6,6 +40,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 
@@ -18,12 +55,12 @@ body {
 }
 
 label {
-  color: #f5f5f5;
+  color: var(--text-color);
   font-size: 1.5em;
 }
 
 input {
-  color: #f5f5f5;
+  color: var(--text-color);
   margin-bottom: 1em;
 }
 
@@ -35,11 +72,11 @@ input {
 
 .reset-p {
   text-decoration: none;
-  color: #f5f5f5;
+  color: var(--text-color);
 }
 
 .reset-p:hover {
-  color: #0f9ddd;
+  color: var(--hover-color);
 }
 
 .login-btn-box {
@@ -51,7 +88,7 @@ input {
 
 .login-btn {
   border-radius: 5px;
-  color: #f5f5f5;
+  color:var(--text-color);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -60,13 +97,13 @@ input {
 }
 
 .login-btn:hover {
-  color: #0f9ddd;
+  color: var(--hover-color);
   cursor: pointer;
 }
 
 input[type="text"] {
   border: none;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid var(--border-color);
   padding: 1px;
   font-size: 1em;
 }
