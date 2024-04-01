@@ -1,0 +1,18 @@
+[project]
+name = "Fire Alarm Notification System (FANS)"
+description = "SYSC3010 Computer Systems Development Project for detecting and mitigating fire-related emergencies."
+license = {text = "MIT"}
+authors = [
+    {name = "Grant Achuzia"},
+    {name = "Javeria Sohail"}
+    {name = "Matteo Golin", email = "matteo.golin@gmail.com"},
+    {name = "Saja Fawagreh"},
+]
+requires-python = ">=3.11"
+dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/SYSC3010-W24/sysc3010-project-l1-g8"
+
+[tool.black]
+line-length = 80
