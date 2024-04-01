@@ -10,36 +10,48 @@ from datetime import datetime
 import netifaces as ni
 import socket
 from messages import Messages
+from twilio.rest import Client
 
 RECEIVE_PORT: int = 2003
 BUFFER_SIZE: int = 100
 
 
-def createEmail(name: str, toEmailAddress: str, fromEmailAddress: str):
-
+def createMessage(name: str) -> str:
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message = Template.from_file("./templates/emergency.txt")
     fields = {"[DATE-TIME]": str(current_datetime), "[USER]": name}
 
     message.customize(fields)
 
+    return str(message)
+
+
+def createEmail(message: str, toEmail: str, fromEmail: str) -> EmailMessage:
     subject = "HIGH PRIORITY: Fire Alarm Emergency Notification"
 
     em = EmailMessage()
 
-    em["From"] = fromEmailAddress
-    em["To"] = toEmailAddress
-    em["Subject"] = subject
+    em['From'] = fromEmail
+    em['To'] = toEmail
+    em['Subject'] = subject
     em.set_content(str(message))
 
     return em
 
 
-def sendEmail(emailMessage, email, password):
+def sendEmail(emailMessage: EmailMessage, email: str, password: str) -> None:
     context = ssl.create_default_context()
-    smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context)
+    smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context)
     smtp.login(email, password)
     smtp.send_message(emailMessage)
+
+
+def sendMessage(client, message: str, phoneNumber: str) -> None:
+    message = client.messages.create(
+        from_='+16506678309',
+        body=message,
+        to=phoneNumber
+    )
 
 
 def connectFirebase(config: dict):
@@ -48,45 +60,45 @@ def connectFirebase(config: dict):
     return db
 
 
-def getUsers(db):
-    users_raw = db.child("users").get().val()
+def getUsers(db) -> dict:
+    users_raw = db.child('users').get().val()
     users = {}
     for key, value in users_raw.items():
-        # Convert the key back to its original email format
-        email = key.replace(",", ".")
-        for name, detail in value.items():
-            user_info = (name, detail)
-            users[email] = user_info
+        email = key.replace(',', '.')
+        users[email] = users_raw[key]
     return users
 
 
-def addUserToSQLite(cursor, email, name, password):
+def addUserToSQLite(cursor, email: str, name: str, phoneNumber: str, password: str) -> None:
     cursor.execute(
-        "REPLACE INTO users (email, name, password) VALUES (?, ?, ?)",
-        (email, name, password),
+        "REPLACE INTO users (Email, Name, PhoneNumber, Password) "
+        "VALUES (?, ?, ?, ?)",
+        (email, name, phoneNumber, password)
     )
 
 
-def print_users_table(cursor):
-    cursor.execute("SELECT email, name, password FROM users")
-    rows = cursor.fetchall()  # Fetch all rows of the query result
-    print("Contents of users table:")
-    for row in rows:
-        print(row)
-
-
 def wait_for_message(channel: socket.socket) -> Messages:
-    """Waits for a message over UDP."""
     data, _ = channel.recvfrom(BUFFER_SIZE)
     return Messages(int.from_bytes(data))
 
 
 def main():
+    with open("twilio_credentials.json", "r") as file:
+        credentials = json.load(file)
+
+    account_sid = credentials["account_sid"]
+    auth_token = credentials["auth_token"]
+
+    client = Client(account_sid, auth_token)
+
     with open("./fans_credentials.json", "r") as file:
-        credentials: dict[str, str] = json.load(file)
+        credentials = json.load(file)
 
     with open("./firebase_config.json", "r") as file:
-        config = json.loads(file.read())
+        config = json.load(file)
+
+    username = credentials["email"]
+    password = credentials["pass"]
 
     db = connectFirebase(config)
 
@@ -94,32 +106,45 @@ def main():
 
     cursor = dbconnect.cursor()
 
-    emails_sent = False  # Flag to control email sending
+    create_table_sql = """
+    CREATE TABLE IF NOT EXISTS users (
+        Email TEXT PRIMARY KEY,
+        Name TEXT NOT NULL,
+        PhoneNumber TEXT NOT NULL,
+        Password TEXT NOT NULL
+    );
+    """
 
-    # Send current IP address for LAN communication between nodes
+    cursor.execute(create_table_sql)
+
+    dbconnect.commit()
+
+    emails_sent = False
+
     ip_addr = ni.ifaddresses("wlan0")[ni.AF_INET][0]["addr"]
     db.child("devices").child("notifier").set(ip_addr)
 
-    # Set up socket
     channel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     channel.bind((ip_addr, RECEIVE_PORT))
 
     while True:
         msg = wait_for_message(channel)
 
-        # Forward the received message as an FSM event
         match msg:
             case Messages.EMERGENCY:
                 if not emails_sent:
                     users = getUsers(db)
                     for email, detail in users.items():
-                        name = detail[0]
-                        userPassword = detail[1]
-                        addUserToSQLite(cursor, email, name, userPassword)
-                        username = credentials["email"]
-                        password = credentials["pass"]
-                        emailMessage = createEmail(name, email, username)
+                        name = detail.get('Name')
+                        userPassword = detail.get('Password')
+                        phoneNumber = detail.get('Phone Number')
+                        addUserToSQLite(
+                            cursor, email, name, phoneNumber, userPassword
+                        )
+                        message = createMessage(name)
+                        emailMessage = createEmail(message, email, username)
                         sendEmail(emailMessage, username, password)
+                        sendMessage(client, message, phoneNumber)
                         print("Email sent to " + name)
                         time.sleep(2)
 
@@ -128,7 +153,6 @@ def main():
 
             case Messages.EMERGENCY_OVER:
                 emails_sent = False
-                print("False")
 
         time.sleep(2)
 
