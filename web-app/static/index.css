@@ -204,8 +204,8 @@ main {
 }
 
 #deactivate:hover {
-  border-color: var(--hover-color);
-  color: var(--hover-color);
+  border-color: var(--link-hover-color);
+  color: var(--link-hover-color);
   cursor: pointer;
   padding: 14px 17px;
   font-size: 0.75em;
@@ -245,8 +245,8 @@ button {
 }
 
 #submit-timeout:hover {
-  border-color: var(--hover-color);
-  color: var(--hover-color);
+  border-color: var(--link-hover-color);
+  color: var(--link-hover-color);
   cursor: pointer;
   padding: 14px 17px;
   font-size: 0.75em;
