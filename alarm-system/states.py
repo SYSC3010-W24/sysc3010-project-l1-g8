@@ -1,3 +1,12 @@
+"""
+This file contains the class definitions for the alarm system's finite state
+machine. It defines the interface that all states must implement for handling
+events, as well as the interface that the state machine context must implement
+(for mocking during testing).
+
+All states and the state machine context are defined here.
+"""
+
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from threading import Timer
@@ -6,6 +15,7 @@ from gpiozero import TonalBuzzer
 from gpiozero.tones import Tone
 
 B_FLAT: Tone = Tone.from_frequency(466.164)
+TOGGLE_DURATION: int = 1  # In seconds
 
 
 class Context(Protocol):
@@ -50,9 +60,8 @@ class AlarmFSM:
 
     def __init__(self, buzzer: TonalBuzzer) -> None:
         self.buzzer: TonalBuzzer = buzzer
-        self.__state: State = (
-            WaitForEmergency()
-        )  # Start by waiting for an emergency
+        # Start by waiting for an emergency
+        self.__state: State = WaitForEmergency()
 
     @property
     def state(self) -> State:
@@ -159,7 +168,7 @@ class AlarmOn(State):
 
     def entry(self, context: Context) -> None:
         context.set_alarm_state(True)
-        context.set_timeout(1)
+        context.set_timeout(TOGGLE_DURATION)
 
     def emergency(self, context: Context) -> None:
         """Handles the event of an emergency."""
@@ -180,7 +189,7 @@ class AlarmOff(State):
 
     def entry(self, context: Context) -> None:
         context.set_alarm_state(False)
-        context.set_timeout(1)
+        context.set_timeout(TOGGLE_DURATION)
 
     def emergency(self, context: Context) -> None:
         """Handles the event of an emergency."""

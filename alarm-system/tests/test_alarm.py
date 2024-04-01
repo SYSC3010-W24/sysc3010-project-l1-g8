@@ -1,3 +1,9 @@
+"""
+This file tests that the buzzer connected to the Raspberry Pi behaves as
+expected. This test must be run while the user can audibly verify that the
+buzzer is sounding.
+"""
+
 from gpiozero import TonalBuzzer
 from gpiozero.tones import Tone
 import pytest

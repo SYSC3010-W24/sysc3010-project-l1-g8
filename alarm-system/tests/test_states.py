@@ -1,3 +1,9 @@
+"""
+This file tests the implementation of the alarm system's state machine by
+creating a mock state machine context and asserting that the individual states
+call the correct methods of the context object.
+"""
+
 import pytest
 from states import State, Context, WaitForEmergency, AlarmOn, AlarmOff
 
