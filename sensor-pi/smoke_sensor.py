@@ -10,7 +10,9 @@ MAX_PPM: float = 10000
 class SmokeSensor:
     """Represents the Flying-Fish MQ2 smoke sensor connected to the Raspberry Pi SPI interface."""
 
-    def __init__(self, sclk: int, miso: int, mosi: int, chip_select: int) -> None:
+    def __init__(
+        self, sclk: int, miso: int, mosi: int, chip_select: int
+    ) -> None:
         self.spi = busio.SPI(clock=sclk, MISO=miso, MOSI=mosi)
         self.cs = digitalio.DigitalInOut(digitalio.Pin(chip_select))
         self.mcp = MCP.MCP3008(self.spi, self.cs)

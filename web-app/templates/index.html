@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="static/index.css" />
     <link rel="stylesheet" href="static/global.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="script.js"></script>
     <title>FANS</title>
   </head>
   <body>
+    
     <script>
 
       const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
@@ -96,7 +98,7 @@
           <div class="graph-container">
             <div class="temperature-box">
               <p class="title-2">Temperature</p>
-              <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
+              <p style="color:var(--text-color)" class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
               <canvas id="temperature-graph" width="420" height="420"></canvas>
             </div>
           
@@ -150,12 +152,13 @@
                         response.json().then(data => {
                             temperature_chart.data.labels = data.timestamps;
                             temperature_chart.data.datasets[0].data = data.vals;
-                            temperature_chart.options.title.fontColor = '#f5f5f5';
-                            temperature_chart.options.legend.labels.fontColor = '#f5f5f5';
-                            temperature_chart.options.scales.xAxes[0].scaleLabel.fontColor = '#f5f5f5';
-                            temperature_chart.options.scales.yAxes[0].scaleLabel.fontColor = '#f5f5f5';
-                            temperature_chart.options.scales.yAxes[0].ticks.fontColor = '#f5f5f5';
-                            temperature_chart.options.scales.xAxes[0].ticks.fontColor = '#f5f5f5';
+                            temperature_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                          temperature_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                          temperature_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
                             temperature_chart.update();
                         })
                     })
@@ -164,7 +167,7 @@
 
           <div class="smoke-box">
             <p class="title-2" styles="align-items:center;">Smoke</p>
-            <p style="color:var(--text-color-dark)">Current Smoke Level: {{current_smoke}} PPM</p>
+            <p style="color:var(--text-color)">Current Smoke Level: {{current_smoke}} PPM</p>
             <canvas id="smoke-graph" width="420" height="420"></canvas>
           </div>
 
@@ -216,12 +219,13 @@
                         response.json().then(data => {
                             smoke_chart.data.labels = data.timestamps;
                             smoke_chart.data.datasets[0].data = data.vals;
-                            smoke_chart.options.title.fontColor = '#f5f5f5';
-                            smoke_chart.options.legend.labels.fontColor = '#f5f5f5';
-                            smoke_chart.options.scales.xAxes[0].scaleLabel.fontColor = '#f5f5f5';
-                            smoke_chart.options.scales.yAxes[0].scaleLabel.fontColor = '#f5f5f5';
-                            smoke_chart.options.scales.yAxes[0].ticks.fontColor = '#f5f5f5';
-                            smoke_chart.options.scales.xAxes[0].ticks.fontColor = '#f5f5f5';
+                            smoke_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                            smoke_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                            smoke_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
                             smoke_chart.update();
                         })
                     })
@@ -242,5 +246,6 @@
       </div>
       </div>
     </main>
+    <script src="static/script.js"></script>
   </body>
 </html>

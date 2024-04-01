@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="static/settings.css" />
     <link rel="stylesheet" href="static/global.css" />
+    
     <title>FANS</title>
   </head>
+  
   <script>
     const TEMP_THRESH = {{url_for("set_temperature_threshold", degrees="40") | tojson}};
     const SMOKE_THRESH = {{url_for("set_smoke_threshold", ppm="500") | tojson}};
@@ -107,13 +109,15 @@
         <p>Accessory Device Notification:</p>
       </div>
 
+      
       <div class="settings-box">
         <p class="title-2"><b>Website Appearance</b></p>
         <p>Theme:</p>
-        <p>Font:</p>
+        <button id="darkModeSwitch" onclick="toggleDarkMode()">Toggle Theme</button>
       </div>
 
       <div class="login-btn-box"></div>
     </main>
+    <script src="static/script.js"></script>
   </body>
 </html>

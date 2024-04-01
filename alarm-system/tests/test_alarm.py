@@ -3,7 +3,7 @@ from gpiozero.tones import Tone
 import pytest
 import time
 
-# The GPIO pin on the Pi that the buzzer will need to be connected to for this test
+# The GPIO pin on the Pi that the buzzer will need to be connected to
 GPIO_PIN: int = 22
 
 # The amount of time the buzzer will be on or off for during toggling
