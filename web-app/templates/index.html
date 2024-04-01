@@ -98,7 +98,7 @@
           <div class="graph-container">
             <div class="temperature-box">
               <p class="title-2">Temperature</p>
-              <p class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
+              <p style="color:var(--text-color)" class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
               <canvas id="temperature-graph" width="420" height="420"></canvas>
             </div>
           
@@ -154,11 +154,11 @@
                             temperature_chart.data.datasets[0].data = data.vals;
                             temperature_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
                           temperature_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');
+                          temperature_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                          temperature_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
                             temperature_chart.update();
                         })
                     })
@@ -221,11 +221,11 @@
                             smoke_chart.data.datasets[0].data = data.vals;
                             smoke_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
                             smoke_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');
+                            smoke_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                            smoke_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
                             smoke_chart.update();
                         })
                     })
