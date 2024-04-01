@@ -60,45 +60,46 @@
       <div class="nav-bar">
         <a href="/">Home</a>
         <a href="/settings">Settings</a>
-        <a href="">Logout</a>
+        <a href="/logout">Logout</a>
       </div>
 
       <div class="settings-box">
         <p class="title-2"><b>Account Information</b></p>
-        <p>Name:</p>
-        <p>Email:</p>
+        <p>Name: {{full_username}}</p>
+        <p>Email: {{user_email}}</p>
       </div>
 
       <div class="settings-box">
         <p class="title-2"><b>Administration Controls</b></p>
-        <p>Administrator:</p>
-        <p>User List</p>
-        <form action="/add_task" method="POST">
-          <div class="form1">
-            <input
-              type="text"
-              class="form1-input"
-              id="add_new_user"
-              name="add_new_user"
-              placeholder="Add a new user here"
-            />
-            <button type="submit" class="add-btn">Add</button>
-          </div>
-        </form>
+        <p><b>Add New User</b></p>
+        <form action="/add_user" method="POST">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required><br><br>
+          
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required><br><br>
+          
+          <label for="phone_number">Phone Number:</label>
+          <input type="text" id="phone_number" name="phone_number" required><br><br>
+          
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email" required><br><br>
+          
+          <button id="add-user-btn" type="submit" style="">Add User</button>
+      </form>
+        
       </div>
 
       <div class="settings-box">
         <p class="title-2"><b>Alarm Settings</b></p>
-        <p>Temperature Threshold: {{ temperature_threshold}}</p>
+        <p>Temperature Threshold: {{ temperature_threshold}} °C</p>
         <input id="temp-thresh" type="number" min="1", max="100" step="1" value="40"></input>
         <br/>
-        <label for="temp-thresh">Temperature threshold in degrees.</label>
         <button onclick="set_temp_thresh()">Submit Temperature Threshold</button>
         <br/>
-        <p>Smoke Threshold: {{ smoke_threshold }}</p>
+        <p>Smoke Threshold: {{ smoke_threshold }} PPM</p>
         <input id="smoke-thresh" type="number" min="1", max="10000" step="50" value="500"></input>
         <br/>
-        <label for="smoke-thresh">Smoke threshold in PPM.</label>
         <button onclick="set_smoke_thresh()">Submit Smoke Threshold</button>
         <br/>
         <p id="threshold-success"></p>
