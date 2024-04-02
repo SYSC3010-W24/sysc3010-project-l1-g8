@@ -1,3 +1,10 @@
+"""
+Pico_Alarm System: A Raspberry Pi Pico-based alarm system that monitors a Firebase database 
+for emergency flags. When triggered, it activates an alarm buzzer and LED indicators.
+Author: Javeria Sohail 101197163
+
+"""
+
 import machine
 import utime
 import urequests
