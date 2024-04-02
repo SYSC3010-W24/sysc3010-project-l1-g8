@@ -57,4 +57,4 @@ class Thresholds:
         Returns true if the smoke concentration exceeds the threshold, false
         otherwise.
         """
-        return smoke < self.smoke
+        return smoke > self.smoke

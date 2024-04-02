@@ -150,6 +150,8 @@ def main() -> None:
         # Write measurement to database
         db.child("sensordata").child("temperature").child(timestamp).set(temperature)
         db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
+        print(thresholds)
+        print(thresholds.smoke_exceeded(smoke_ppm))
 
         # Update configuration unless there's a timeout
         if not current_timer.is_alive():
