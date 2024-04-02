@@ -32,7 +32,7 @@ class SystemNode:
 
     def send_message(self, message: Messages) -> None:
         """Sends a message to the system node."""
-        self.socket.sendto(bytes(message), (self.ip_addr, self.port))
+        self.socket.sendto(bytes(message.value), (self.ip_addr, self.port))
 
     @classmethod
     def from_db_device(cls, device_name: str, db: Database) -> Self:
