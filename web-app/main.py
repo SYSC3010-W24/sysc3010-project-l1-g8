@@ -80,6 +80,7 @@ def home():
         username_parts = full_username.split()
         username = username_parts[0] if username_parts else "User"
 
+    # Takes the user to the home page upon login
     if "logged_in" in session:
 
         return render_template(
@@ -129,6 +130,7 @@ def settings():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """Handles user login."""
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
@@ -142,39 +144,43 @@ def login():
         if user_ref.val():
             user_data = user_ref.val()
             if "Password" in user_data and user_data["Password"] == password:
+                # Store user's email in the session and mark as logged in
                 session["email"] = email
                 session["logged_in"] = True
+                # Redirect to the home page after successful login
                 return redirect(url_for("home"))
             else:
+                # Show an error message for incorrect password
                 return render_template(
                     "login.html", error_message="Incorrect password"
                 )
         else:
-            return render_template("login.html", error_message="User not found")
+            # Show an error message for user not found
+            return render_template(
+                "login.html", error_message="User not found")
 
     return render_template("login.html")
 
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    """Handles user signup"""
+
     if request.method == "POST":
-        print(request.form)
+        # Get account information from the form
         username = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
         phone_number = request.form.get("phone_number")
-        print(
-            f"Received data - Username: {username}, Email: {email}, Password: {password}, Phone Number: {phone_number}"
-        )
 
+        # Check if all required fields are provided
         if not username or not email or not phone_number:
             return (
                 jsonify(
                     {
                         "success": False,
-                        "message": "Username, email, and phone number are required",
-                    }
-                ),
+                        "message": "Account info required",
+                    }),
                 400,
             )
 
@@ -198,19 +204,23 @@ def signup():
         # Redirect to home page after successful signup
         return redirect(url_for("home"))
 
+    # Show signup page for GET requests
     return render_template("signup.html")
 
 
 @app.route("/logout", methods=["GET"])
 def logout():
-    """Logs out the user by clearing the session and redirects to the login page."""
+    """
+    Logs out the user by clearing the
+    session and redirects to the login page."""
     session.clear()
     return redirect("/login")
 
 
 @app.route("/api/deactivate", methods=["GET"])
 def deactivate_alarm():
-    """Deactivates the alarm flag in Firebase to signal the emergency is over."""
+    """Deactivates the alarm flag in Firebase to
+    signal the emergency is over."""
     db.child("emergency").set(False)
     return jsonify(success=True), 200
 
@@ -218,9 +228,10 @@ def deactivate_alarm():
 @app.route("/api/timeout/<duration>", methods=["GET"])
 def set_timeout(duration: str):
     """Sets a timeout duration in Firebase."""
-
+    # Convert duration number to an integer
     numeric_duration = int(duration)
 
+    # Check if duration is within limit
     if numeric_duration > MAX_TIMEOUT:
         return (
             jsonify(
@@ -238,6 +249,7 @@ def set_timeout(duration: str):
             400,
         )
 
+    # Get timestamp for timeout
     timestamp = (
         dt.datetime.now().isoformat().replace(".", "+")
     )  # Remove . because Firebase doesn't allow it
@@ -248,7 +260,8 @@ def set_timeout(duration: str):
 
 @app.route("/api/tempdata", methods=["GET"])
 def get_temperature():
-    """Gets the latest temperature time series data and returns it in JSON format."""
+    """Gets the latest temperature time series data
+    and returns it in JSON format."""
     temp_data = (
         db.child("sensordata/temperature")
         .order_by_key()
@@ -267,7 +280,8 @@ def get_temperature():
 
 @app.route("/api/smoke", methods=["GET"])
 def get_smoke():
-    """Gets the latest temperature time series data and returns it in JSON format."""
+    """Gets the latest temperature time series data
+    and returns it in JSON format."""
     smoke_data = (
         db.child("sensordata/smoke")
         .order_by_key()
@@ -294,7 +308,7 @@ def set_temperature_threshold(degrees: str):
         return (
             jsonify(
                 success=False,
-                message=f"Tempereature threshold must be less than {MAX_TEMP_THRESH} degrees!",
+                message=f"Temp. threshold must be < {MAX_TEMP_THRESH}°C",
             ),
             400,
         )
@@ -303,7 +317,7 @@ def set_temperature_threshold(degrees: str):
         return (
             jsonify(
                 success=False,
-                message="Tempereature threshold must be higher than 0 degrees!",
+                message="Temp threshold must be > 0 degrees!",
             ),
             400,
         )
@@ -323,7 +337,7 @@ def set_smoke_threshold(ppm: str):
         return (
             jsonify(
                 success=False,
-                message=f"Smoke threshold must be less than {MAX_SMOKE_THRESH} ppm!",
+                message=f"Smoke threshold must be < {MAX_SMOKE_THRESH} ppm!",
             ),
             400,
         )
