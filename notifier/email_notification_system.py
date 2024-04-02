@@ -1,3 +1,11 @@
+"""
+This file implements an emergency notification system. It sends email and SMS
+notifications, manages user information with Firebase and SQLite, and listens
+for UDP signals to trigger or stop notifications depending on the emergency
+status.
+Author: Saja Fawagreh
+"""
+
 from email.message import EmailMessage
 import ssl
 import sqlite3
