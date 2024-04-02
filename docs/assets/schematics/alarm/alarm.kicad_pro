@@ -239,7 +239,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "smoke-detector.kicad_pro",
+    "filename": "alarm.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -267,10 +267,7 @@
     },
     "net_colors": null,
     "netclass_assignments": {
-      "Net-(Q2-C)": "MISO",
-      "unconnected-(U1-CLK-Pad13)": "SCLK",
-      "unconnected-(U1-Din-Pad11)": "MOSI",
-      "unconnected-(U1-~{CS}{slash}SHDN-Pad10)": "GPIO 22"
+      "Net-(BZ1-+)": "GPIO22"
     },
     "netclass_patterns": []
   },
@@ -388,7 +385,7 @@
   },
   "sheets": [
     [
-      "fcdf4738-63ef-494f-bc9b-df456286ae4f",
+      "67894826-7478-4f80-b474-558efeb4700f",
       "Root"
     ]
   ],
