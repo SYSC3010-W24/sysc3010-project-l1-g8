@@ -156,6 +156,8 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 
 **Hardware Assembly**
 
+![](./docs/assets/schematics/fritzingpico.png)
+
 1. **Connect the Buzzer** to GPIO 1 on the Pico W.
 2. **Attach the Red LED** to GPIO 6 with a 10k resistor in series.
 3. **Attach the Green LED** to GPIO 5 with a 10k resistor in series.
@@ -180,17 +182,11 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 
 **Note**: The Raspberry Pi Pico W must be powered continuously for the alarm system to function. It can remain powered via the USB connection to your computer or through an external 5V power source.
 
-## Operational Notes
+**Operational Notes**
 
 - The system checks the Firebase database at regular intervals for any emergency flags.
 - The buzzer and red LED activate to indicate an emergency, with the green LED indicating normal operations.
 - The button serves as an acknowledgment mechanism to stop the alarm and reset the system to its normal state.
-
-![](./docs/assets/schematics/fritzingpico.png)
-
-## Further Reading
-
-To read more about FANS, its implementation and design, you can visit its [GitHub Wiki][wiki].
 
 [wiki]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/wiki
 [alarm]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/tree/main/alarm-system
