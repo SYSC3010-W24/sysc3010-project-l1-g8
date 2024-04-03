@@ -21,7 +21,7 @@
 
         function deactivate_emergency() {
             fetch(DEACTIVATE_URL).then((response) => {
-                window.location.reload();
+                console.log("Manual deactivation.")
             });
         }
 
