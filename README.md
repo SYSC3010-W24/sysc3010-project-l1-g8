@@ -104,6 +104,29 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
+### Notifier
+
+In order to set up the `notifier` node, you will need:
+
+- Raspberry Pi 4
+
+The node can be started by running the software located in the notifier directory on the Raspberry Pi. Prior installation of Python 3.11 is required. Execute the following commands in the terminal to download the repository and start the software:
+
+```console
+git clone https://github.com/SYSC3010-W24/sysc3010-project-l1-g8.git
+cd sysc-project-l1-g8/notifier
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 email_notification_system.py
+```
+
+Additionally, ensure that the following files are present in the same directory for it to function properly:
+
+- fans_credentials.json: This file should contain the username and password required for authentication to the email server, enabling the system to send notifications via email.
+- firebase_config.json: This file should include the configuration details required to connect to the Firebase database, such as the API key, authentication domain, database URL, and storage bucket.
+- twilio_credentials.json: This file should contain the authentication credentials for accessing the Twilio API, including the account SID and authentication token, enabling the system to send notifications via SMS.
+
 ## Further Reading
 
 To read more about FANS, its implementation and design, you can visit its [GitHub Wiki][wiki].
