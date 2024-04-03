@@ -1,0 +1,188 @@
+\section{Final Solution}
+
+\subsection{Deployment Diagram}
+
+\subsection{Message Protocol Table}
+
+In the Fire Alarm Notification System (FANS), a variety of communication protocols are meticulously integrated to ensure
+seamless interaction among the system components and with the external cloud database, facilitating a robust and
+responsive fire alarm solution.
+
+The system’s core, the Smoke Detection System, communicates with its temperature and smoke sensors using the I2C and SPI
+protocols over the GPIO pins of a Raspberry Pi 4.
+
+\subsubsection{I2C Communication}
+
+The Raspberry Pi 4 utilizes the I2C protocol to communicate with an array of temperature and smoke sensors, monitoring
+environmental conditions to detect potential fire hazards. This is not visible in the sequence diagrams as they show
+the bigger picture of the communication of the nodes with the sensors.
+
+% TODO: fix that the smoke sensor uses I2C
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}
+        \hline
+        Sender         & Receiver               & Message              & Data Format                                          & Protocol                 \\
+        \hline
+        Raspberry Pi 4 & Temperature Sensor     & \texttt{read\_temp}  & See section 6.2.1 of datasheet \cite{temp-datasheet} & I2C                      \\
+        \hline
+        Raspberry Pi 4 & Smoke Sensor (via ADC) & \texttt{read\_smoke} & See figure 1.1 of datasheet \cite{adc-datasheet}     & SPI \cite{adc-datasheet} \\
+        \hline
+    \end{tabular}
+    \caption{Messages for I2C communication in FANS.}
+\end{table}
+
+\subsubsection{Local Area Network Communication}
+
+Nodes within the FANS (smoke detection, alarm, and notification systems) communicate over a local network using UDP
+packets, facilitating real-time alerts and system coordination.
+
+The messages sent over UDP use numerical value to encode messages. The representation agreed upon is as follows:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c |}
+        \hline
+        Message      & Value \\
+        \hline
+        Emergency    & 0     \\
+        \hline
+        No Emergency & 1     \\
+        \hline
+    \end{tabular}
+    \caption{Numerical representation of messages over UDP in FANS.}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}
+        \hline
+        Sender                 & Receiver            & Message      & Data Format & Protocol \\
+        \hline
+        Smoke detection system & Notification system & Emergency    & 0           & UDP      \\
+        \hline
+        Smoke detection system & Alarm system        & Emergency    & 0           & UDP      \\
+        \hline
+        Smoke detection system & Notification system & No emergency & 1           & UDP      \\
+        \hline
+        Smoke detection system & Alarm system        & No Emergency & 1           & UDP      \\
+        \hline
+    \end{tabular}
+    \caption{Messages for local area network communication in FANS.}
+\end{table}
+
+\subsubsection{Cloud Database Communication}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}
+        \hline
+        Sender          & Receiver & Message                                    & Data Format                      & Protocol    \\
+        \hline
+        Smoke Detection & Cloud DB & \texttt{put\_sensor\_data()}               & See listing \ref{lst:sensor}     & HTTP (JSON) \\
+        \hline
+        GUI             & Cloud DB & \texttt{update\_threshold(new\_threshold)} & See listing \ref{lst:threshold}  & HTTP (JSON) \\
+        \hline
+        Notification    & Cloud DB & \texttt{query\_contact\_information()}     & See listing \ref{lst:contact}    & HTTP (JSON) \\
+        \hline
+        Haptic Alarm    & Cloud DB & \texttt{emergency()}                       & See listing \ref{lst:emergency}  & HTTP (JSON) \\
+        \hline
+        GUI             & Cloud DB & \texttt{get\_sensor\_data()}               & See listing \ref{lst:sensor-get} & HTTP (JSON) \\
+        \hline
+    \end{tabular}
+    \caption{Messages for cloud database communication in FANS.}
+\end{table}
+
+\begin{lstlisting}[language=json,label={lst:sensor},caption={Update sensor data message.}]
+{
+  "method": "PUT",
+  "path": "/sensor-data/temperature",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+  },
+  "body": {
+      "data": {
+          "temperature": 21.2,
+          "timestamp": "2024-03-13T08:37:22"
+      }
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=json,label={lst:threshold},caption={Threshold update message.}]
+{
+  "method": "PUT",
+  "path": "/system/threshold",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "newThreshold": 50
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=json,label={lst:contact},caption={Request for user contact information.}]
+{
+  "method": "GET",
+  "path": "/user/contact",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=json,label={lst:emergency},caption={Request for emergency flag.}]
+{
+  "method": "GET",
+  "path": "/system/emergency",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=json,label={lst:sensor-get},caption={Request for latest sensor data.}]
+{
+  "method": "GET",
+  "path": "/sensor-data",
+  "headers": {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+  }
+}
+\end{lstlisting}
+
+\subsubsection{User Notification Communication}
+
+The notification system communicates with users through email, employing standard internet protocols to ensure timely
+and effective alerts.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| c | c | c | c | c |}
+        \hline
+        Sender              & Receiver   & Message                & Data Format                 & Protocol     \\
+        \hline
+        Notification System & User Inbox & Emergency notification & See listing \ref{lst:email} & SMTP (Email) \\
+        \hline
+    \end{tabular}
+    \caption{Messages for user notification communication in FANS.}
+\end{table}
+
+\begin{lstlisting}[label={lst:email},caption={Email notification for detected emergency in FANS.}]
+FROM: notification@example.com
+TO: user@example.com
+SUBJECT: Fire Alarm Notification
+
+Dear [User's Name],
+
+This is an emergency notification. Please exit the building.
+
+Emergency detected: [Date, Time]
+
+Stay safe!
+\end{lstlisting}
+
+\subsection{Sequence Diagrams}
