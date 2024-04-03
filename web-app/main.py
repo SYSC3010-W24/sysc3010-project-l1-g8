@@ -48,26 +48,11 @@ def home():
     """Renders the home page of the website."""
     # Get temperature data from Firebase
 
-    latest_temperature = list(
-        db.child("sensordata/temperature")
-        .order_by_key()
-        .limit_to_last(1)
-        .get()
-        .val()
-        .values()
-    )
-    latest_smoke = list(
-        db.child("sensordata/smoke")
-        .order_by_key()
-        .limit_to_last(1)
-        .get()
-        .val()
-        .values()
-    )
+    latest_temperature = list(db.child("sensordata/temperature").order_by_key().limit_to_last(1).get().val().values())
+    latest_smoke = list(db.child("sensordata/smoke").order_by_key().limit_to_last(1).get().val().values())
 
     # Get emergency flag from Firebase
     emergency_flag = db.child("emergency").get().val()
-    color_class = "fire" if emergency_flag else "no-fire"
 
     # Check if the user is logged in
     if "email" in session:
@@ -87,7 +72,6 @@ def home():
             "index.html",
             current_temperature=round(latest_temperature[-1], 2),
             emergency_flag=emergency_flag,
-            color_class=color_class,
             current_smoke=round(latest_smoke[-1], 2),
             full_username=full_username,
             username=username,
@@ -102,9 +86,7 @@ def home():
 def settings():
     """Renders the settings page of the website."""
     # Get thresholds data from firebase
-    temperature_threshold = (
-        db.child("thresholds").child("temperature").get().val()
-    )
+    temperature_threshold = db.child("thresholds").child("temperature").get().val()
     smoke_threshold = db.child("thresholds").child("smoke").get().val()
 
     # Check if the user is logged in
@@ -151,13 +133,10 @@ def login():
                 return redirect(url_for("home"))
             else:
                 # Show an error message for incorrect password
-                return render_template(
-                    "login.html", error_message="Incorrect password"
-                )
+                return render_template("login.html", error_message="Incorrect password")
         else:
             # Show an error message for user not found
-            return render_template(
-                "login.html", error_message="User not found")
+            return render_template("login.html", error_message="User not found")
 
     return render_template("login.html")
 
@@ -180,7 +159,8 @@ def signup():
                     {
                         "success": False,
                         "message": "Account info required",
-                    }),
+                    }
+                ),
                 400,
             )
 
@@ -225,6 +205,14 @@ def deactivate_alarm():
     return jsonify(success=True), 200
 
 
+@app.route("/api/emergency", methods=["GET"])
+def emergency_status():
+    """
+    Returns the status of the emergency flag in the Firebase database.
+    """
+    return {"status": db.child("emergency").get().val()}, 200
+
+
 @app.route("/api/timeout/<duration>", methods=["GET"])
 def set_timeout(duration: str):
     """Sets a timeout duration in Firebase."""
@@ -243,16 +231,13 @@ def set_timeout(duration: str):
 
     elif numeric_duration <= 0:
         return (
-            jsonify(
-                success=False, message="Timeout must be longer than 0 seconds!"
-            ),
+            jsonify(success=False, message="Timeout must be longer than 0 seconds!"),
             400,
         )
 
     # Get timestamp for timeout
-    timestamp = (
-        dt.datetime.now().isoformat().replace(".", "+")
-    )  # Remove . because Firebase doesn't allow it
+    # Remove . because Firebase doesn't allow it
+    timestamp = dt.datetime.now().isoformat().replace(".", "+")
     db.child("timeout").child(timestamp).set(numeric_duration)
 
     return jsonify(success=True), 200
@@ -262,13 +247,7 @@ def set_timeout(duration: str):
 def get_temperature():
     """Gets the latest temperature time series data
     and returns it in JSON format."""
-    temp_data = (
-        db.child("sensordata/temperature")
-        .order_by_key()
-        .limit_to_last(10)
-        .get()
-        .val()
-    )
+    temp_data = db.child("sensordata/temperature").order_by_key().limit_to_last(10).get().val()
     timestamps = list(temp_data.keys())
     values = list(temp_data.values())
 
@@ -282,13 +261,7 @@ def get_temperature():
 def get_smoke():
     """Gets the latest temperature time series data
     and returns it in JSON format."""
-    smoke_data = (
-        db.child("sensordata/smoke")
-        .order_by_key()
-        .limit_to_last(10)
-        .get()
-        .val()
-    )
+    smoke_data = db.child("sensordata/smoke").order_by_key().limit_to_last(10).get().val()
     timestamps = list(smoke_data.keys())
     values = list(smoke_data.values())
 

@@ -17,10 +17,48 @@
 
         const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
         const TIMEOUT_URL = {{url_for("set_timeout", duration = "3600") | tojson}};
+        const EMERGENCY_STATUS_URL = {{url_for("emergency_status") | tojson}};
 
         function deactivate_emergency() {
             fetch(DEACTIVATE_URL).then((response) => {
                 window.location.reload();
+            });
+        }
+
+        function refresh_emergency_status() {
+            fetch(EMERGENCY_STATUS_URL).then((response) => {
+                response.json().then(data => {
+
+                    const alarm_box1 = document.getElementsByClassName("alarm-status-box1")[0];
+                    const alarm_box2 = document.getElementsByClassName("alarm-status-box2")[0];
+
+                    let show_class = "no-fire";
+                    let hide_class = "fire";
+
+                    if (data.status) {
+                        show_class = "fire";
+                        hide_class = "no-fire";
+                        alarm_box1.classList.add("fire");
+                        alarm_box2.classList.add("fire");
+                        alarm_box1.classList.remove("no-fire");
+                        alarm_box2.classList.remove("no-fire");
+                    } else {
+                        alarm_box1.classList.remove("fire");
+                        alarm_box2.classList.remove("fire");
+                        alarm_box1.classList.add("no-fire");
+                        alarm_box2.classList.add("no-fire");
+                    }
+
+                    const show_elements = document.getElementsByClassName(show_class);
+                    const hide_elements = document.getElementsByClassName(hide_class);
+
+                    for (var i = 0; i < show_elements.length; i++) {
+                        show_elements[i].style.display = "block";
+                    }
+                    for (var i = 0; i < hide_elements.length; i++) {
+                        hide_elements[i].style.display = "none";
+                    }
+                })
             });
         }
 
@@ -59,27 +97,21 @@
                 <p class="title-1">Welcome {{full_username}}</p>
                 <br />
                 <div class="status-and-timer-container">
-                    <div class="alarm-status-box1 {{ color_class }}">
+                    <div class="alarm-status-box1 no-fire">
                         <p><b>{{username}}'s Fire Alarm</b></p>
-                        <div class="alarm-status-box2 {{color_class}}">
-                            {% if emergency_flag %}
-                            <p class="fire">FIRE DETECTED</p>
-                            {% else %}
+                        <div class="alarm-status-box2 no-fire">
+                            <p style="display: none;" class="fire">FIRE DETECTED</p>
                             <p class="no-fire">Clear</p>
-                            {% endif %}
                         </div>
-                        {% if emergency_flag %}
-                        <button id="deactivate" onclick="deactivate_emergency()">Deactivate Emergency</button>
-                        {% endif %}
+                        <button style="display: none;" class="fire" id="deactivate"
+                            onclick="deactivate_emergency()">Deactivate
+                            Emergency</button>
                     </div>
                     <div class="alarm-status-box1">
                         <p><b>{{username}}'s Pager</b></p>
-                        <div class="alarm-status-box2 {{color_class}}">
-                            {% if emergency_flag %}
-                            <p class="fire">Disconnected</p>
-                            {% else %}
+                        <div class="alarm-status-box2 no-fire">
+                            <p style="display: none;" class="fire">Disconnected</p>
                             <p class="no-fire">Connected</p>
-                            {% endif %}
                         </div>
                     </div>
                     <div class="timer-settings">
@@ -244,16 +276,17 @@
                         })
                     }
 
-                    function refresh_charts() {
+                    function refresh_data() {
                         refresh_smoke_values()
                         refresh_temp_values()
+                        refresh_emergency_status();
                         // Refresh every three seconds
                         setTimeout(() => {
-                            refresh_charts();
+                            refresh_data();
                         }, 3000);
                     }
 
-                    refresh_charts(); // Refresh when page loads
+                    refresh_data(); // Refresh when page loads
                 </script>
             </div>
         </div>
