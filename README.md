@@ -104,6 +104,53 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
+### Pico-Alarm
+In order to set up the `pico_alarm` buzzer alarm and led notifier system, you will need:
+
+- Raspberry Pi Pico W
+- Piezoelectric Buzzer
+- 1 red and 1 green LED
+- Breadboard
+- Wires
+- 2x 10k resistors
+
+## Setup Instructions
+
+### Hardware Assembly
+
+1. **Connect the Buzzer** to GPIO 1 on the Pico W.
+2. **Attach the Red LED** to GPIO 6 with a 10k resistor in series.
+3. **Attach the Green LED** to GPIO 5 with a 10k resistor in series.
+4. **Set up the Button** on GPIO 18, ensuring it's properly debounced with a 10k resistor.
+5. **Wire everything** according to the schematic on a breadboard, ensuring secure connections.
+
+### Software Installation and Deployment for Pico_Alarm System
+1. **Connect the Raspberry Pi Pico W** to your computer. Use a USB cable to establish the connection. Ensure the Pico is in MicroPython mode.
+2. **Open Thonny IDE** on your computer. It's recommended to use Thonny for working with MicroPython on Raspberry Pi Pico due to its built-in support.
+3. **Prepare the Python Script**: Have the `pico_alarm.py` script ready. This script includes the logic for monitoring the Firebase database and activating the buzzer and LEDs.
+4. **Configure the Script**:
+    - **WiFi Credentials**: Within the script, locate the `do_connect()` function. Replace `"your_wifi_ssid"` and `"your_wifi_password"` with your actual WiFi network SSID and password.
+    - **Firebase URL**: Find the `firebase_url` variable in the script. Change its value to your Firebase database URL where the emergency flag will be checked.
+5. **Deploy the Script to Pico W**:
+    - In Thonny, select MicroPython (Raspberry Pi Pico) as the interpreter from the bottom right corner.
+    - Open the `pico_alarm.py` script in Thonny.
+    - Click on 'File' > 'Save As...' and choose to save the script on your Raspberry Pi Pico.
+6. **Run the Script**:
+    - With the `pico_alarm.py` script open in Thonny, press the green 'Run' button to execute the script on the Pico W.
+    - The script will automatically start monitoring the Firebase database for any emergency flags and activate the buzzer and LEDs accordingly.
+
+**Note**: The Raspberry Pi Pico W must be powered continuously for the alarm system to function. It can remain powered via the USB connection to your computer or through an external 5V power source.
+
+## Operational Notes
+
+- The system checks the Firebase database at regular intervals for any emergency flags.
+- The buzzer and red LED activate to indicate an emergency, with the green LED indicating normal operations.
+- The button serves as an acknowledgment mechanism to stop the alarm and reset the system to its normal state.
+  
+
+![](./docs/assets/schematics/fritzingpico.png)
+
+
 ## Further Reading
 
 To read more about FANS, its implementation and design, you can visit its [GitHub Wiki][wiki].
