@@ -1,3 +1,10 @@
+"""
+This file implements an emergency notification system. It sends email and SMS
+notifications, manages user information with Firebase and SQLite, and listens
+for UDP signals to trigger or stop notifications depending on the emergency
+status.
+"""
+
 from email.message import EmailMessage
 import ssl
 import sqlite3
@@ -16,7 +23,7 @@ RECEIVE_PORT: int = 2003
 BUFFER_SIZE: int = 100
 
 
-def createMessage(name: str) -> str:
+def create_message(name: str) -> str:
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message = Template.from_file("./templates/emergency.txt")
     fields = {"[DATE-TIME]": str(current_datetime), "[USER]": name}
@@ -26,54 +33,52 @@ def createMessage(name: str) -> str:
     return str(message)
 
 
-def createEmail(message: str, toEmail: str, fromEmail: str) -> EmailMessage:
+def create_email(message: str, toEmail: str, fromEmail: str) -> EmailMessage:
     subject = "HIGH PRIORITY: Fire Alarm Emergency Notification"
 
     em = EmailMessage()
 
-    em['From'] = fromEmail
-    em['To'] = toEmail
-    em['Subject'] = subject
+    em["From"] = fromEmail
+    em["To"] = toEmail
+    em["Subject"] = subject
     em.set_content(str(message))
 
     return em
 
 
-def sendEmail(emailMessage: EmailMessage, email: str, password: str) -> None:
+def send_email(emailMessage: EmailMessage, email: str, password: str) -> None:
     context = ssl.create_default_context()
-    smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context)
+    smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context)
     smtp.login(email, password)
     smtp.send_message(emailMessage)
 
 
-def sendMessage(client, message: str, phoneNumber: str) -> None:
-    message = client.messages.create(
-        from_='+16506678309',
-        body=message,
-        to=phoneNumber
-    )
+def send_message(client, message: str, phoneNumber: str) -> None:
+    message = client.messages.create(from_="+16506678309", body=message, to=phoneNumber)
 
 
-def connectFirebase(config: dict):
+def connect_to_firebase(config: dict):
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     return db
 
 
-def getUsers(db) -> dict:
-    users_raw = db.child('users').get().val()
+def get_users(db) -> dict:
+    users_raw = db.child("users").get().val()
     users = {}
     for key, value in users_raw.items():
-        email = key.replace(',', '.')
+        email = key.replace(",", ".")
         users[email] = users_raw[key]
     return users
 
 
-def addUserToSQLite(cursor, email: str, name: str, phoneNumber: str, password: str) -> None:
+def add_user_to_SQLite(
+    cursor, email: str, name: str, phoneNumber: str, password: str
+) -> None:
     cursor.execute(
         "REPLACE INTO users (Email, Name, PhoneNumber, Password) "
         "VALUES (?, ?, ?, ?)",
-        (email, name, phoneNumber, password)
+        (email, name, phoneNumber, password),
     )
 
 
@@ -100,7 +105,7 @@ def main():
     username = credentials["email"]
     password = credentials["pass"]
 
-    db = connectFirebase(config)
+    db = connect_to_firebase(config)
 
     dbconnect = sqlite3.connect("FANS.db")
 
@@ -133,18 +138,18 @@ def main():
         match msg:
             case Messages.EMERGENCY:
                 if not emails_sent:
-                    users = getUsers(db)
+                    users = get_users(db)
                     for email, detail in users.items():
-                        name = detail.get('Name')
-                        userPassword = detail.get('Password')
-                        phoneNumber = detail.get('Phone Number')
-                        addUserToSQLite(
+                        name = detail.get("Name")
+                        userPassword = detail.get("Password")
+                        phoneNumber = detail.get("Phone Number")
+                        add_user_to_SQLite(
                             cursor, email, name, phoneNumber, userPassword
                         )
-                        message = createMessage(name)
-                        emailMessage = createEmail(message, email, username)
-                        sendEmail(emailMessage, username, password)
-                        sendMessage(client, message, phoneNumber)
+                        message = create_message(name)
+                        emailMessage = create_email(message, email, username)
+                        send_email(emailMessage, username, password)
+                        send_message(client, message, phoneNumber)
                         print("Email sent to " + name)
                         time.sleep(2)
 
