@@ -1,6 +1,6 @@
 # 🔥 FANS (Fire Alarm Notification System)
 
-<!--- TODO: include project image --->
+![](docs\assets\FANS-Project-Image.png)
 
 FANS is a comprehensive multi-system solution for fire-related emergencies that require prompt notification of persons
 in the affected area.
@@ -10,6 +10,16 @@ FANS issues SMS and email notifications to individuals in the surrounding area.
 
 FANS provides a dashboard for live monitoring of its environment, as well as an interface for customizing things like
 its sensitivity to pressure changes.
+
+## Table Of Contents
+- [Contributors](#contributors)  
+- [Repository Organization](#repository-organization)
+- [Installation and Setup Guide](#installation-and-setup-guide) 
+   - [Sensor Pi](#sensor-pi)
+   - [Alarm System](#alarm-system)
+   - [Notifier](#notifier)
+   - [Pico Alarm](#pico-alarm)
+   - [Web App](#web-app)
 
 ## Contributors
 
@@ -40,6 +50,13 @@ FANS design report, and the `proposal/` folder contains the LaTeX source files f
 
 Guides to install and run each system node are provided below. Once all nodes have been set up, the system will be
 functional.
+
+### Installation Table Of Contents
+- [Sensor Pi](#sensor-pi)
+- [Alarm System](#alarm-system)
+- [Notifier](#notifier)
+- [Pico Alarm](#pico-alarm)
+- [Web App](#web-app)
 
 ### Sensor-Pi
 
@@ -195,3 +212,25 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 [haptic]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/tree/main/pico_alarm
 [notifier]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/tree/main/notifier
 [pi-pinout]: https://www.the-diy-life.com/wp-content/uploads/2021/05/Raspberry-Pi-4-Pinout.png
+
+### Web App
+![](docs\assets\gui\final-homepage.png)
+In order to set up the `web-app` node, you will need: 
+
+- Raspberry Pi 4
+- Access to the internet
+
+FANS web application is made using Flask, an easy to use Python micro framework. Execute the following commands in the terminal to download the repository and start the software:
+
+```console
+git clone https://github.com/SYSC3010-W24/sysc3010-project-l1-g8.git
+cd sysc-project-l1-g8/web-app
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 main.py
+```
+
+In the terminal, click on the second http link to access the web app on your browser:  
+`Running on http://your.ip.address`
+
