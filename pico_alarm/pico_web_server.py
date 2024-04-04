@@ -1,7 +1,6 @@
 import network
 import socket
 from time import sleep
-from picozero import pico_temp_sensor, pico_led
 import machine
 
 
@@ -32,10 +31,9 @@ def get_pass():
     - ssid (str): The WiFi SSID entered by the user.
     - password (str): The WiFi password entered by the user.
     """
-    while True:
-        ssid = input("Enter your WiFi ssid: ")
-        password = input("Enter your WiFi password: ")
-        return ssid, password
+    ssid = input("Enter your WiFi ssid: ")
+    password = input("Enter your WiFi password: ")
+    return ssid, password
 
 
 def connect():
@@ -48,16 +46,12 @@ def connect():
     # Connect to WLAN
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
+    ssid, password = get_pass()
+    wlan.connect(ssid, password)
 
-    while True:
-        ssid, password = get_pass()
-        wlan.connect(ssid, password)
-
-        while wlan.isconnected() == False:
-            print("Waiting for connection...")
-            sleep(1)
-        if wlan.isconnected():
-            break
+    while not wlan.isconnected():
+        print("Waiting for connection...")
+        sleep(1)
 
     ip = wlan.ifconfig()[0]
     print(f"Connected on {ip}")
@@ -69,3 +63,5 @@ try:
     connection = open_socket(ip)
 except KeyboardInterrupt:
     machine.reset()
+
+# Adding the correct number of blank lines at the end of the file.
