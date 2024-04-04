@@ -1,15 +1,42 @@
 \section{Final Solution}
 
+The final solution for FANS is displayed in Figure \ref{fig:deployment}. This solution uses a distributed systems
+approach to create a multi-node fire response system controlled via a web interface.
+
 \subsection{Deployment Diagram}
+
+The primary node in the FANS system is the sensor data collection node, which monitors temperature and smoke
+concentration levels. All sensor measurements are written to the Firebase cloud database for display by the web UI.
+
+When a measurement is detected above the user-defined threshold, the sensor data collection node sends a UDP message
+signifying an emergency over the local network to the notification system and alarm system nodes. Upon receipt of this
+message, the notification system will send emails and SMS notifications to all users in its local database. The alarm
+system node will begin blinking an LED and sounding an alarm.
+
+In addition to the UDP message, the sensor data collection node will raise an emergency flag in the Firebase database
+which signifies to the UI and the wearable haptic alarm that an emergency is active. The haptic alarm wearable device
+will then begin blinking an LED and buzzing until the user disables it or the emergency ends.
+
+The UI provides an interface for checking on the status of an emergency and reviewing sensor data in real-time. Users
+can disable the emergency response from the UI when the emergency has been resolved, and they can also time out the
+system’s emergency response in scenarios where the system may be falsely triggered (smokey cooking). Finally, the UI
+also provides an interface for user contact information to be added to the subscriber list for emergency notifications.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\imagewidth]{../assets/FANSDeployment.png}
+    \caption{The FANS deployment diagram.}
+    \label{fig:deployment}
+\end{figure}
 
 \subsection{Message Protocol Table}
 
-In the Fire Alarm Notification System (FANS), a variety of communication protocols are meticulously integrated to ensure
-seamless interaction among the system components and with the external cloud database, facilitating a robust and
+In the Fire Alarm Notification System (FANS), a variety of communication protocols are meticulously integrated to
+ensure seamless interaction among the system components and with the external cloud database, facilitating a robust and
 responsive fire alarm solution.
 
-The system’s core, the Smoke Detection System, communicates with its temperature and smoke sensors using the I2C and SPI
-protocols over the GPIO pins of a Raspberry Pi 4.
+The system’s core, the Smoke Detection System, communicates with its temperature and smoke sensors using the I2C and
+SPI protocols over the GPIO pins of a Raspberry Pi 4.
 
 \subsubsection{I2C Communication}
 
@@ -17,7 +44,6 @@ The Raspberry Pi 4 utilizes the I2C protocol to communicate with an array of tem
 environmental conditions to detect potential fire hazards. This is not visible in the sequence diagrams as they show
 the bigger picture of the communication of the nodes with the sensors.
 
-% TODO: fix that the smoke sensor uses I2C
 \begin{table}[H]
     \centering
     \begin{tabular}{| c | c | c | c | c |}
@@ -93,6 +119,8 @@ The messages sent over UDP use numerical value to encode messages. The represent
     \caption{Messages for cloud database communication in FANS.}
 \end{table}
 
+{
+\tiny
 \begin{lstlisting}[language=json,label={lst:sensor},caption={Update sensor data message.}]
 {
   "method": "PUT",
@@ -153,6 +181,7 @@ The messages sent over UDP use numerical value to encode messages. The represent
   }
 }
 \end{lstlisting}
+}
 
 \subsubsection{User Notification Communication}
 
@@ -171,6 +200,8 @@ and effective alerts.
     \caption{Messages for user notification communication in FANS.}
 \end{table}
 
+{
+\tiny
 \begin{lstlisting}[label={lst:email},caption={Email notification for detected emergency in FANS.}]
 FROM: notification@example.com
 TO: user@example.com
@@ -184,5 +215,72 @@ Emergency detected: [Date, Time]
 
 Stay safe!
 \end{lstlisting}
+}
 
 \subsection{Sequence Diagrams}
+
+The FANS system will satisfy six core use cases highlighted and illustrated in the message sequence diagrams below.
+
+\subsubsection{Trigger Emergency Use Case}
+
+The Trigger Emergency Use Case represents the critical functionality of the FANS, where the system detects a potential
+fire through its smoke detection system and initiates a series of automated responses to mitigate the situation. As
+depicted in the message sequence diagram, the process begins when the smoke detection system identifies smoke and
+potentially high temperatures indicative of a fire. This detection triggers the system to send a notification to the
+alarm system and the notification system. The alarm system responds by sounding an audible and visible alert to notify
+occupants of the building immediately. Concurrently, the notification system sends out emergency alerts via SMS and
+email to all registered users, ensuring they are informed of the danger regardless of their current location. This
+response ensures that all the users are promptly alerted to the emergency, resulting in a quick evacuation and response
+to the detected threat.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\imagewidth]{../assets/sequence/TriggerEmergencyUseCaseSequenceDiagram.png}
+    \caption{The sequence diagram for the trigger emergency use case.}
+\end{figure}
+
+\subsubsection{Add New Contact Information Use Case}
+
+This use case outlined the process by which users added new contact information to the FANS database. Through the web
+GUI, users entered new contact details such as phone numbers and email addresses, enabling the system to send emergency
+notifications. Upon submission, these details were successfully updated in the real-time database. The message sequence
+diagram for this use case (not shown) illustrated the interactions between the user, the web GUI, and the database,
+culminating in the notification system being updated with the new contact information. This ensured that the FANS could
+reach the user through various channels in the event of an emergency, thereby enhancing the system’s effectiveness in
+communicating critical alerts.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\imagewidth]{../assets/sequence/AddingNewContactInformationSequenceDiagram.png}
+    \caption{The sequence diagram for the adding new contact information use case.}
+\end{figure}
+
+\subsubsection{Change Emergency Threshold Use Case}
+
+Adjusting the smoke detection threshold was an essential feature that allowed users to customize the sensitivity of the
+FANS based on environmental conditions and personal preferences. This use case involved a user accessing the web GUI to
+modify the threshold settings determining when the smoke detection system should trigger an alert. The message sequence
+diagram (not shown) visualized the steps involved, from the user’s interaction with the GUI to update the threshold to
+the real-time database’s role in storing this new setting. The smoke detection system then retrieved and applied the
+updated threshold, ensuring that the FANS operated according to the user’s specifications, balancing sensitivity and
+minimizing false alarms.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\imagewidth]{../assets/sequence/ChangingSmokeDetectionThresholdSequenceDiagram.png}
+    \caption{The sequence diagram for the changing emergency threshold use case.}
+\end{figure}
+
+\subsubsection{Emergency Response Use Case}
+
+This scenario highlighted the FANS’s capability to notify users in the event of a detected fire. Upon detecting a fire,
+the notification system successfully queried the cloud database for contact information and then sent out alerts via
+SMS and email to all users. The message sequence diagram for this use case (provided above) captured the sequence of
+these interactions, showcasing how the system ensured that occupants were informed and ready to address the emergency
+promptly.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\imagewidth]{../assets/sequence/EmergencyResponseUseCase.png}
+    \caption{The sequence diagram for the emergency response use case.}
+\end{figure}
