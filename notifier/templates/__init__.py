@@ -1,3 +1,9 @@
+"""
+This file contains the Template class for text template management.
+It supports template creation from files, dynamic content replacement,
+and resetting content to its original state.
+"""
+
 from typing import Self
 
 

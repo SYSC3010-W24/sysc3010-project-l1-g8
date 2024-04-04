@@ -67,7 +67,6 @@ def home():
 
     # Get emergency flag from Firebase
     emergency_flag = db.child("emergency").get().val()
-    color_class = "fire" if emergency_flag else "no-fire"
 
     # Check if the user is logged in
     if "email" in session:
@@ -87,7 +86,6 @@ def home():
             "index.html",
             current_temperature=round(latest_temperature[-1], 2),
             emergency_flag=emergency_flag,
-            color_class=color_class,
             current_smoke=round(latest_smoke[-1], 2),
             full_username=full_username,
             username=username,
@@ -157,7 +155,9 @@ def login():
         else:
             # Show an error message for user not found
             return render_template(
-                "login.html", error_message="User not found")
+                "login.html",
+                error_message="User not found",
+            )
 
     return render_template("login.html")
 
@@ -180,7 +180,8 @@ def signup():
                     {
                         "success": False,
                         "message": "Account info required",
-                    }),
+                    }
+                ),
                 400,
             )
 
@@ -225,6 +226,14 @@ def deactivate_alarm():
     return jsonify(success=True), 200
 
 
+@app.route("/api/emergency", methods=["GET"])
+def emergency_status():
+    """
+    Returns the status of the emergency flag in the Firebase database.
+    """
+    return {"status": db.child("emergency").get().val()}, 200
+
+
 @app.route("/api/timeout/<duration>", methods=["GET"])
 def set_timeout(duration: str):
     """Sets a timeout duration in Firebase."""
@@ -250,9 +259,8 @@ def set_timeout(duration: str):
         )
 
     # Get timestamp for timeout
-    timestamp = (
-        dt.datetime.now().isoformat().replace(".", "+")
-    )  # Remove . because Firebase doesn't allow it
+    # Remove . because Firebase doesn't allow it
+    timestamp = dt.datetime.now().isoformat().replace(".", "+")
     db.child("timeout").child(timestamp).set(numeric_duration)
 
     return jsonify(success=True), 200

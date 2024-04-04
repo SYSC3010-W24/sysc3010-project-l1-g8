@@ -141,14 +141,18 @@ def main() -> None:
         timestamp, smoke_ppm = smoke.get()
 
         # Alert of emergency if threshold is exceeded or if there is smoke
-        if thresholds.temperature_exceeded(temperature) or thresholds.smoke_exceeded(smoke_ppm):
+        if thresholds.temperature_exceeded(
+            temperature
+        ) or thresholds.smoke_exceeded(smoke_ppm):
             db.child("emergency").set(True)
             local_emergency = True
             for device in devices:
                 device.send_message(Messages.EMERGENCY)
 
         # Write measurement to database
-        db.child("sensordata").child("temperature").child(timestamp).set(temperature)
+        db.child("sensordata").child("temperature").child(timestamp).set(
+            temperature
+        )
         db.child("sensordata").child("smoke").child(timestamp).set(smoke_ppm)
 
         # Update configuration unless there's a timeout
@@ -156,7 +160,9 @@ def main() -> None:
             thresholds.update(db)
 
         # Check for timeout
-        timeout_changed, current_timeout, duration = get_latest_timeout(current_timeout, db)
+        timeout_changed, current_timeout, duration = get_latest_timeout(
+            current_timeout, db
+        )
 
         if timeout_changed:
             # If a timer is already running, stop it

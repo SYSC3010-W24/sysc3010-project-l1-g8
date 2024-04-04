@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="static/index.css" />
@@ -8,244 +9,290 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script src="script.js"></script>
     <title>FANS</title>
-  </head>
-  <body>
-    
+</head>
+
+<body>
+
     <script>
 
-      const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
-      const TIMEOUT_URL = {{url_for("set_timeout", duration="3600") | tojson}};
+        const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
+        const TIMEOUT_URL = {{url_for("set_timeout", duration = "3600") | tojson}};
+        const EMERGENCY_STATUS_URL = {{url_for("emergency_status") | tojson}};
 
-      function deactivate_emergency() {
-          fetch(DEACTIVATE_URL).then((response) => {
-              window.location.reload();
-          });
-      }
+        function deactivate_emergency() {
+            fetch(DEACTIVATE_URL).then((response) => {
+                refresh_emergency_status();
+            });
+        }
 
-      function submit_timeout() {
-          const field = document.getElementById("timeout");
-          const duration = field.value;
-          const timeout_with_duration = TIMEOUT_URL.replace("3600", duration);
-          fetch(timeout_with_duration).then((response) => {
+        function refresh_emergency_status() {
+            fetch(EMERGENCY_STATUS_URL).then((response) => {
+                response.json().then(data => {
 
-              if (response.status != 200){
-                  response.json().then(message => {
-                      document.getElementById("timeout-success").textContent = message.message;
-                  })
-                  return;
-              }
+                    const alarm_box1 = document.getElementsByClassName("alarm-status-box1")[0];
+                    const alarm_box2 = document.getElementsByClassName("alarm-status-box2")[0];
 
-              document.getElementById("timeout-success").textContent = "Timeout set successfully!";
+                    let show_class = "no-fire";
+                    let hide_class = "fire";
 
-              // Remove success message after 10s
-              setTimeout(() => {
-                  document.getElementById("timeout-success").textContent = "";
-              }, 5000);
-          })
-      }
+                    if (data.status) {
+                        show_class = "fire";
+                        hide_class = "no-fire";
+                        alarm_box1.classList.add("fire");
+                        alarm_box2.classList.add("fire");
+                        alarm_box1.classList.remove("no-fire");
+                        alarm_box2.classList.remove("no-fire");
+                    } else {
+                        alarm_box1.classList.remove("fire");
+                        alarm_box2.classList.remove("fire");
+                        alarm_box1.classList.add("no-fire");
+                        alarm_box2.classList.add("no-fire");
+                    }
+
+                    const show_elements = document.getElementsByClassName(show_class);
+                    const hide_elements = document.getElementsByClassName(hide_class);
+
+                    for (var i = 0; i < show_elements.length; i++) {
+                        show_elements[i].style.display = "block";
+                    }
+                    for (var i = 0; i < hide_elements.length; i++) {
+                        hide_elements[i].style.display = "none";
+                    }
+                })
+            });
+        }
+
+        function submit_timeout() {
+            const field = document.getElementById("timeout");
+            const duration = field.value;
+            const timeout_with_duration = TIMEOUT_URL.replace("3600", duration);
+            fetch(timeout_with_duration).then((response) => {
+
+                if (response.status != 200) {
+                    response.json().then(message => {
+                        document.getElementById("timeout-success").textContent = message.message;
+                    })
+                    return;
+                }
+
+                document.getElementById("timeout-success").textContent = "Timeout set successfully!";
+
+                // Remove success message after 10s
+                setTimeout(() => {
+                    document.getElementById("timeout-success").textContent = "";
+                }, 5000);
+            })
+        }
     </script>
 
     <main>
-      <div class="nav-bar">
-        <a href="/">Home</a>
-        <a href="/settings">Settings</a>
-        <a href="/logout">Logout</a>
-      </div>
-
-      <div class="content-box">
-        <div class="fire-alarm-box">
-          <p class="title-1">Welcome {{full_username}}</p>
-          <br />
-          <div class="status-and-timer-container">
-            <div class="alarm-status-box1 {{ color_class }}">
-              <p><b>{{username}}'s Fire Alarm</b></p>
-              <div class="alarm-status-box2 {{color_class}}">
-                {% if emergency_flag %}
-                <p class="fire">FIRE DETECTED</p>
-                {% else %}
-                <p class="no-fire">Clear</p>
-                {% endif %}
-              </div>
-              {% if emergency_flag %}
-              <button id="deactivate" onclick="deactivate_emergency()">Deactivate Emergency</button>
-              {% endif %}
-            </div>
-            <div class="alarm-status-box1">
-              <p><b>{{username}}'s Pager</b></p>
-              <div class="alarm-status-box2 {{color_class}}">
-                {% if emergency_flag %}
-                <p class="fire">Disconnected</p>
-                {% else %}
-                <p class="no-fire">Connected</p>
-                {% endif %}
-              </div>
-            </div>
-            <div class="timer-settings">
-              <p class="title-2">Timeout System</p>
-              <input id="timeout" type="number" min="1" max="1440" step="60" value="3600"></input>
-              <br />
-              <p id="timeout-label">System timeout in seconds (maximum 4 hours/7200 seconds).</p>
-              <br />
-              <button id="submit-timeout" onclick="submit_timeout()">Submit Timeout</button>
-              <p id="timeout-success"></p>
-            </div>
-          </div>
+        <div class="nav-bar">
+            <a href="/">Home</a>
+            <a href="/settings">Settings</a>
+            <a href="/logout">Logout</a>
         </div>
-        
+
+        <div class="content-box">
+            <div class="fire-alarm-box">
+                <p class="title-1">Welcome {{full_username}}</p>
+                <br />
+                <div class="status-and-timer-container">
+                    <div class="alarm-status-box1 no-fire">
+                        <p><b>{{username}}'s Fire Alarm</b></p>
+                        <div class="alarm-status-box2 no-fire">
+                            <p style="display: none;" class="fire">FIRE DETECTED</p>
+                            <p class="no-fire">Clear</p>
+                        </div>
+                        <button style="display: none;" class="fire" id="deactivate"
+                            onclick="deactivate_emergency()">Deactivate
+                            Emergency</button>
+                    </div>
+                    <div class="alarm-status-box1">
+                        <p><b>{{username}}'s Pager</b></p>
+                        <div class="alarm-status-box2 no-fire">
+                            <p style="display: none;" class="fire">Disconnected</p>
+                            <p class="no-fire">Connected</p>
+                        </div>
+                    </div>
+                    <div class="timer-settings">
+                        <p class="title-2">Timeout System</p>
+                        <input id="timeout" type="number" min="1" max="1440" step="60" value="3600"></input>
+                        <br />
+                        <p id="timeout-label">System timeout in seconds (maximum 4 hours/7200 seconds).</p>
+                        <br />
+                        <button id="submit-timeout" onclick="submit_timeout()">Submit Timeout</button>
+                        <p id="timeout-success"></p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="data-box">
-          <div class="graph-container">
-            <div class="temperature-box">
-              <p class="title-2">Temperature</p>
-              <p style="color:var(--text-color)" class="current-temp">Current Temperature: {{current_temperature}} &#176;C</p>
-              <canvas id="temperature-graph" width="320" height="320"></canvas>
+            <div class="graph-container">
+                <div class="temperature-box">
+                    <p class="title-2">Temperature</p>
+                    <p style="color:var(--text-color)" id="current-temp" class="current-temp">Current Temperature:
+                        {{current_temperature}} &#176;C</p>
+                    <canvas id="temperature-graph" width="325" height="325"></canvas>
+                </div>
+
+
+
+                <script>
+
+                    const GET_TEMPERATURE = {{url_for("get_temperature") | tojson}};
+
+                    // Temperature line chart
+                    let temperature_chart = new Chart(document.getElementById("temperature-graph"), {
+                        type: 'line',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                data: [],
+                                label: "Temperature",
+                                borderColor: "#ff4d4d",
+                                fill: false
+                            }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Temperature (C)"
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        max: 80
+                                    }
+                                }],
+                                xAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Time",
+                                    }
+                                }]
+                            },
+                            title: {
+                                display: true,
+                                text: "Temperature of system environment"
+                            },
+                            hover: {
+                                mode: 'index',
+                                intersect: true
+                            },
+                        }
+                    });
+
+                    function refresh_temp_values() {
+                        fetch(GET_TEMPERATURE).then((response) => {
+                            response.json().then(data => {
+                                temperature_chart.data.labels = data.timestamps;
+                                temperature_chart.data.datasets[0].data = data.vals;
+                                document.getElementById("current-temp").innerHTML = `Current Temperature: ${data.vals[0].toFixed(2)} &#176;C`
+                                temperature_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                                temperature_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                                temperature_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                temperature_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                temperature_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                temperature_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                temperature_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                temperature_chart.update();
+                            })
+                        })
+                    }
+                </script>
+
+                <div class="smoke-box">
+                    <p class="title-2" styles="align-items:center;">Smoke</p>
+                    <p style="color:var(--text-color)" id="current-smoke">Current Smoke Level: {{current_smoke}} PPM</p>
+                    <canvas id="smoke-graph" width="325" height="325"></canvas>
+                </div>
+
+                <script>
+
+                    const GET_SMOKE = {{url_for("get_smoke") | tojson}};
+
+                    // Temperature line chart
+                    let smoke_chart = new Chart(document.getElementById("smoke-graph"), {
+                        type: 'line',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                data: [],
+                                label: "Smoke Concentration",
+                                borderColor: "#ff4d4d",
+                                fill: false
+                            }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Smoke (PPM)"
+                                    },
+                                    ticks: {
+                                        min: 0,
+                                        max: 10000
+                                    }
+                                }],
+                                xAxes: [{
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: "Time",
+                                    }
+                                }]
+                            },
+                            title: {
+                                display: true,
+                                text: "Smoke concentration of system environment"
+                            },
+                            hover: {
+                                mode: 'index',
+                                intersect: true
+                            },
+                        }
+                    });
+
+                    function refresh_smoke_values() {
+                        fetch(GET_SMOKE).then((response) => {
+                            response.json().then(data => {
+                                smoke_chart.data.labels = data.timestamps;
+                                smoke_chart.data.datasets[0].data = data.vals;
+                                document.getElementById("current-smoke").textContent = `Current Smoke Level: ${data.vals[0].toFixed(2)} PPM`
+                                smoke_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                                smoke_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
+                                smoke_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                smoke_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                smoke_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                smoke_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                smoke_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
+                                smoke_chart.update();
+                            })
+                        })
+                    }
+
+                    function refresh_data() {
+                        refresh_smoke_values()
+                        refresh_temp_values()
+                        refresh_emergency_status();
+                        // Refresh every three seconds
+                        setTimeout(() => {
+                            refresh_data();
+                        }, 3000);
+                    }
+
+                    refresh_data(); // Refresh when page loads
+                </script>
             </div>
-          
-          
-
-            <script>
-
-                const GET_TEMPERATURE = {{url_for("get_temperature") | tojson}};
-
-                // Temperature line chart
-                let temperature_chart = new Chart(document.getElementById("temperature-graph"), {
-                  type: 'line',
-                  data: {
-                    labels: [],
-                    datasets: [{
-                        data: [],
-                        label: "Temperature",
-                        borderColor: "#ff4d4d",
-                        fill: false
-                      }
-                    ]
-                  },
-                  options: {
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Temperature (C)"
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Time",
-                            }
-                        }]
-                    },
-                    title: {
-                      display: true,
-                      text: "Temperature of system environment"
-                    },
-                    hover: {
-                     mode: 'index',
-                     intersect: true
-                    },
-                  }
-                });
-
-                function refresh_temp_values() {
-                    fetch(GET_TEMPERATURE).then((response) => {
-                        response.json().then(data => {
-                            temperature_chart.data.labels = data.timestamps;
-                            temperature_chart.data.datasets[0].data = data.vals;
-                            temperature_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                          temperature_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                          temperature_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                          temperature_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                          temperature_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                          temperature_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                            temperature_chart.update();
-                        })
-                    })
-                }
-            </script>
-
-          <div class="smoke-box">
-            <p class="title-2" styles="align-items:center;">Smoke</p>
-            <p style="color:var(--text-color)">Current Smoke Level: {{current_smoke}} PPM</p>
-            <canvas id="smoke-graph" width="320" height="320"></canvas>
-          </div>
-
-            <script>
-
-                const GET_SMOKE = {{url_for("get_smoke") | tojson}};
-
-                // Temperature line chart
-                let smoke_chart = new Chart(document.getElementById("smoke-graph"), {
-                  type: 'line',
-                  data: {
-                    labels: [],
-                    datasets: [{
-                        data: [],
-                        label: "Smoke Concentration",
-                        borderColor: "#ff4d4d",
-                        fill: false
-                      }
-                    ]
-                  },
-                  options: {
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Smoke (PPM)"
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: "Time",
-                            }
-                        }]
-                    },
-                    title: {
-                      display: true,
-                      text: "Smoke concentration of system environment"
-                    },
-                    hover: {
-                     mode: 'index',
-                     intersect: true
-                    },
-                  }
-                });
-
-                function refresh_smoke_values() {
-                    fetch(GET_SMOKE).then((response) => {
-                        response.json().then(data => {
-                            smoke_chart.data.labels = data.timestamps;
-                            smoke_chart.data.datasets[0].data = data.vals;
-                            smoke_chart.options.title.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.options.legend.labels.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color');
-                            smoke_chart.options.scales.xAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                            smoke_chart.options.scales.yAxes[0].scaleLabel.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                            smoke_chart.options.scales.yAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                            smoke_chart.options.scales.xAxes[0].ticks.fontColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                            smoke_chart.data.datasets[0].borderColor = getComputedStyle(document.documentElement).getPropertyValue('--link-hover-color');
-                            smoke_chart.update();
-                        })
-                    })
-                }
-
-                function refresh_charts() {
-                    refresh_smoke_values()
-                    refresh_temp_values()
-                    // Refresh every three seconds
-                    setTimeout(() => {
-                        refresh_charts();
-                    }, 3000);
-                }
-
-                refresh_charts(); // Refresh when page loads
-            </script>
-      </div>  
-      </div>
-      </div>
+        </div>
+        </div>
     </main>
     <script src="static/script.js"></script>
-  </body>
+</body>
+
 </html>
