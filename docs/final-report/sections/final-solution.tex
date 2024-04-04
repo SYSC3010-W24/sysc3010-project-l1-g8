@@ -22,7 +22,7 @@ can disable the emergency response from the UI when the emergency has been resol
 system’s emergency response in scenarios where the system may be falsely triggered (smokey cooking). Finally, the UI
 also provides an interface for user contact information to be added to the subscriber list for emergency notifications.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\imagewidth]{../assets/FANSDeployment.png}
     \caption{The FANS deployment diagram.}
@@ -38,13 +38,12 @@ responsive fire alarm solution.
 The system’s core, the Smoke Detection System, communicates with its temperature and smoke sensors using the I2C and
 SPI protocols over the GPIO pins of a Raspberry Pi 4.
 
-\subsubsection{I2C Communication}
+\subsubsection{I2C \& SPI Communication}
 
-The Raspberry Pi 4 utilizes the I2C protocol to communicate with an array of temperature and smoke sensors, monitoring
-environmental conditions to detect potential fire hazards. This is not visible in the sequence diagrams as they show
-the bigger picture of the communication of the nodes with the sensors.
+The Raspberry Pi 4 utilizes the I2C and SPI protocol to communicate with temperature and smoke sensors, monitoring
+environmental conditions to detect potential fire hazards. These messages are outlined in \ref{table:i2c}.
 
-\begin{table}[H]
+\begin{table}
     \centering
     \begin{tabular}{| c | c | c | c | c |}
         \hline
@@ -56,16 +55,17 @@ the bigger picture of the communication of the nodes with the sensors.
         \hline
     \end{tabular}
     \caption{Messages for I2C communication in FANS.}
+    \label{table:i2c}
 \end{table}
 
 \subsubsection{Local Area Network Communication}
 
 Nodes within the FANS (smoke detection, alarm, and notification systems) communicate over a local network using UDP
-packets, facilitating real-time alerts and system coordination.
+packets, facilitating real-time alerts and system coordination. The messages sent over UDP use numerical value to
+encode messages. The representation agreed upon is shown in Table \ref{table:udp-rep}. The messages sent are in Table
+\ref{table:udp-messages}
 
-The messages sent over UDP use numerical value to encode messages. The representation agreed upon is as follows:
-
-\begin{table}[H]
+\begin{table}
     \centering
     \begin{tabular}{| c | c |}
         \hline
@@ -77,9 +77,10 @@ The messages sent over UDP use numerical value to encode messages. The represent
         \hline
     \end{tabular}
     \caption{Numerical representation of messages over UDP in FANS.}
+    \label{table:udp-rep}
 \end{table}
 
-\begin{table}[H]
+\begin{table}
     \centering
     \begin{tabular}{| c | c | c | c | c |}
         \hline
@@ -95,11 +96,14 @@ The messages sent over UDP use numerical value to encode messages. The represent
         \hline
     \end{tabular}
     \caption{Messages for local area network communication in FANS.}
+    \label{table:udp-messages}
 \end{table}
 
 \subsubsection{Cloud Database Communication}
 
-\begin{table}[H]
+Messages between each node and the Firebase database are shown in Table \ref{table:firebase}.
+
+\begin{table}
     \centering
     \begin{tabular}{| c | c | c | c | c |}
         \hline
@@ -117,6 +121,7 @@ The messages sent over UDP use numerical value to encode messages. The represent
         \hline
     \end{tabular}
     \caption{Messages for cloud database communication in FANS.}
+    \label{table:firebase}
 \end{table}
 
 {
@@ -223,64 +228,68 @@ The FANS system will satisfy six core use cases highlighted and illustrated in t
 
 \subsubsection{Trigger Emergency Use Case}
 
-The Trigger Emergency Use Case represents the critical functionality of the FANS, where the system detects a potential
-fire through its smoke detection system and initiates a series of automated responses to mitigate the situation. As
-depicted in the message sequence diagram, the process begins when the smoke detection system identifies smoke and
-potentially high temperatures indicative of a fire. This detection triggers the system to send a notification to the
-alarm system and the notification system. The alarm system responds by sounding an audible and visible alert to notify
-occupants of the building immediately. Concurrently, the notification system sends out emergency alerts via SMS and
-email to all registered users, ensuring they are informed of the danger regardless of their current location. This
-response ensures that all the users are promptly alerted to the emergency, resulting in a quick evacuation and response
-to the detected threat.
+The trigger emergency use case shown in Figure \ref{fig:trigger-emerg} represents the critical functionality of the
+FANS, where the system detects a potential fire through its smoke detection system and initiates a series of automated
+responses to mitigate the situation. As depicted in the message sequence diagram, the process begins when the smoke
+detection system identifies smoke and potentially high temperatures indicative of a fire. This detection triggers the
+system to send a notification to the alarm system and the notification system. The alarm system responds by sounding an
+audible and visible alert to notify occupants of the building immediately. Concurrently, the notification system sends
+out emergency alerts via SMS and email to all registered users, ensuring they are informed of the danger regardless of
+their current location. This response ensures that all the users are promptly alerted to the emergency, resulting in a
+quick evacuation and response to the detected threat.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\imagewidth]{../assets/sequence/TriggerEmergencyUseCaseSequenceDiagram.png}
     \caption{The sequence diagram for the trigger emergency use case.}
+    \label{fig:trigger-emerg}
 \end{figure}
 
 \subsubsection{Add New Contact Information Use Case}
 
-This use case outlined the process by which users added new contact information to the FANS database. Through the web
-GUI, users entered new contact details such as phone numbers and email addresses, enabling the system to send emergency
-notifications. Upon submission, these details were successfully updated in the real-time database. The message sequence
-diagram for this use case (not shown) illustrated the interactions between the user, the web GUI, and the database,
-culminating in the notification system being updated with the new contact information. This ensured that the FANS could
-reach the user through various channels in the event of an emergency, thereby enhancing the system’s effectiveness in
-communicating critical alerts.
+This use case shown in Figure \ref{fig:add-contact} outlined the process by which users added new contact information
+to the FANS database. Through the web GUI, users entered new contact details such as phone numbers and email addresses,
+enabling the system to send emergency notifications. Upon submission, these details were successfully updated in the
+real-time database. The message sequence diagram for this use case (not shown) illustrated the interactions between the
+user, the web GUI, and the database, culminating in the notification system being updated with the new contact
+information. This ensured that the FANS could reach the user through various channels in the event of an emergency,
+thereby enhancing the system’s effectiveness in communicating critical alerts.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\imagewidth]{../assets/sequence/AddingNewContactInformationSequenceDiagram.png}
     \caption{The sequence diagram for the adding new contact information use case.}
+    \label{fig:add-contact}
 \end{figure}
 
 \subsubsection{Change Emergency Threshold Use Case}
 
 Adjusting the smoke detection threshold was an essential feature that allowed users to customize the sensitivity of the
-FANS based on environmental conditions and personal preferences. This use case involved a user accessing the web GUI to
-modify the threshold settings determining when the smoke detection system should trigger an alert. The message sequence
-diagram (not shown) visualized the steps involved, from the user’s interaction with the GUI to update the threshold to
-the real-time database’s role in storing this new setting. The smoke detection system then retrieved and applied the
-updated threshold, ensuring that the FANS operated according to the user’s specifications, balancing sensitivity and
-minimizing false alarms.
+FANS based on environmental conditions and personal preferences. This use case shown in \ref{fig:change-thresh}
+involved a user accessing the web GUI to modify the threshold settings determining when the smoke detection system
+should trigger an alert. The message sequence diagram (not shown) visualized the steps involved, from the user’s
+interaction with the GUI to update the threshold to the real-time database’s role in storing this new setting. The
+smoke detection system then retrieved and applied the updated threshold, ensuring that the FANS operated according to
+the user’s specifications, balancing sensitivity and minimizing false alarms.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\imagewidth]{../assets/sequence/ChangingSmokeDetectionThresholdSequenceDiagram.png}
     \caption{The sequence diagram for the changing emergency threshold use case.}
+    \label{fig:change-thresh}
 \end{figure}
 
 \subsubsection{Emergency Response Use Case}
 
-This scenario highlighted the FANS’s capability to notify users in the event of a detected fire. Upon detecting a fire,
-the notification system successfully queried the cloud database for contact information and then sent out alerts via
-SMS and email to all users. The message sequence diagram for this use case (provided above) captured the sequence of
-these interactions, showcasing how the system ensured that occupants were informed and ready to address the emergency
-promptly.
+The scenario in Figure \ref{fig:emergency-resp} highlights the FANS’s capability to notify users in the event of a
+detected fire. Upon detecting a fire, the notification system successfully queried the cloud database for contact
+information and then sent out alerts via SMS and email to all users. The message sequence diagram for this use case
+(provided above) captured the sequence of these interactions, showcasing how the system ensured that occupants were
+informed and ready to address the emergency promptly.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\imagewidth]{../assets/sequence/EmergencyResponseUseCase.png}
     \caption{The sequence diagram for the emergency response use case.}
+    \label{fig:emergency-resp}
 \end{figure}

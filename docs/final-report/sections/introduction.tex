@@ -30,3 +30,30 @@ fire safety, and thereby mitigate fire disasters and protect the well-being of i
 across Canada \cite{smoke-alarm-gc}.
 
 \subsection{Overview of Solution}
+
+In our project, we implemented the Fire Alarm Notification System (FANS), a real-time system designed for efficient
+fire detection and alerting. The system comprised several key components, seamlessly integrated to ensure a
+comprehensive approach to fire safety. We outlined the system's architecture in a detailed deployment diagram,
+illustrating the interconnections between the various components.
+
+The Alarm System, based on a Raspberry Pi 4, triggered audible and visual alerts promptly in the event of a fire,
+ensuring occupants were promptly warned. Our Smoke Detection System, also utilizing a Raspberry Pi 4, continuously
+monitored the environment for smoke using advanced sensors. It served as the primary detection mechanism, activating
+the alarm and notification systems upon detecting smoke.
+
+Our Notification System, operating on a Raspberry Pi 4, promptly sent out emergency alerts to predefined contacts,
+including local authorities and individuals, ensuring rapid response to the detected fire. We employed a real-time
+cloud database to store critical data, facilitating remote monitoring and configuration, thus ensuring optimal system
+functionality.
+
+Additionally, we utilized a Pi Pico Device to provide haptic feedback, offering an additional layer of alert through
+physical sensation, ensuring even those outside the hearing range of the alarm or with hearing impairments were
+alerted.
+
+Our design emphasized scalability, enabling easy expansion with additional sensors or alarm units as needed. Each
+component functioned independently, ensuring reliability and ease of maintenance. Communication between components was
+facilitated through a local network, with the cloud database supporting remote access and control. We incorporated
+advanced communication protocols for efficient data exchange and alerting. The smoke detection system employed the I2C
+protocol for sensor communication, while UDP packets facilitated local network communication between the system's
+nodes. HTTP requests were utilized for interactions with the cloud-hosted real-time Firebase database, ensuring timely
+updates and access to system data.
