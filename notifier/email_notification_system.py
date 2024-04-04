@@ -54,7 +54,9 @@ def send_email(emailMessage: EmailMessage, email: str, password: str) -> None:
 
 
 def send_message(client, message: str, phoneNumber: str) -> None:
-    message = client.messages.create(from_="+16506678309", body=message, to=phoneNumber)
+    message = client.messages.create(
+        from_="+16506678309", body=message, to=phoneNumber
+    )
 
 
 def connect_to_firebase(config: dict):
