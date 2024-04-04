@@ -1,6 +1,6 @@
 # 🔥 FANS (Fire Alarm Notification System)
 
-![](docs\assets\FANS-Project-Image.png)
+![Project Image](./docs/assets/FANS-Project-Image.png)
 
 FANS is a comprehensive multi-system solution for fire-related emergencies that require prompt notification of persons
 in the affected area.
@@ -12,14 +12,15 @@ FANS provides a dashboard for live monitoring of its environment, as well as an 
 its sensitivity to pressure changes.
 
 ## Table Of Contents
+
 - [Contributors](#contributors)  
 - [Repository Organization](#repository-organization)
-- [Installation and Setup Guide](#installation-and-setup-guide) 
-   - [Sensor Pi](#sensor-pi)
-   - [Alarm System](#alarm-system)
-   - [Notifier](#notifier)
-   - [Pico Alarm](#pico-alarm)
-   - [Web App](#web-app)
+- [Installation and Setup Guide](#installation-and-setup-guide)
+  - [Sensor Pi](#sensor-pi)
+  - [Alarm System](#alarm-system)
+  - [Notifier](#notifier)
+  - [Pico Alarm](#pico-alarm)
+  - [Web App](#web-app)
 
 ## Contributors
 
@@ -52,6 +53,7 @@ Guides to install and run each system node are provided below. Once all nodes ha
 functional.
 
 ### Installation Table Of Contents
+
 - [Sensor Pi](#sensor-pi)
 - [Alarm System](#alarm-system)
 - [Notifier](#notifier)
@@ -205,7 +207,6 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 - The buzzer and red LED activate to indicate an emergency, with the green LED indicating normal operations.
 - The button serves as an acknowledgment mechanism to stop the alarm and reset the system to its normal state.
 
-[wiki]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/wiki
 [alarm]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/tree/main/alarm-system
 [sensor-pi]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/tree/main/sensor-pi
 [gui]: https://github.com/SYSC3010-W24/sysc3010-project-l1-g8/tree/main/web-app
@@ -214,8 +215,7 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 [pi-pinout]: https://www.the-diy-life.com/wp-content/uploads/2021/05/Raspberry-Pi-4-Pinout.png
 
 ### Web App
-![](docs\assets\gui\final-homepage.png)
-In order to set up the `web-app` node, you will need: 
+In order to set up the `web-app` node, you will need:
 
 - Raspberry Pi 4
 - Access to the internet
@@ -232,5 +232,6 @@ python3 main.py
 ```
 
 In the terminal, click on the second http link to access the web app on your browser:  
-`Running on http://your.ip.address`
+`Running on http://your.ip.address` 
 
+![Web App home page image](./docs/assets/gui/final-homepage.png)
