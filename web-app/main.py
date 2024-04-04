@@ -154,7 +154,10 @@ def login():
                 )
         else:
             # Show an error message for user not found
-            return render_template("login.html", error_message="User not found")
+            return render_template(
+                "login.html",
+                error_message="User not found",
+            )
 
     return render_template("login.html")
 
