@@ -7,8 +7,10 @@
   --border-color-dark: #fff6e0;
   --connection-color-dark: #4dff4d;
 
-  --background-color-light: #ffffff; /* Updated background color */
-  --text-color-light: #23282e; /* Updated text color */
+  --background-color-light: #ffffff;
+  /* Updated background color */
+  --text-color-light: #23282e;
+  /* Updated text color */
   --link-hover-color-light: #0c7bb3;
   --border-color-light: #23282e;
   --connection-color-light: #2ecc71;
@@ -114,12 +116,14 @@ button:hover {
   border-color: var(--link-hover-color);
   color: var(--link-hover-color);
   cursor: pointer;
-  padding: 14px 17px; /* Increase padding on hover */
+  padding: 14px 17px;
+  /* Increase padding on hover */
   font-size: 0.75em;
 }
 
 form {
-  padding: 10px; /* Add padding to the form */
+  padding: 10px;
+  /* Add padding to the form */
 }
 
 body {

@@ -5,8 +5,10 @@
   --border-color-dark: #fff6e0;
   --connection-color-dark: #4dff4d;
 
-  --background-color-light: #ffffff; /* Updated background color */
-  --text-color-light: #23282e; /* Updated text color */
+  --background-color-light: #ffffff;
+  /* Updated background color */
+  --text-color-light: #23282e;
+  /* Updated text color */
   --link-hover-color-light: #0c7bb3;
   --border-color-light: #23282e;
   --connection-color-light: #2ecc71;
@@ -46,6 +48,7 @@ main {
   display: flex;
   flex-direction: column;
 }
+
 .content-box {
   display: flex;
   flex-direction: column;
@@ -70,6 +73,7 @@ main {
   grid-template-columns: repeat(3, 1fr);
   gap: 1em;
 }
+
 .welcome-user p {
   font-size: 0.5em;
   margin-bottom: 10px;
@@ -178,6 +182,7 @@ main {
 .smoke-graph p {
   color: var(--text-color);
 }
+
 .temperature-box,
 .smoke-box {
   text-align: center;
@@ -186,6 +191,7 @@ main {
 .current-temp p {
   justify-content: center;
 }
+
 .graph-container {
   display: flex;
   flex-direction: row;

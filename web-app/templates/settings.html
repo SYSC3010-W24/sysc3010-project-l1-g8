@@ -1,121 +1,123 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="static/settings.css" />
-    <link rel="stylesheet" href="static/global.css" />
-    
-    <title>FANS</title>
-  </head>
-  
-  <script>
-    const TEMP_THRESH = {{url_for("set_temperature_threshold", degrees="40") | tojson}};
-    const SMOKE_THRESH = {{url_for("set_smoke_threshold", ppm="500") | tojson}};
 
-    function set_temp_thresh() {
-        const field = document.getElementById("temp-thresh");
-        const degrees = field.value;
-        const new_temp_thresh = TEMP_THRESH.replace("40", degrees);
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="static/settings.css" />
+  <link rel="stylesheet" href="static/global.css" />
 
-        fetch(new_temp_thresh).then((response) => {
-            if (response.status != 200){
-                response.json().then(message => {
-                    document.getElementById("threshold-success").textContent = message.message;
-                })
-                return;
-            }
-            document.getElementById("threshold-success").textContent = "Threshold set successfully!";
-            // Remove success message after 10s
-            setTimeout(() => {
-                document.getElementById("threshold-success").textContent = "";
-            }, 5000);
+  <title>FANS</title>
+</head>
+
+<script>
+  const TEMP_THRESH = {{ url_for("set_temperature_threshold", degrees = "40") | tojson}};
+  const SMOKE_THRESH = {{ url_for("set_smoke_threshold", ppm = "500") | tojson}};
+
+  function set_temp_thresh() {
+    const field = document.getElementById("temp-thresh");
+    const degrees = field.value;
+    const new_temp_thresh = TEMP_THRESH.replace("40", degrees);
+
+    fetch(new_temp_thresh).then((response) => {
+      if (response.status != 200) {
+        response.json().then(message => {
+          document.getElementById("threshold-success").textContent = message.message;
         })
-    }
+        return;
+      }
+      document.getElementById("threshold-success").textContent = "Threshold set successfully!";
+      // Remove success message after 10s
+      setTimeout(() => {
+        document.getElementById("threshold-success").textContent = "";
+      }, 5000);
+    })
+  }
 
-    function set_smoke_thresh() {
+  function set_smoke_thresh() {
 
-        const field = document.getElementById("smoke-thresh");
-        const ppm = field.value;
-        const new_smoke_thresh = SMOKE_THRESH.replace("500", ppm);
+    const field = document.getElementById("smoke-thresh");
+    const ppm = field.value;
+    const new_smoke_thresh = SMOKE_THRESH.replace("500", ppm);
 
-        fetch(new_smoke_thresh).then((response) => {
-            if (response.status != 200){
-                response.json().then(message => {
-                    document.getElementById("threshold-success").textContent = message.message;
-                })
-                return;
-            }
-
-            document.getElementById("threshold-success").textContent = "Threshold set successfully!";
-
-            // Remove success message after 10s
-            setTimeout(() => {
-                document.getElementById("threshold-success").textContent = "";
-            }, 5000);
+    fetch(new_smoke_thresh).then((response) => {
+      if (response.status != 200) {
+        response.json().then(message => {
+          document.getElementById("threshold-success").textContent = message.message;
         })
-    }
-  </script>
+        return;
+      }
 
-  <body>
-    <main>
-      <div class="nav-bar">
-        <a href="/">Home</a>
-        <a href="/settings">Settings</a>
-        <a href="/logout">Logout</a>
-      </div>
+      document.getElementById("threshold-success").textContent = "Threshold set successfully!";
 
-      <div class="settings-box">
-        <p class="title-2"><b>Account Information</b></p>
-        <p>Name: {{full_username}}</p>
-        <p>Email: {{user_email}}</p>
-      </div>
+      // Remove success message after 10s
+      setTimeout(() => {
+        document.getElementById("threshold-success").textContent = "";
+      }, 5000);
+    })
+  }
+</script>
 
-      <div class="settings-box">
-        <p class="title-2"><b>Administration Controls</b></p>
-        <p><b>Add New User</b></p>
-        <form action="/add_user" method="POST">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required><br><br>
-          
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required><br><br>
-          
-          <label for="phone_number">Phone Number:</label>
-          <input type="text" id="phone_number" name="phone_number" required><br><br>
-          
-          <label for="email">Email:</label>
-          <input type="text" id="email" name="email" required><br><br>
-          
-          <button id="add-user-btn" type="submit" style="">Add User</button>
+<body>
+  <main>
+    <div class="nav-bar">
+      <a href="/">Home</a>
+      <a href="/settings">Settings</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <div class="settings-box">
+      <p class="title-2"><b>Account Information</b></p>
+      <p>Name: {{full_username}}</p>
+      <p>Email: {{user_email}}</p>
+    </div>
+
+    <div class="settings-box">
+      <p class="title-2"><b>Administration Controls</b></p>
+      <p><b>Add New User</b></p>
+      <form action="/add_user" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required><br><br>
+
+        <button id="add-user-btn" type="submit" style="">Add User</button>
       </form>
-        
-      </div>
 
-      <div class="settings-box">
-        <p class="title-2"><b>Alarm Settings</b></p>
-        <p>Temperature Threshold: {{ temperature_threshold}} °C</p>
-        <input id="temp-thresh" type="number" min="1", max="100" step="1" value="40"></input>
-        <br/>
-        <button onclick="set_temp_thresh()">Submit Temperature Threshold</button>
-        <br/>
-        <p>Smoke Threshold: {{ smoke_threshold }} PPM</p>
-        <input id="smoke-thresh" type="number" min="1", max="10000" step="50" value="500"></input>
-        <br/>
-        <button onclick="set_smoke_thresh()">Submit Smoke Threshold</button>
-        <br/>
-        <p id="threshold-success"></p>
-      </div>
+    </div>
 
-      
-      <div class="settings-box">
-        <p class="title-2"><b>Website Appearance</b></p>
-        <p>Theme:</p>
-        <button id="darkModeSwitch" onclick="toggleDarkMode()">Toggle Theme</button>
-      </div>
+    <div class="settings-box">
+      <p class="title-2"><b>Alarm Settings</b></p>
+      <p>Temperature Threshold: {{ temperature_threshold}} °C</p>
+      <input id="temp-thresh" type="number" min="1" , max="100" step="1" value="40"></input>
+      <br />
+      <button onclick="set_temp_thresh()">Submit Temperature Threshold</button>
+      <br />
+      <p>Smoke Threshold: {{ smoke_threshold }} PPM</p>
+      <input id="smoke-thresh" type="number" min="1" , max="10000" step="50" value="500"></input>
+      <br />
+      <button onclick="set_smoke_thresh()">Submit Smoke Threshold</button>
+      <br />
+      <p id="threshold-success"></p>
+    </div>
 
-      <div class="login-btn-box"></div>
-    </main>
-    <script src="static/script.js"></script>
-  </body>
+
+    <div class="settings-box">
+      <p class="title-2"><b>Website Appearance</b></p>
+      <p>Theme:</p>
+      <button id="darkModeSwitch" onclick="toggleDarkMode()">Toggle Theme</button>
+    </div>
+
+    <div class="login-btn-box"></div>
+  </main>
+  <script src="static/script.js"></script>
+</body>
+
 </html>

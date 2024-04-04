@@ -15,9 +15,9 @@
 
     <script>
 
-        const DEACTIVATE_URL = {{url_for("deactivate_alarm") | tojson}};
-        const TIMEOUT_URL = {{url_for("set_timeout", duration = "3600") | tojson}};
-        const EMERGENCY_STATUS_URL = {{url_for("emergency_status") | tojson}};
+        const DEACTIVATE_URL = {{ url_for("deactivate_alarm") | tojson}};
+        const TIMEOUT_URL = {{ url_for("set_timeout", duration = "3600") | tojson}};
+        const EMERGENCY_STATUS_URL = {{ url_for("emergency_status") | tojson}};
 
         function deactivate_emergency() {
             fetch(DEACTIVATE_URL).then((response) => {
@@ -141,7 +141,7 @@
 
                 <script>
 
-                    const GET_TEMPERATURE = {{url_for("get_temperature") | tojson}};
+                    const GET_TEMPERATURE = {{ url_for("get_temperature") | tojson}};
 
                     // Temperature line chart
                     let temperature_chart = new Chart(document.getElementById("temperature-graph"), {
@@ -213,7 +213,7 @@
 
                 <script>
 
-                    const GET_SMOKE = {{url_for("get_smoke") | tojson}};
+                    const GET_SMOKE = {{ url_for("get_smoke") | tojson}};
 
                     // Temperature line chart
                     let smoke_chart = new Chart(document.getElementById("smoke-graph"), {

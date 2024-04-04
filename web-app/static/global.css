@@ -7,8 +7,10 @@
   --border-color-dark: #fff6e0;
   --connection-color-dark: #4dff4d;
 
-  --background-color-light: #ffffff; /* Updated background color */
-  --text-color-light: #23282e; /* Updated text color */
+  --background-color-light: #ffffff;
+  /* Updated background color */
+  --text-color-light: #23282e;
+  /* Updated text color */
   --link-hover-color-light: #0c7bb3;
   --border-color-light: #23282e;
   --connection-color-light: #2ecc71;
