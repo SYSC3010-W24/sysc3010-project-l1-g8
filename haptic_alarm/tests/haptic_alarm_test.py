@@ -8,10 +8,10 @@ class TestFirebaseConnection(unittest.TestCase):
     @patch("haptic_alarm.pyrebase")
     def test_connect_firebase(self, mock_pyrebase):
         """
-        Test the connectFirebase function to verify it correctly initializes the Firebase app
-        and returns a database object.
+        Test connectFirebase to verify correct initialization of Firebase app
+        and return of database object.
         """
-        # Define a dummy Firebase config
+        # Define dummy Firebase config
         config = {
             "apiKey": "testKey",
             "authDomain": "testDomain",
@@ -19,25 +19,23 @@ class TestFirebaseConnection(unittest.TestCase):
             "storageBucket": "testBucket",
         }
 
-        # Set up the mock to simulate Firebase app initialization
+        # Setup mock for Firebase app initialization
         mock_db = MagicMock()
-        mock_pyrebase.initialize_app.return_value.database.return_value = (
-            mock_db
-        )
+        init_app = mock_pyrebase.initialize_app
+        init_app.return_value.database.return_value = mock_db
 
-        # Execute and verify function behavior
+        # Execute function and verify behavior
         db = connectFirebase(config)
-        mock_pyrebase.initialize_app.assert_called_once_with(config)
+        init_app.assert_called_once_with(config)
         self.assertEqual(db, mock_db)
 
     @patch("haptic_alarm.pyrebase")
     def test_connect_firebase_exception(self, mock_pyrebase):
         """
-        Test that the correct exception is raised when there's an error connecting to Firebase.
-        This simulates a failure in initializing the Firebase app and ensures the exception
-        is properly propagated or handled.
+        Test exception when there's an error connecting to Firebase.
+        Simulates Firebase app initialization failure.
         """
-        # Simulate a failure in Firebase app initialization
+        # Simulate Firebase app initialization failure
         mock_pyrebase.initialize_app.side_effect = Exception(
             "Failed to initialize Firebase"
         )
@@ -49,11 +47,11 @@ class TestFirebaseConnection(unittest.TestCase):
             "storageBucket": "testBucket",
         }
 
-        # Attempt to connect to Firebase and verify that an exception is raised
+        # Attempt connection to Firebase and check for exception
         with self.assertRaises(Exception) as context:
             connectFirebase(config)
 
-        # Optionally, assert the exception message if specific error handling is expected
+        # Check for specific exception message
         self.assertTrue(
             "Failed to initialize Firebase" in str(context.exception)
         )
@@ -65,36 +63,34 @@ class TestControlAlarm(unittest.TestCase):
     @patch("time.sleep", MagicMock())
     @patch("haptic_alarm.pyrebase")
     def test_alarm_triggered(self, mock_pyrebase, mock_GPIO):
-        # Mocking Firebase database to return True for emergency flag
+        # Mock Firebase db to return True for emergency flag
         mock_db = MagicMock()
-        mock_db.child.return_value.get.return_value.val.return_value = True
-        mock_pyrebase.initialize_app.return_value.database.return_value = (
-            mock_db
-        )
+        get_val = mock_db.child.return_value.get.return_value.val
+        get_val.return_value = True
+        init_app = mock_pyrebase.initialize_app
+        init_app.return_value.database.return_value = mock_db
 
-        # Call control_alarm
+        # Call control_alarm and verify GPIO interactions
         control_alarm()
-
-        # Assert GPIO interactions
         mock_GPIO.output.assert_called_with(17, mock_GPIO.HIGH)
 
     @patch("haptic_alarm.GPIO")
     @patch("time.sleep", MagicMock())
     @patch("haptic_alarm.pyrebase")
     def test_alarm_not_triggered(self, mock_pyrebase, mock_GPIO):
-        # Mocking Firebase database to return False for emergency flag
+        # Mock Firebase db to return False for emergency flag
         mock_db = MagicMock()
-        mock_db.child.return_value.get.return_value.val.return_value = False
-        mock_pyrebase.initialize_app.return_value.database.return_value = (
-            mock_db
-        )
+        get_val = mock_db.child.return_value.get.return_value.val
+        get_val.return_value = False
+        init_app = mock_pyrebase.initialize_app
+        init_app.return_value.database.return_value = mock_db
 
-        # Call control_alarm
+        # Call control_alarm and verify GPIO interactions
         control_alarm()
-
-        # Assert GPIO interactions
         mock_GPIO.output.assert_called_with(17, mock_GPIO.LOW)
 
 
 if __name__ == "__main__":
     unittest.main()
+
+# Adding an extra newline at the end of the file
