@@ -1,3 +1,9 @@
+"""
+This file contains the main Flask app for FANS. It includes routes for
+rendering HTML pages, handling user authentication, and providing API
+endpoints for accessing and updating a Firebase database.
+"""
+
 import json
 import datetime as dt
 from flask import (

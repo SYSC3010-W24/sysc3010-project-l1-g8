@@ -1,3 +1,9 @@
+"""
+This file includes unit tests for the Flask app. It tests the functionality
+of the home page and settings page, checking if the correct data is displayed
+and if the pages render without errors.
+"""
+
 import json
 import unittest
 
