@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% Proper links
+\usepackage[
+    pdftitle={SYSC3010 Computer Systems Development Project - FANS Final Report},
+    colorlinks=false,
+    allbordercolors={0 0 0},
+    citebordercolor={1 1 1}, % No border for citations
+    pdfborderstyle={/S/U/W 1},
+]{hyperref}
+
+% Display graphics nicely
+\usepackage{float}
+\usepackage{graphicx}
+
+\def\imagewidth{4in}
+
+% Display JSON nicely
+\usepackage{listings}
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+% References
+\usepackage[style=ieee]{biblatex}
+\addbibresource{./references.bib}
+
+% Remove paragraph indentation and use newline to separate instead. %
+\usepackage[parfill]{parskip}
+\setlength{\parindent}{0cm}
+
+\author{
+    Grant Achuzia, 101222695 \\
+    Javeria Sohail, 101197163 \\
+    Matteo Golin, 101220709 \\
+    Saja Fawagreh, 101217326 \\
+    TA: Sean Kirkby
+}
+\title{
+    SYSC3010 Computer Systems Development Project \\
+    FANS Final Report \\
+    {\large Group L1-G8} \\
+    {
+        \vspace{0.5in}
+        \centering
+        \includegraphics[width=4in]{../assets/header-image.jpg} \\
+        \small \cite{header-img}
+    }
+}
+\date{
+    Created: April 3rd, 2024 \\
+    Modified: \today
+}
+
+\begin{document}
+
+% TITLE %
+\maketitle
+\pagebreak
+
+% TABLE OF CONTENTS %
+{
+    \hypersetup{hidelinks}
+    \tableofcontents
+}
+
+% MAIN MATTER %
+\include{sections/introduction}
+\include{sections/final-solution}
+\include{sections/discussion}
+\include{sections/contributions}
+
+% BIBLIOGRAPHY %
+\pagebreak
+\printbibliography
+
+% APPENDIX %
+\pagebreak
+\input{sections/appendix}
+
+\end{document}

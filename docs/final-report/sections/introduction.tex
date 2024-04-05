@@ -1,0 +1,59 @@
+\section{Project Description}
+
+\subsection{Motivation}
+
+The motivation for the FANS project was to address the critical problem of preventable fire-related deaths in Canada.
+Fire safety was a fundamental concern for individuals, families, and communities nationwide. By leveraging modern
+technological advancements, the FANS system aimed to significantly enhance the effectiveness of fire alarm systems,
+reducing response times, and ultimately saving lives. The importance of this project could not be overstated, as it
+directly impacted the safety and well-being of Canadians.
+
+\subsection{Problem Statement}
+
+The need for the Fire Alarm Notification System (FANS) stemmed from the alarming number of preventable fire deaths in
+Canada, where 220 people died in fires each year, with at least one in seven of these deaths occurring in homes without
+working smoke alarms \cite{fire-stats}. This critical problem underscored the shortcomings of traditional fire alarm
+systems, which often lacked advanced communication capabilities and real-time monitoring capabilities
+\cite{modern-fire-alarms}. These limitations not only contributed to delayed response times but also to preventable
+deaths, underscoring the urgent need for an advanced fire alarm solution.
+
+Traditional systems’ shortcomings, coupled with the fact that smoke detection systems were sometimes unsafely disarmed
+by users to avoid false alarms—especially those installed close to kitchen spaces—further exacerbated the problem. The
+FANS project sought to address these issues by integrating smoke and temperature sensors with Internet of Things (IoT)
+technology. This approach not only aimed to cover scenarios where smoke may not reach the detecting device but also
+offered real-time notifications via SMS and email, thus notifying homeowners immediately in the event of an emergency.
+
+By providing configurable thresholds for smoke and temperature alarms and adjustable timeouts that prevented the system
+from being deactivated in an unsafe manner, FANS aimed to use technological advances to significantly improve the
+effectiveness of fire detection systems. The ultimate goal of the project was to reduce response times, improve overall
+fire safety, and thereby mitigate fire disasters and protect the well-being of individuals, families, and communities
+across Canada \cite{smoke-alarm-gc}.
+
+\subsection{Overview of Solution}
+
+In our project, we implemented the Fire Alarm Notification System (FANS), a real-time system designed for efficient
+fire detection and alerting. The system comprised several key components, seamlessly integrated to ensure a
+comprehensive approach to fire safety. We outlined the system's architecture in a detailed deployment diagram,
+illustrating the interconnections between the various components.
+
+The Alarm System, based on a Raspberry Pi 4, triggered audible and visual alerts promptly in the event of a fire,
+ensuring occupants were promptly warned. Our Smoke Detection System, also utilizing a Raspberry Pi 4, continuously
+monitored the environment for smoke using advanced sensors. It served as the primary detection mechanism, activating
+the alarm and notification systems upon detecting smoke.
+
+Our Notification System, operating on a Raspberry Pi 4, promptly sent out emergency alerts to predefined contacts,
+including local authorities and individuals, ensuring rapid response to the detected fire. We employed a real-time
+cloud database to store critical data, facilitating remote monitoring and configuration, thus ensuring optimal system
+functionality.
+
+Additionally, we utilized a Pi Pico Device to provide haptic feedback, offering an additional layer of alert through
+physical sensation, ensuring even those outside the hearing range of the alarm or with hearing impairments were
+alerted.
+
+Our design emphasized scalability, enabling easy expansion with additional sensors or alarm units as needed. Each
+component functioned independently, ensuring reliability and ease of maintenance. Communication between components was
+facilitated through a local network, with the cloud database supporting remote access and control. We incorporated
+advanced communication protocols for efficient data exchange and alerting. The smoke detection system employed the I2C
+protocol for sensor communication, while UDP packets facilitated local network communication between the system's
+nodes. HTTP requests were utilized for interactions with the cloud-hosted real-time Firebase database, ensuring timely
+updates and access to system data.
