@@ -52,8 +52,6 @@ FANS design report, and the `proposal/` folder contains the LaTeX source files f
 Guides to install and run each system node are provided below. Once all nodes have been set up, the system will be
 functional.
 
-### Installation Table Of Contents
-
 - [Sensor Pi](#sensor-pi)
 - [Alarm System](#alarm-system)
 - [Notifier](#notifier)
@@ -78,7 +76,7 @@ sources can come from the Raspberry Pi or an external source. The labelled pin o
 all meant to be connected to the corresponding pin on the Raspberry Pi 4. Please see its [pinout][pi-pinout] sheet to
 locate this pins.
 
-![](./docs/assets/schematics/MQ2-Schematic-Final.png)
+![MQ2 smokedetector circuit](./docs/assets/schematics/MQ2-Schematic-Final.png)
 
 Ensure that the following files are present in the same directory for it to function properly:
 
@@ -124,7 +122,7 @@ In order to assemble the circuit, place the components on your breadboard accord
 input signal should be connected to the Raspberry Pi's GPIO 22 pin. Please see the Pi's [pinout][pi-pinout] sheet to
 connect the pins properly.
 
-![](./docs/assets/schematics/Alarm-Schematic.png)
+![Alarm system circuit](./docs/assets/schematics/Alarm-Schematic.png)
 
 Once the circuit is assembled and connected, the node can be started by running the software located in the
 `alarm-system` directory from the Raspberry Pi. Python 3.11 must be previously installed. The following commands will
@@ -173,9 +171,9 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 - Wires
 - 2x 10k resistors
 
-**Hardware Assembly**
+#### Hardware Assembly
 
-![](./docs/assets/schematics/fritzingpico.png)
+![Fritzing schematic of pico alarm](./docs/assets/schematics/fritzingpico.png)
 
 1. **Connect the Buzzer** to GPIO 1 on the Pico W.
 2. **Attach the Red LED** to GPIO 6 with a 10k resistor in series.
@@ -183,7 +181,7 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 4. **Set up the Button** on GPIO 18, ensuring it's properly debounced with a 10k resistor.
 5. **Wire everything** according to the schematic on a breadboard, ensuring secure connections.
 
-**Software Installation and Deployment for Pico_Alarm System**
+#### Software Installation and Deployment for Pico_Alarm System
 
 1. **Connect the Raspberry Pi Pico W** to your computer. Use a USB cable to establish the connection. Ensure the Pico is in MicroPython mode.
 2. **Open Thonny IDE** on your computer. It's recommended to use Thonny for working with MicroPython on Raspberry Pi Pico due to its built-in support.
@@ -201,7 +199,7 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 
 **Note**: The Raspberry Pi Pico W must be powered continuously for the alarm system to function. It can remain powered via the USB connection to your computer or through an external 5V power source.
 
-**Operational Notes**
+#### Operational Notes
 
 - The system checks the Firebase database at regular intervals for any emergency flags.
 - The buzzer and red LED activate to indicate an emergency, with the green LED indicating normal operations.
