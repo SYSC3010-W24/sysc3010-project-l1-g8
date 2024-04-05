@@ -215,12 +215,28 @@ In order to set up the `pico_alarm` buzzer alarm and led notifier system, you wi
 [pi-pinout]: https://www.the-diy-life.com/wp-content/uploads/2021/05/Raspberry-Pi-4-Pinout.png
 
 ### Web App
+
 In order to set up the `web-app` node, you will need:
 
-- Raspberry Pi 4
 - Access to the internet
 
-FANS web application is made using Flask, an easy to use Python micro framework. Execute the following commands in the terminal to download the repository and start the software:
+FANS web application is made using Flask, an easy to use Python micro framework. The `static/` folder contains css files for styling the app as well as a JS script for dynamically changing between themes. The `templates/` folder contains html files, and the `tests/` folder contains tests for making sure the application gets data from firebase.
+
+Ensure that the following files are present in the same directory for it to function properly:
+
+- firebase_config.json: This file should include the configuration details required to connect to the Firebase database, such as the API key, authentication domain, database URL, and storage bucket.
+Example firebase_config.json file:
+
+```python
+{
+  "apiKey": "yourKey",
+  "authDomain": "yourDomain",
+  "databaseURL": "https://your-database-url",
+  "storageBucket": "someStorageBucket"
+}
+```
+
+To gain access to the website, run the following commands in your terminal:
 
 ```console
 git clone https://github.com/SYSC3010-W24/sysc3010-project-l1-g8.git
@@ -231,7 +247,7 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-In the terminal, click on the second http link to access the web app on your browser:  
-`Running on http://your.ip.address` 
+In the terminal, click on the second http link to access the web app on a network server. Here's an example of what the second link may look like:  
+`Running on http://192.168.X.X:5000/`
 
 ![Web App home page image](./docs/assets/gui/final-homepage.png)
