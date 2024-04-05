@@ -12,8 +12,14 @@ from datetime import datetime, timedelta
 from email.message import EmailMessage
 import re
 from email_notification_system import (
-    create_message, create_email, send_email, send_message,
-    connect_to_firebase, get_users, add_user_to_SQLite, wait_for_message
+    create_message,
+    create_email,
+    send_email,
+    send_message,
+    connect_to_firebase,
+    get_users,
+    add_user_to_SQLite,
+    wait_for_message,
 )
 
 
@@ -22,29 +28,36 @@ class TestScript(unittest.TestCase):
     def test_createMessage(self):
         name = "TestUser"
         result = create_message(name)
-        expected_content = ("Dear TestUser,\n\n"
-                            "This is an emergency notification. "
-                            "Please exit the building.\n\n"
-                            "Emergency detected:")
+        expected_content = (
+            "Dear TestUser,\n\n"
+            "This is an emergency notification. "
+            "Please exit the building.\n\n"
+            "Emergency detected:"
+        )
         self.assertIn(expected_content, result)
 
         date_pattern = r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
         match = re.search(date_pattern, result)
-        self.assertIsNotNone(match,
-                             "It should include a date and time.")
+        self.assertIsNotNone(match, "It should include a date and time.")
 
         if match:
             extracted_date = datetime.strptime(
-                match.group(), "%Y-%m-%d %H:%M:%S")
+                match.group(), "%Y-%m-%d %H:%M:%S"
+            )
             now = datetime.now()
             time_difference = now - extracted_date
 
-            self.assertGreaterEqual(time_difference, timedelta(0),
-                                    "The extracted datetime is in the future.")
+            self.assertGreaterEqual(
+                time_difference,
+                timedelta(0),
+                "The extracted datetime is in the future.",
+            )
 
-            self.assertLessEqual(time_difference, timedelta(hours=1),
-                                 "The extracted datetime "
-                                 "is more than an hour in the past.")
+            self.assertLessEqual(
+                time_difference,
+                timedelta(hours=1),
+                "The extracted datetime " "is more than an hour in the past.",
+            )
 
     def test_createEmail(self):
         message = "This is a test message."
@@ -52,26 +65,27 @@ class TestScript(unittest.TestCase):
         fromEmail = "from@example.com"
         emailMessage = create_email(message, toEmail, fromEmail)
         self.assertIsInstance(emailMessage, EmailMessage)
-        self.assertEqual(emailMessage['To'], toEmail)
-        self.assertEqual(emailMessage['From'], fromEmail)
+        self.assertEqual(emailMessage["To"], toEmail)
+        self.assertEqual(emailMessage["From"], fromEmail)
         self.assertIn(message, emailMessage.get_content())
 
-    @patch('smtplib.SMTP_SSL')
+    @patch("smtplib.SMTP_SSL")
     def test_sendEmail(self, mock_smtp):
         emailMessage = EmailMessage()
-        emailMessage['To'] = "to@example.com"
-        emailMessage['From'] = "from@example.com"
+        emailMessage["To"] = "to@example.com"
+        emailMessage["From"] = "from@example.com"
         emailMessage.set_content("This is a test message.")
         send_email(emailMessage, "email@example.com", "password")
         instance = mock_smtp.return_value
 
         mock_smtp.assert_called_with(
-            'smtp.gmail.com', 465, context=unittest.mock.ANY)
+            "smtp.gmail.com", 465, context=unittest.mock.ANY
+        )
 
         instance.login.assert_called_with("email@example.com", "password")
         instance.send_message.assert_called_with(emailMessage)
 
-    @patch('twilio.rest.Client')
+    @patch("twilio.rest.Client")
     def test_sendMessage(self, mock_client):
         mock_messages = MagicMock()
         mock_client.return_value.messages = mock_messages
@@ -80,35 +94,36 @@ class TestScript(unittest.TestCase):
         send_message(client, "This is a test message.", "+1234567890")
 
         mock_messages.create.assert_called_once_with(
-            from_='+16506678309',
+            from_="+16506678309",
             body="This is a test message.",
-            to='+1234567890'
+            to="+1234567890",
         )
 
-    @patch('email_notification_system.pyrebase')
+    @patch("email_notification_system.pyrebase")
     def test_connectFirebase(self, mock_pyrebase):
         config = {
             "apiKey": "testKey",
             "authDomain": "testDomain",
             "databaseURL": "testURL",
-            "storageBucket": "testBucket"
+            "storageBucket": "testBucket",
         }
         mock_db = MagicMock()
-        mock_pyrebase.initialize_app.return_value\
-            .database.return_value = mock_db
+        mock_pyrebase.initialize_app.return_value.database.return_value = (
+            mock_db
+        )
         db = connect_to_firebase(config)
         mock_pyrebase.initialize_app.assert_called_once_with(config)
         self.assertEqual(db, mock_db)
 
-    @patch('pyrebase.pyrebase.Database')
+    @patch("pyrebase.pyrebase.Database")
     def test_getUsers(self, mock_database):
         db = MagicMock()
 
         db.child.return_value.get.return_value.val.return_value = {
             "test@example.com": {
-                'Name': 'Test User',
-                'Password': 'password',
-                'Phone Number': '6132225555'
+                "Name": "Test User",
+                "Password": "password",
+                "Phone Number": "6132225555",
             }
         }
 
@@ -117,22 +132,27 @@ class TestScript(unittest.TestCase):
         self.assertEqual(len(users), 1)
         self.assertIn("test@example.com", users)
 
-        self.assertEqual(users.get("test@example.com"), {
-                         'Name': 'Test User',
-                         'Password': 'password',
-                         'Phone Number': '6132225555'})
+        self.assertEqual(
+            users.get("test@example.com"),
+            {
+                "Name": "Test User",
+                "Password": "password",
+                "Phone Number": "6132225555",
+            },
+        )
 
     def test_addUserToSQLite(self):
         cursor = MagicMock()
-        add_user_to_SQLite(cursor, "test@example.com",
-                           "Test User", "6132225555", "password")
+        add_user_to_SQLite(
+            cursor, "test@example.com", "Test User", "6132225555", "password"
+        )
 
     def test_wait_for_message(self):
         mock_socket = MagicMock()
-        mock_socket.recvfrom.return_value = (b'\x00\x01', ('127.0.0.1', 12345))
+        mock_socket.recvfrom.return_value = (b"\x00\x01", ("127.0.0.1", 12345))
         result = wait_for_message(mock_socket)
         self.assertEqual(result, 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

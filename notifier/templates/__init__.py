@@ -15,13 +15,17 @@ class Template:
 
     @classmethod
     def from_file(cls, file_path: str) -> Self:
-        """Creates a new template from the contents of a file containing plain-text."""
+        """
+        Creates a new template from the contents of a file containing
+        plain-text.
+        """
         with open(file_path, "r") as file:
             return cls(file.read())
 
     def customize(self, fields: dict[str, str]) -> None:
         """
-        Updates the contents of the template by finding the fields (keys) and replacing them with the values specified.
+        Updates the contents of the template by finding the fields (keys) and
+        replacing them with the values specified.
         """
         for item in fields:
             self.custom_content = self.custom_content.replace(

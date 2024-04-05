@@ -11,8 +11,9 @@ import urequests
 import network
 
 # Adjusted to fit within the limit
-firebase_url = ("https://fans-38702-default-rtdb."
-                "firebaseio.com//emergency.json")
+firebase_url = (
+    "https://fans-38702-default-rtdb." "firebaseio.com//emergency.json"
+)
 
 # Auth data for Firebase
 auth_data = {
@@ -22,9 +23,11 @@ auth_data = {
 }
 
 # Making auth request# Adjusted to fit within the limit
-auth_url = ("https://identitytoolkit.googleapis.com/v1/"
-            "accounts:signInWithPassword?"
-            "key=AIzaSyDCrm-YWek1mShoftACTezFdzn8PoLSNrY")
+auth_url = (
+    "https://identitytoolkit.googleapis.com/v1/"
+    "accounts:signInWithPassword?"
+    "key=AIzaSyDCrm-YWek1mShoftACTezFdzn8PoLSNrY"
+)
 auth_response = urequests.post(auth_url, json=auth_data)
 auth_response_data = auth_response.json()
 print(auth_response_data)
