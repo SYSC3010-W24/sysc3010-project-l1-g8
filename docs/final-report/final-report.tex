@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{enumitem}
 
 % Proper links
 \usepackage[
@@ -96,12 +97,13 @@
     \hypersetup{hidelinks}
     \tableofcontents
 }
+\pagebreak
 
 % MAIN MATTER %
-\include{sections/introduction}
-\include{sections/final-solution}
-\include{sections/discussion}
-\include{sections/contributions}
+\input{sections/introduction}
+\input{sections/final-solution}
+\input{sections/discussion}
+\input{sections/contributions}
 
 % BIBLIOGRAPHY %
 \pagebreak
