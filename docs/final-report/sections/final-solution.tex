@@ -7,32 +7,28 @@ approach to create a multi-node fire response system controlled via a web interf
 
 The primary node in our FANS project is the sensor data collection node, which monitors temperature and smoke
 concentration levels. All sensor measurements are written to the Firebase cloud database for display by the web UI.
+When an emergency is detected, the sensor unit sends an alert over UDP and raises an emergency flag in the cloud
+database.
 
-When a measurement is detected above the user-defined threshold, the sensor data collection node sends a UDP message
-signifying an emergency over the local network to the notification system and alarm system nodes. Upon receipt of this
-message, the notification system will send emails and SMS notifications to all users in its local database. The alarm
-system node will begin blinking an LED and sounding an alarm.
+The notification system and alarm system are subscribed to UDP messages sent by the sensor data collection node. This
+allows them to be notified of detected emergencies even when they cannot read the emergency flag in the cloud database.
 
-In addition to the UDP message, the sensor data collection node will raise an emergency flag in the Firebase database
-which signifies to the UI and the wearable haptic alarm that an emergency is active. The haptic alarm wearable device
-will then begin blinking an LED and buzzing until the user disables it or the emergency ends.
-
-The UI provides an interface for checking on the status of an emergency and reviewing sensor data in real-time. Users
-can disable the emergency response from the UI when the emergency has been resolved, and they can also time out the
-system’s emergency response whenever the system is falsely triggered (smokey cooking). Finally, the UI also allows user
-contact information to be added to the subscriber list for emergency notifications.
+The haptic alarm and web UI are connect to the system through the cloud database. The haptic alarm activates its
+emergency response when it sees a change in the emergency flag. The UI provides an interface for checking on the status
+of an emergency and reviewing sensor data in real-time. Users can disable the emergency response from the UI when the
+emergency has been resolved, and they can also time out the system’s emergency response whenever the system is falsely
+triggered (smokey cooking). Finally, the UI also allows user contact information to be added to the subscriber list for
+emergency notifications. All changes to settings from the UI are propagated through the cloud database to the sensor
+unit and notification system over the internet.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\imagewidth]{../assets/FANSDeployment.png}
+    \includegraphics[width=3.5in]{../assets/FANSDeployment.png}
     \caption{The FANS deployment diagram.}
     \label{fig:deployment}
 \end{figure}
 
 \subsection{Message Protocol Table}
-
-In the Fire Alarm Notification System (FANS), a variety of communication protocols are meticulously integrated to
-ensure seamless interaction among the system components and with the external cloud database.
 
 The system’s core, the Smoke Detection System, communicates with its temperature and smoke sensors using the I2C and
 SPI protocols over the GPIO pins of a Raspberry Pi 4.
@@ -44,6 +40,7 @@ environmental conditions to detect potential fire hazards. These messages are ou
 
 \begin{table}
     \centering
+    \footnotesize
     \begin{tabular}{| c | c | c | c | c |}
         \hline
         Sender         & Receiver               & Message              & Data Format                                          & Protocol                 \\
@@ -66,6 +63,7 @@ encode messages. The representation agreed upon is shown in Table \ref{table:udp
 
 \begin{table}
     \centering
+    \footnotesize
     \begin{tabular}{| c | c |}
         \hline
         Message      & Value \\
@@ -81,6 +79,7 @@ encode messages. The representation agreed upon is shown in Table \ref{table:udp
 
 \begin{table}
     \centering
+    \footnotesize
     \begin{tabular}{| c | c | c | c | c |}
         \hline
         Sender                 & Receiver            & Message      & Data Format & Protocol \\
