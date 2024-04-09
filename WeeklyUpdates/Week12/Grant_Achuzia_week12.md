@@ -16,7 +16,7 @@ I spent 6 hours working on the project this week.
    (meetings, information gathering, design, research, brainstorming, evaluating options, prototyping options, writing/documenting, refactoring, testing, software implementation, hardware implementation)
 
    1. Finished work on Final Report, 3 hours
-   2. Reviewed GitHub repository and made sure it met all submission requirements
+   2. Reviewed GitHub repository and made sure it met all submission requirements, 3 hours
 
 3. **_What did you accomplish this week?_** _(Be specific)_
 
@@ -25,7 +25,7 @@ I spent 6 hours working on the project this week.
 
 4. **_How do you feel about your progress?_** _(brief, free-form reflection)_
 
-- Great, we finished the project and accomplished all the tasks we set out to accomplish.
+- Great, we finished the project and accomplished all the goals we set.
 
 5. **_What are you planning to do next week_**? _(give specific goals)_
 
