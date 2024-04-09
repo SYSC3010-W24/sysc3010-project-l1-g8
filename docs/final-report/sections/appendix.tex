@@ -36,9 +36,69 @@ database. Through the web GUI, a user enters a new contact (name, email, phone, 
 notifications. Upon submission, these details are updated in the real-time cloud database. The notification system also
 copies these changes to its local database a backup for possible connection loss.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=\imagewidth]{../assets/sequence/AddingNewContactInformationSequenceDiagram.png}
     \caption{The sequence diagram for the adding new contact information use case.}
     \label{fig:add-contact}
+\end{figure}
+
+\section{Schematics}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/schematics/MQ2-Schematic-Final.png}
+    \caption{The smoke detection system's electrical connections.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/schematics/Alarm-Schematic.png}
+    \caption{The alarm system's electrical connections.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/schematics/fritzingpico.png}
+    \caption{The haptic alarm system's wiring diagram on a breadboard.}
+\end{figure}
+
+\section{State Machine Diagrams}
+
+\subsection{Alarm System}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{../assets/state-machine/AlarmSystemStateMachine.png}
+    \caption{The alarm system's software state machine.}
+\end{figure}
+
+\subsection{Smoke Detection System}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4in]{../assets/state-machine/DataCollectionStateMachine.png}
+    \caption{The smoke detection system's software state machine for data collection.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4in]{../assets/state-machine/DataCollectionLogicLoop.png}
+    \caption{The smoke detection system's software state machine for performing its primary logic.}
+\end{figure}
+
+\subsection{Notification System}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4in]{../assets/state-machine/NotificationSystemStateMachine.png}
+    \caption{The primary logic of the notification system as a state machine.}
+\end{figure}
+
+\subsection{Haptic Alarm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4in]{../assets/state-machine/HapticAlarmStateMachine.png}
+    \caption{The primary logic of the haptic alarm as a state machine.}
 \end{figure}
