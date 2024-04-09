@@ -90,9 +90,11 @@
 
 % TITLE %
 \maketitle
+\pagenumbering{gobble} % Don't number title page
 \pagebreak
 
 % TABLE OF CONTENTS %
+\pagenumbering{arabic} % Start numbering again
 {
     \hypersetup{hidelinks}
     \tableofcontents
