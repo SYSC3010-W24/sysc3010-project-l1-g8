@@ -1,36 +1,38 @@
 \section{Discussion of Final Design}
 
-Throughout the development of FANS, our team adhered to the specifications and objectives outlined in our initial
-proposal and detailed design document. Our goal was to develop a system that would not only detect fire based on smoke
-and temperature changes but also immediately notify people of emergencies.
+Although our team adhered to the specifications and objectives originally outlined in our proposal, we did make some
+modifications to our original plan as we learned more and got further into our project.
 
-\begin{enumerate}
-    \item Complete implementation: We are proud that our project was realized completely and without omissions. Every component,
-          from the smoke detection system to the emergency call system, was implemented as planned. Thanks to our commitment to
-          rigorous planning and effective teamwork, we were able to overcome challenges and ensure that all project objectives
-          were met.
-    \item Consistency of protocols: There was no deviation from the originally proposed communication protocols. The use of the
-          I2C protocol for sensor communication, UDP for local network communication and HTTP requests for interaction with the
-          Firebase real-time database were maintained throughout the project.
-\end{enumerate}
+\textbf{Changes Made}
 
-Our project not only met the expected design specifications, but also performed excellently in the test phases. Here
-are some important results and data from our tests:
+The first change that was made to FANS from the original specification was the LCD screen component. We had originally
+planned to add a monitor to the smoke detection unit, but realized during development that it would not have a
+practical use since the unit would likely be ceiling mounted where the monitor is not visible.
 
-\begin{itemize}
-    \item Sensitivity of the sensors: the smoke and temperature sensors used in the FANS showed high sensitivity and accuracy
-          during testing. They were able to detect slight changes in environmental conditions, ensuring early detection of
-          potential fire hazards.
-    \item Efficiency of the notification system: The notification system was tested to ensure that it could immediately trigger
-          an alarm when a fire was detected. The test results showed that the SMS and email notifications were sent without
-          significant delay, usually within seconds of the emergency being detected.
-    \item Scalability of the system: Tests confirmed that adding new components did not affect the performance of the system,
-          proving the flexibility and adaptability of the design to different environments.
-    \item GUI functionality: FANS UI provides an interactive platform for real-time monitoring and control, enabling direct alarm
-          management and seamless integration with the system components and real-time database.
-\end{itemize}
+The second change to our original proposal, which was made several times, was our project timeline. As we developed our
+system we realized that our time estimates were not completely accurate. We adjusted our timeline several times to
+allocate more resources to development of more difficult portions. For instance, we had to order new components after
+the component request period in order to properly interface with our smoke sensor. This caused us to push back the
+smoke detection portion of the system until the components arrived.
 
-The fire detection system represents a significant advance in fire protection, effectively meeting the need for an
-integrated, responsive and reliable fire detection and notification system. Through unwavering commitment to our
-project goals and meticulous adherence to our design, we have developed a system that will significantly impact the
-well-being of Canadians and provide a new level of protection from fire hazards.
+\textbf{Findings}
+
+The smoke detection unit for our system was not entirely accurate due to electrical noise and some calibration
+requirements that could not be met. The data sheet advised to measure air resistance of smoke, but we could not find
+any fully reliable values for this online. We simply tuned the sensor to not trigger it's onboard LED in the absence of
+smoke. Our system reports a very small PPM measurement of smoke in clear environments due to the calibration issues and
+the electrical noise of our breadboard (likely due to the home-made logic level converter).
+
+The temperature sensor was reliable and could accurately detect temperature changes, but had a baseline of around 38
+degrees Celsius due to the heat from the CPU accumulating inside the Pi case. Removing the case or mounting the sensor
+further away from the CPU could help reduce this.
+
+During our testing, we determined that from moment the smoke detection unit triggered an emergency, the response from
+all nodes in the system (alarms, lights, web UI) took a maximum of one second. This is likely dependent on the network
+speed, but our system's UDP messages are deliberately short for maximum transmission speed. The longest response time
+was for email notifications due to latency in the mail carrier outside of our control, but the notification system and
+other local nodes responded to the emergency trigger in under a second.
+
+Scalability was also confirmed by doubling up on specific nodes during testing. We would convert our team's Pis to be
+two sensor nodes or two alarm nodes. Since our messages are sent over UDP and internet in a way that can be consumed by
+multiple listeners, all of our system nodes could be present in any number without any changes to the system's logic.
