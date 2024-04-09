@@ -31,12 +31,10 @@ The following sub-sections describe additional use cases that are handled by FAN
 
 \subsubsection{Add New Contact Information Use Case}
 
-This use case shown in Figure \ref{fig:add-contact} outlined the process wherein users added new contact information to
-the FANS database. Through the web GUI, users entered new contact detail (phone numbers and email addresses) that
-enabled the system to send emergency notifications. Upon submission, these details were successfully updated in the
-real-time database. The message sequence diagram for this use case (not shown) illustrated the interactions between the
-user, the web GUI, and the database, culminating in the notification system being updated with the new contact
-information. This ensured that the FANS could reach the user through various channels in an emergency.
+The use case shown in Figure \ref{fig:add-contact} outlines the process of adding new contact information to the FANS
+database. Through the web GUI, a user enters a new contact (name, email, phone, etc.) to be subscribed to emergency
+notifications. Upon submission, these details are updated in the real-time cloud database. The notification system also
+copies these changes to its local database a backup for possible connection loss.
 
 \begin{figure}
     \centering
